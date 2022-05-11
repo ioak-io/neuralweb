@@ -1,0 +1,11 @@
+{
+  "properties": [
+    {
+      "name": "elevation",
+      "type": "0..24",
+      "default": "0",
+      "description": "How raised the component should appear in relation to its surrounding."
+    }
+  ],
+  "events": []
+}

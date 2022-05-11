@@ -1,0 +1,29 @@
+{
+  "properties": [
+    {
+      "name": "elevation",
+      "type": "0..24",
+      "default": "0",
+      "description": "How raised the component should appear in relation to its surrounding."
+    },
+    {
+      "name": "rounded",
+      "type": "boolean",
+      "default": "false",
+      "description": "If true, component will have rounded corners."
+    },
+    {
+      "name": "fillColor",
+      "type": "container <br>| surface <br>| float <br>| primary <br>| secondary <br>| tertiary <br>| default <br>| danger <br>| warning <br>| success <br>| info <br>| invert <br>| none",
+      "default": "container",
+      "description": "Fill color of the component. It supports those theme colors that make sense for this role."
+    },
+    {
+      "name": "gutterBottom",
+      "type": "boolean",
+      "default": "false",
+      "description": "If true, a margin space will be added below the component."
+    }
+  ],
+  "events": []
+}

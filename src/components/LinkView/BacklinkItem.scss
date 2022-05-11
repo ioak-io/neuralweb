@@ -1,0 +1,28 @@
+.backlink-item {
+  display: grid;
+  grid-auto-flow: row;
+  justify-items: flex-start;
+  // row-gap: 10px;
+}
+
+.highlight-link {
+  background-color: #ebe5ba;
+  color: inherit;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.dark .highlight-link {
+  background-color: #72724a;
+}
+
+.backlink-item__description {
+  display: inline;
+  button {
+    margin-left: 6px;
+  }
+}
+
+.backlink-item__description__text {
+  display: inline;
+}

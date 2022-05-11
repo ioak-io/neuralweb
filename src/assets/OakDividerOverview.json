@@ -1,0 +1,11 @@
+{
+  "title": "Typography is ...",
+  "componentName": "oak-typography",
+  "composerName": "@oakui/core-stage/style-composer/OakTypographyComposer",
+  "sections": [
+    {
+      "heading": "Theming",
+      "body": "tbd"
+    }
+  ]
+}

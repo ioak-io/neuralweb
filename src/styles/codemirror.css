@@ -1,0 +1,61 @@
+.CodeMirror {
+  /* height: calc(100vh - 70px - 100px); */
+}
+
+.CodeMirror {
+  background: inherit;
+  color: inherit;
+}
+
+.CodeMirror div.CodeMirror-cursor {
+  border-left: 1px solid #000;
+}
+
+.dark .CodeMirror div.CodeMirror-cursor {
+  border-left: 1px solid #fff;
+}
+
+div.CodeMirror-scroll {
+  height: 100% !important;
+  overflow: visible;
+}
+
+.CodeMirror-sizer {
+  margin-bottom: 2px !important;
+}
+
+.CodeMirror-hints {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  /* border: none; */
+  padding: 0;
+}
+.CodeMirror-hint {
+  margin: 0;
+  padding: 12px 12px;
+  border-radius: 0;
+  /* border-radius: 2px; */
+  white-space: pre;
+  color: #000;
+  cursor: pointer;
+  background-color: #fafafa;
+  /* outline: none;
+  box-shadow: none;
+  border: none; */
+}
+
+.dark .CodeMirror-hint {
+  background-color: #202020;
+  color: #fff;
+}
+
+li.CodeMirror-hint-active {
+  background: rgb(70, 77, 119);
+  color: white;
+}
+
+.dark li.CodeMirror-hint-active {
+  background: #000;
+  color: white;
+}

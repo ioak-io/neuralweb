@@ -1,0 +1,13 @@
+.drop-links {
+  display: grid;
+  row-gap: 30px;
+
+  // align-content: center;
+  // font-family: 'Roboto Slab', serif;
+  font-size: 42px;
+  font-weight: 100;
+  @media (max-width: 767px) {
+    flex-direction: column;
+    font-size: var(--metric-typography-10);
+  }
+}

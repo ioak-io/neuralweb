@@ -1,0 +1,47 @@
+{
+  "properties": [
+    {
+      "name": "elevation",
+      "type": "0..24",
+      "default": "0",
+      "description": "How raised the component should appear in relation to its surrounding."
+    },
+    {
+      "name": "rounded",
+      "type": "boolean",
+      "default": "false",
+      "description": "If true, component will have rounded corners."
+    },
+    {
+      "name": "paddingHorizontal",
+      "type": "0..10",
+      "default": "2",
+      "description": "How much padding should be added to the section on the left and right edges."
+    },
+    {
+      "name": "paddingVertical",
+      "type": "0..10",
+      "default": "2",
+      "description": "How much padding should be added to the section on the top and bottom edges."
+    },
+    {
+      "name": "fillColor",
+      "type": "container <br>| surface <br>| float <br>| primary <br>| secondary <br>| tertiary <br>| default <br>| danger <br>| warning <br>| success <br>| info <br>| invert <br>| none",
+      "default": "container",
+      "description": "Fill color of the component. It supports those theme colors that make sense for this role."
+    },
+    {
+      "name": "outlineColor",
+      "type": "container <br>| surface<br>| float<br>| primary<br>| secondary<br>| tertiary<br>| default<br>| danger<br>| warning<br>| success<br>| info<br>| invert<br>| none",
+      "default": "none",
+      "description": "If set, will show an outline border with the specified color scheme. It supports those theme colors that make sense for this role"
+    },
+    {
+      "name": "textColor",
+      "type": "primary<br>| secondary<br>| tertiary<br>| default<br>| danger<br>| warning<br>| success<br>| info<br>| invert<br>| auto",
+      "default": "auto",
+      "description": "Text color of the section. If set to auto - the component auto selects the foreground color as dark or light, depending on dynamic contrast with fillColor. It supports those theme colors that make sense for this role"
+    }
+  ],
+  "events": []
+}

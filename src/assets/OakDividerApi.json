@@ -1,0 +1,11 @@
+{
+  "properties": [
+    {
+      "name": "variant",
+      "type": "h1",
+      "default": "body1",
+      "description": "Variant"
+    }
+  ],
+  "events": []
+}

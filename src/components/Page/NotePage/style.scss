@@ -1,0 +1,14 @@
+.note-page {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.note-page__left {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  align-items: flex-start;
+}
+
+.note-page__main {
+  height: 100%;
+}

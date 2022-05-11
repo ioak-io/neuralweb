@@ -1,0 +1,8 @@
+.network-graph {
+  line,
+  rect,
+  circle,
+  text {
+    transition: stroke 500ms ease-in-out, fill 500ms ease-in-out;
+  }
+}

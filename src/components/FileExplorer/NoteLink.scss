@@ -1,0 +1,74 @@
+.note-link {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  text-align: left;
+  cursor: default;
+  // padding: 0 10px;
+  // border-radius: 4px;
+  height: 36px;
+  align-content: center;
+  min-width: 100%;
+  // column-gap: 6px;
+}
+
+.note-link:hover {
+  background-color: #d3d3d3;
+}
+.dark .note-link:hover {
+  background-color: #414141;
+}
+.note-link__name {
+  white-space: nowrap;
+}
+.note-link__icon {
+  visibility: hidden;
+}
+
+.note-link__parent__context {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  column-gap: 10px;
+  align-items: center;
+}
+
+.note-link__parent__context {
+  // border-radius: 4px;
+  padding: 0 0 0 10px;
+  padding: 0 10px;
+  outline: none;
+  height: 36px;
+}
+.note-link__parent__context,
+.note-link__parent__context__input {
+  background-color: #d3d3d3;
+}
+.dark .note-link__parent__context,
+.dark .note-link__parent__context__input {
+  background-color: #414141;
+}
+
+.note-link__parent__context__button {
+  font-size: 14px;
+}
+.note-link-context-popup {
+  background-color: #202020;
+  padding: 4px 0;
+  border: 1px solid #555555;
+  border-radius: 4px;
+  display: grid;
+  grid-auto-flow: row;
+  justify-items: flex-start;
+
+  button {
+    width: 100%;
+    padding: 6px 20px 6px 12px;
+    &:hover {
+      background-color: #444444;
+    }
+    display: grid;
+    justify-content: flex-start;
+    justify-items: flex-start;
+    grid-template-columns: 24px 1fr;
+    align-items: center;
+  }
+}

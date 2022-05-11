@@ -1,0 +1,33 @@
+.context-content-mini {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  transition: width 250ms ease-in-out, background-color 150ms ease-in-out;
+  width: var(--oak-app-layout-contextbar-mini-width);
+  z-index: 2;
+}
+
+.context-content-mini__header {
+  height: var(--oak-app-layout-topbar-height);
+  display: grid;
+  align-items: center;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  // margin-left: 35px;
+  padding: 0 10px;
+}
+
+.context-content-mini__control {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.context-content-mini__menu {
+  padding: 10px 10px;
+  display: grid;
+  grid-auto-flow: row;
+  row-gap: 5px;
+  align-content: flex-start;
+}

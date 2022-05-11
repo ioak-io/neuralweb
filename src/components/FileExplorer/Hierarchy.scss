@@ -1,0 +1,124 @@
+.hierarchy {
+  // padding-right: 5px;
+}
+.hierarchy__children {
+  // margin-left: 12px;
+  user-select: none;
+  transition: height 100ms ease-in-out;
+}
+
+.hierarchy__children--not-root {
+  // margin-left: 12px;
+}
+
+.hierarchy__parent {
+  display: grid;
+}
+
+.hierarchy__parent__button {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  text-align: left;
+  cursor: default;
+  // padding: 0 10px;
+  height: 36px;
+  // border-radius: 4px;
+  min-width: 100%;
+  // column-gap: 10px;
+  align-content: center;
+  align-items: center;
+}
+
+.hierarchy__parent__button:hover,
+.hierarchy__parent__button.last-clicked {
+  background-color: #d3d3d3;
+}
+.dark .hierarchy__parent__button:hover,
+.dark .hierarchy__parent__button.last-clicked {
+  background-color: #414141;
+}
+.hierarchy__parent__name {
+  white-space: nowrap;
+}
+.hierarchy__parent__indicator {
+  height: 36px;
+  // width: 36px;
+  width: 12px;
+  transition: transform 250ms ease-in-out;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  margin-right: 4px;
+}
+.hierarchy__parent__indicator__icon--expanded {
+  transform: rotate(90deg);
+}
+
+.hierarchy__parent__indicator__icon {
+}
+
+.hierarchy__children {
+  //   overflow: hidden;
+}
+.hierarchy__children--collapsed {
+  height: 0;
+  overflow-y: hidden;
+}
+
+.hierarchy__children--expanded {
+  height: 100%;
+}
+
+.hierarchy__parent__context {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  column-gap: 10px;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.hierarchy__parent__context {
+  // border-radius: 4px;
+  // padding: 0 0 0 10px;
+  outline: none;
+  height: 36px;
+}
+.hierarchy__parent__context__indicator__icon--expanded {
+  transform: rotate(90deg);
+}
+.hierarchy__parent__context,
+.hierarchy__parent__context__input {
+  background-color: #d3d3d3;
+}
+.dark .hierarchy__parent__context,
+.dark .hierarchy__parent__context__input {
+  background-color: #414141;
+}
+
+.hierarchy__parent__context__button {
+  font-size: 14px;
+}
+
+.hierarchy-context-popup {
+  background-color: #202020;
+  padding: 4px 0;
+  border: 1px solid #555555;
+  border-radius: 4px;
+  display: grid;
+  grid-auto-flow: row;
+  justify-items: flex-start;
+
+  button {
+    width: 100%;
+    padding: 6px 20px 6px 12px;
+    &:hover {
+      background-color: #444444;
+    }
+    display: grid;
+    justify-content: flex-start;
+    justify-items: flex-start;
+    grid-template-columns: 24px 1fr;
+    align-items: center;
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Toolbar is ...",
+  "componentName": "oak-toolbar",
+  "composerName": "",
+  "sections": [
+    {
+      "heading": "Theming",
+      "body": "tbd"
+    }
+  ]
+}

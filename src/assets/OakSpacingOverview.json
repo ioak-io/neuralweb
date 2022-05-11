@@ -1,0 +1,11 @@
+{
+  "title": "Spacing is ...",
+  "componentName": "oak-spacing",
+  "composerName": "@oakui/core-stage/style-composer/OakSpacingComposer",
+  "sections": [
+    {
+      "heading": "Theming",
+      "body": "tbd"
+    }
+  ]
+}

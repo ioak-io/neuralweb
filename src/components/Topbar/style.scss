@@ -1,0 +1,29 @@
+.topbar {
+  // background-color: var(--color-surface);
+  height: var(--oak-app-layout-topbar-height);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 10px;
+  align-content: center;
+  align-items: center;
+  padding: 0 20px;
+  transition: background-color 250ms ease-in-out, color 250ms ease-in-out;
+}
+.topbar__left {
+  font-size: 28px;
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: flex-start;
+  column-gap: 20px;
+  align-items: center;
+  font-size: 24px;
+
+  button {
+    font-size: 24px;
+  }
+}
+.topbar__right {
+  display: grid;
+  grid-auto-flow: column;
+  column-gap: 20px;
+}

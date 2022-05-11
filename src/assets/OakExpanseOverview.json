@@ -1,0 +1,11 @@
+{
+  "title": "Expanse is a...",
+  "componentName": "oak-expanse",
+  "composerName": "",
+  "sections": [
+    {
+      "heading": "Theming",
+      "body": "An expanse can be stylized..."
+    }
+  ]
+}

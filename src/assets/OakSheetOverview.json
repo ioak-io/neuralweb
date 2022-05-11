@@ -1,0 +1,17 @@
+{
+  "componentName": "oak-sheet",
+  "composerName": "",
+  "sections": [
+    {
+      "body": "Sheet is a section that slides out from one edge of the screen, to show additional controls or content. It helps achieve clutter free interface, by keeping user attention in focus and free from distracting details. Move secondary piece of content into a hidden section and show only when needed by the user."
+    },
+    {
+      "heading": "Theming",
+      "body": "A section can be stylized in a variety of ways. You can vary the fill color of a section by using the fillColor property. Outline of the section can be changed using outlineColor. Color of the text can be changed using textColor property. Color related properties support any oakui color theme."
+    },
+    {
+      "heading": "Contrast",
+      "body": "Contrast between background and foreground is always taken care, when you choose the textColor as auto. For all other textColor values, you should consider the color combinations wisely."
+    }
+  ]
+}
