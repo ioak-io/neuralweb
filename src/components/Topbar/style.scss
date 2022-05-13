@@ -4,7 +4,6 @@
   display: grid;
   grid-template-columns: 1fr auto;
   column-gap: 10px;
-  align-content: center;
   align-items: center;
   padding: 0 20px;
   transition: background-color 250ms ease-in-out, color 250ms ease-in-out;
@@ -17,6 +16,7 @@
   column-gap: 20px;
   align-items: center;
   font-size: 24px;
+  height: 100%;
 
   button {
     font-size: 24px;
@@ -26,4 +26,5 @@
   display: grid;
   grid-auto-flow: column;
   column-gap: 20px;
+  height: 100%;
 }

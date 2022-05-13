@@ -16,3 +16,29 @@
 .note-page__context {
   // padding: 0 10px;
 }
+
+.topbar-actions {
+  button {
+    position: relative;
+    padding: 0 10px;
+    &:hover,
+    &.active {
+      color: var(--color-primary-100);
+    }
+    &.active {
+      .menu-highlight-line {
+        background-color: var(--color-primary-100);
+      }
+    }
+    .menu-highlight-line {
+      position: absolute;
+      background-color: inherit;
+      height: 4px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-radius: 4px;
+      transition: background-color 250ms ease-in-out;
+    }
+  }
+}

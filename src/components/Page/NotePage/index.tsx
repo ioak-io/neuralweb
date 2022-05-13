@@ -10,7 +10,7 @@ import {
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import './style.scss';
@@ -38,6 +38,7 @@ const NotePage = (props: Props) => {
   const profile = useSelector((state: any) => state.profile);
   const authorization = useSelector((state: any) => state.authorization);
   const dispatch = useDispatch();
+  const id = useRef('');
 
   const [view, setView] = useState('view');
 
@@ -52,6 +53,7 @@ const NotePage = (props: Props) => {
   useEffect(() => {
     const queryParam = queryString.parse(props.location.search);
     setQueryParam(queryParam);
+    id.current = queryParam?.id || '';
   }, [props.location]);
 
   useEffect(() => {
@@ -92,26 +94,21 @@ const NotePage = (props: Props) => {
     history.push(`/${props.space}/note`);
   };
 
-  const saveChanges = () => {
-    saveNote(props.space, state, authorization).then((response: any) => {
-      if (response) {
-        setState(response);
-        setView('view');
-      }
-    });
-  };
+  // const saveChanges = () => {
+  //   saveNote(props.space, state, authorization).then((response: any) => {
+  //     if (response) {
+  //       setState(response);
+  //       setView('view');
+  //     }
+  //   });
+  // };
 
   const handleSave = (_note: NoteModel) => {
-    // saveNote(props.space, _note, authorization).then((response: any) => {
-    //   if (response && queryParam?.id === response.reference) {
-    //     console.log(
-    //       queryParam?.id,
-    //       response.reference,
-    //       queryString.parse(props.location.search)
-    //     );
-    //     setState(response);
-    //   }
-    // });
+    saveNote(props.space, _note, authorization).then((response: any) => {
+      if (response && id.current === response.reference) {
+        setState(response);
+      }
+    });
   };
 
   // useEffect(() => {
@@ -123,31 +120,34 @@ const NotePage = (props: Props) => {
       <div className="note-page page-animate">
         <Topbar title={state?.name || 'Untitled'}>
           <div className="topbar-actions">
-            {view !== 'view' && (
-              <button className="button" onClick={openViewMode}>
-                <FontAwesomeIcon icon={faGlasses} />
-              </button>
-            )}
-            {view !== 'edit' && (
-              <button className="button" onClick={openEditMode}>
-                <FontAwesomeIcon icon={faPen} />
-              </button>
-            )}
-            {view !== 'graph' && (
-              <button className="button" onClick={openGraphMode}>
-                <FontAwesomeIcon icon={faCircleNodes} />
-              </button>
-            )}
-            {view !== 'link' && (
-              <button className="button" onClick={openLinkMode}>
-                <FontAwesomeIcon icon={faLink} />
-              </button>
-            )}
-            {queryParam.id && (
-              <button className="button" onClick={closeNote}>
-                <FontAwesomeIcon icon={faTimes} />
-              </button>
-            )}
+            <button
+              className={`button ${view === 'view' ? 'active' : ''}`}
+              onClick={openViewMode}
+            >
+              <FontAwesomeIcon icon={faGlasses} />
+              <span className="menu-highlight-line" />
+            </button>
+            <button
+              className={`button ${view === 'edit' ? 'active' : ''}`}
+              onClick={openEditMode}
+            >
+              <FontAwesomeIcon icon={faPen} />
+              <span className="menu-highlight-line" />
+            </button>
+            <button
+              className={`button ${view === 'graph' ? 'active' : ''}`}
+              onClick={openGraphMode}
+            >
+              <FontAwesomeIcon icon={faCircleNodes} />
+              <span className="menu-highlight-line" />
+            </button>
+            <button
+              className={`button ${view === 'link' ? 'active' : ''}`}
+              onClick={openLinkMode}
+            >
+              <FontAwesomeIcon icon={faLink} />
+              <span className="menu-highlight-line" />
+            </button>
           </div>
         </Topbar>
         <div className="note-page__left">
@@ -181,7 +181,7 @@ const NotePage = (props: Props) => {
           </div>
         )}
       </ContextContainer>
-      {view === 'edit' && state && (
+      {/* {view === 'edit' && state && (
         <Footer>
           <div className="footer-action">
             <button className="button" onClick={saveChanges}>
@@ -189,7 +189,7 @@ const NotePage = (props: Props) => {
             </button>
           </div>
         </Footer>
-      )}
+      )} */}
     </>
   );
 };

@@ -37,6 +37,18 @@ module.exports = {
           400: '#161616',
           500: '#000000',
         },
+        primaryDark: {
+          100: '#a07af8',
+          200: '#a07af8',
+          300: '#a07af8',
+          400: '#a07af8',
+        },
+        primaryLight: {
+          100: '#a07af8',
+          200: '#a07af8',
+          300: '#a07af8',
+          400: '#a07af8',
+        },
         light: {
           100: '#ffffff',
           200: '#fafafa',

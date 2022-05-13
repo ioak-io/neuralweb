@@ -31,6 +31,7 @@
 @import './custom/table.scss';
 @import './custom/menu.scss';
 @import './custom/padding.scss'; */
+@import './theme.css';
 @import './typography.css';
 @import './oak-app-layout.css';
 @import './codemirror.css';
