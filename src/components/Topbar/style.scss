@@ -1,13 +1,34 @@
 .topbar {
-  // background-color: var(--color-surface);
   height: var(--oak-app-layout-topbar-height);
   display: grid;
   grid-template-columns: 1fr auto;
   column-gap: 10px;
   align-items: center;
   padding: 0 20px;
-  transition: background-color 250ms ease-in-out, color 250ms ease-in-out;
+  transition: background-color 250ms ease-in-out, color 250ms ease-in-out,
+    left 250ms ease-in-out, right 250ms ease-in-out;
 }
+.topbar--not-fixed {
+}
+.topbar--fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.topbar--fixed.topbar--sidebar-active {
+  left: calc(
+    var(--oak-app-layout-sidebar-width-shrinked) +
+      var(--oak-app-layout-sidebar-width)
+  );
+}
+.topbar--fixed.topbar--sidebar-inactive {
+  left: var(--oak-app-layout-sidebar-width-shrinked);
+}
+.topbar--fixed.topbar--context-active {
+  right: var(--oak-app-layout-contextbar-width);
+}
+
 .topbar__left {
   font-size: 28px;
   display: grid;

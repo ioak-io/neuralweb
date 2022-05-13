@@ -44,14 +44,6 @@ const MainContent = (props: Props) => {
           profile.sidebar
             ? 'main-content__sidebar-active'
             : 'main-content__sidebar-inactive'
-        } ${
-          profile.contextbar
-            ? 'main-content__contextbar-active'
-            : 'main-content__contextbar-inactive'
-        } ${
-          disableContextBar
-            ? 'main-content__contextbar-off'
-            : 'main-content__contextbar-on'
         }`}
       >
         <BodyContainer {...props} />

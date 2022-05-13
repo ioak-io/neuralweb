@@ -24,6 +24,7 @@ import './Hierarchy.scss';
 import NoteLink from './NoteLink';
 import MoveFolderCommand from '../../events/MoveFolderCommand';
 import MoveNoteCommand from '../../events/MoveNoteCommand';
+import ShowSelectedNoteCommand from '../../events/ShowSelectedNoteCommand';
 
 interface Props {
   space: string;
@@ -39,6 +40,7 @@ interface Props {
   level: number;
   handleAddFolder: any;
   handleAddNote: any;
+  selectedNoteId: string;
 }
 
 const Hierarchy = (props: Props) => {
@@ -140,6 +142,18 @@ const Hierarchy = (props: Props) => {
     props.handleFolderDelete(folder);
     closeContext();
   };
+
+  useEffect(() => {
+    const showSelectedNoteCommandSub =
+      ShowSelectedNoteCommand.asObservable().subscribe((message) => {
+        console.log(message);
+        if (message.folderIdList.includes(props.folderId || 'none')) {
+          setIsExpanded(true);
+        }
+      });
+
+    return () => showSelectedNoteCommandSub.unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (props.folderList) {
@@ -339,6 +353,7 @@ const Hierarchy = (props: Props) => {
                 level={props.level + 1}
                 handleAddFolder={props.handleAddFolder}
                 handleAddNote={props.handleAddNote}
+                selectedNoteId={props.selectedNoteId}
               />
             </div>
           ))}
@@ -350,6 +365,7 @@ const Hierarchy = (props: Props) => {
                 handleNoteChange={props.handleNoteChange}
                 handleNoteDelete={props.handleNoteDelete}
                 level={props.level + 1}
+                selectedNoteId={props.selectedNoteId}
               />
             </div>
           ))}

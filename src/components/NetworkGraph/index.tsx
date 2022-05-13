@@ -299,9 +299,9 @@ const NetworkGraph = (props: Props) => {
     if (profile.sidebar) {
       width -= 350;
     }
-    if (profile.contextbar) {
-      width -= 350;
-    }
+    // if (profile.contextbar) {
+    //   width -= 350;
+    // }
 
     svgRef.current?.setAttribute('height', height);
     svgRef.current?.setAttribute('width', width);

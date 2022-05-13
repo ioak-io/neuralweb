@@ -32,17 +32,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import DarkModeIcon from '../../../components/Navigation/DarkModeIcon';
-import NavAccountIcon from '../../../components/Navigation/NavAccountIcon';
-import Logo from '../../../components/Logo';
-import SideNavLink from '../SideNavLink';
 
 import './style.scss';
-import FileExplorer from '../../../components/FileExplorer';
 
 interface Props {
   space: string;
   children: any;
+  isExpanded: boolean;
 }
 
 const ContextContent = (props: Props) => {
@@ -54,9 +50,9 @@ const ContextContent = (props: Props) => {
   return (
     <div
       className={`context-content ${
-        profile.contextbar
-          ? 'context-content__contextbar-active'
-          : 'context-content__contextbar-inactive'
+        props.isExpanded
+          ? 'context-content--active'
+          : 'context-content--inactive'
       } bg-light-300 dark:bg-dark-400`}
     >
       {props.children}

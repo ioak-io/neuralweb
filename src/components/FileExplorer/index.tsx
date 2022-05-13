@@ -1,10 +1,10 @@
 /* eslint-disable no-loop-func */
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { cloneDeep, sortBy, uniqBy } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCircleDot, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import MoveFolderCommand from '../../events/MoveFolderCommand';
 import MoveNoteCommand from '../../events/MoveNoteCommand';
 import FolderModel from '../../model/FolderModel';
@@ -25,9 +25,11 @@ import {
   deleteNoteItems,
   updateNoteItem,
 } from '../../actions/NoteActions';
+import ShowSelectedNoteCommand from '../../events/ShowSelectedNoteCommand';
 
 interface Props {
   space: string;
+  selectedNoteId: string;
 }
 
 const FileExplorer = (props: Props) => {
@@ -37,6 +39,15 @@ const FileExplorer = (props: Props) => {
   const noteList = useSelector((state: any) => state.note.items);
   const authorization = useSelector((state: any) => state.authorization);
   const dispatch = useDispatch();
+  const [folderMap, setFolderMap] = useState<any>({});
+
+  useEffect(() => {
+    const _folderMap: any = {};
+    folderList.forEach((item: FolderModel) => {
+      _folderMap[item._id] = item;
+    });
+    setFolderMap(_folderMap);
+  }, [folderList]);
 
   const handleFolderChange = (_folder: FolderModel) => {
     saveFolder(props.space, _folder, authorization).then((response: any) => {
@@ -154,11 +165,37 @@ const FileExplorer = (props: Props) => {
     });
   };
 
+  const showOpenedNote = () => {
+    if (!props.selectedNoteId) {
+      return;
+    }
+    const _note = noteList.find(
+      (item: NoteModel) => item.reference === props.selectedNoteId
+    );
+    if (!_note) {
+      return;
+    }
+    const folderIdList: string[] = [];
+    let _folderId = _note.folderId;
+    while (_folderId) {
+      folderIdList.push(_folderId);
+      _folderId = folderMap[_folderId]?.parentId;
+    }
+    ShowSelectedNoteCommand.next({
+      folderIdList,
+      noteReference: _note.reference,
+    });
+    // ShowSelectedNoteCommand.next(queryParam.id);
+  };
+
   return (
     <div className="file-explorer">
       <div className="file-explorer__header">
         <div>File explorer</div>
-        <div>
+        <div className="file-explorer__header__action">
+          <button className="button" onClick={showOpenedNote}>
+            <FontAwesomeIcon icon={faCircleDot} />
+          </button>
           <button className="button" onClick={() => handleAddFolder()}>
             <FontAwesomeIcon icon={faFolderPlus} />
           </button>
@@ -178,6 +215,7 @@ const FileExplorer = (props: Props) => {
           handleAddFolder={handleAddFolder}
           handleAddNote={handleAddNote}
           level={0}
+          selectedNoteId={props.selectedNoteId}
         />
       </div>
     </div>

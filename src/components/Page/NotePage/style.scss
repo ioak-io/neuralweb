@@ -1,12 +1,18 @@
 .note-page {
   display: grid;
   grid-template-columns: 1fr;
+  margin-right: 0;
+  transition: margin-right 150ms ease-in-out;
 }
 
+.note-page--context-active {
+  margin-right: var(--oak-app-layout-contextbar-width);
+}
 .note-page__left {
   display: grid;
   grid-template-rows: auto 1fr;
   align-items: flex-start;
+  margin-top: var(--oak-app-layout-topbar-height);
 }
 
 .note-page__main {

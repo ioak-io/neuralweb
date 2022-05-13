@@ -19,7 +19,7 @@ import Editor from '../../../components/Editor';
 import NoteModel from '../../../model/NoteModel';
 import Viewer from '../../../components/Viewer';
 import FileExplorer from '../../../components/FileExplorer';
-import ContextContainer from '../../../components/MainContent/ContextContainer';
+import ContextContent from '../../../components/ContextContent';
 import DisableContextBarCommand from '../../../events/DisableContextBarCommand';
 import Footer from '../../../components/Footer';
 import { getNoteByReference, saveNote } from './service';
@@ -41,6 +41,7 @@ const NotePage = (props: Props) => {
   const id = useRef('');
 
   const [view, setView] = useState('view');
+  const [isContextExpanded, setIsContextExpanded] = useState(false);
 
   const [state, setState] = useState<NoteModel | null>(null);
 
@@ -117,8 +118,18 @@ const NotePage = (props: Props) => {
 
   return (
     <>
-      <div className="note-page page-animate">
-        <Topbar title={state?.name || 'Untitled'}>
+      <div
+        className={`note-page page-animate ${
+          isContextExpanded
+            ? 'note-page--context-active'
+            : 'note-page--context-inactive'
+        }`}
+      >
+        <Topbar
+          title={state?.name || 'Untitled'}
+          fixed
+          isContextExpanded={isContextExpanded}
+        >
           <div className="topbar-actions">
             <button
               className={`button ${view === 'view' ? 'active' : ''}`}
@@ -142,11 +153,10 @@ const NotePage = (props: Props) => {
               <span className="menu-highlight-line" />
             </button>
             <button
-              className={`button ${view === 'link' ? 'active' : ''}`}
-              onClick={openLinkMode}
+              className={`button ${isContextExpanded ? 'active' : ''}`}
+              onClick={() => setIsContextExpanded(!isContextExpanded)}
             >
               <FontAwesomeIcon icon={faLink} />
-              <span className="menu-highlight-line" />
             </button>
           </div>
         </Topbar>
@@ -174,13 +184,17 @@ const NotePage = (props: Props) => {
           </div>
         </div>
       </div>
-      <ContextContainer space={props.space}>
-        {['view', 'edit'].includes(view) && state && (
+      <ContextContent space={props.space} isExpanded={isContextExpanded}>
+        {state && (
           <div className="note-page__context">
-            <LinkView space={props.space} note={state} />
+            <LinkView
+              space={props.space}
+              note={state}
+              handleClose={() => setIsContextExpanded(false)}
+            />
           </div>
         )}
-      </ContextContainer>
+      </ContextContent>
       {/* {view === 'edit' && state && (
         <Footer>
           <div className="footer-action">

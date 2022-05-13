@@ -4,9 +4,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faAnglesDown,
   faArrowsLeftRightToLine,
   faCaretRight,
   faPlus,
+  faTimes,
   faUpRightAndDownLeftFromCenter,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -20,6 +22,7 @@ import Backlinks from './Backlinks';
 interface Props {
   space: string;
   note: NoteModel;
+  handleClose: any;
 }
 
 const LinkView = (props: Props) => {
@@ -98,23 +101,33 @@ const LinkView = (props: Props) => {
   return (
     <div className="link-view-wrapper">
       <div className="link-view-topbar text-dark-100 dark:text-light-600">
-        <button
-          className={`button ${collapseResults ? '' : 'active'}`}
-          onClick={() => setCollapseResults(!collapseResults)}
-        >
-          <FontAwesomeIcon icon={faUpRightAndDownLeftFromCenter} />
-        </button>
-        <button
-          className={`button invert-icon ${showMoreContext ? 'active' : ''}`}
-          onClick={() => setShowMoreContext(!showMoreContext)}
-        >
-          <FontAwesomeIcon icon={faArrowsLeftRightToLine} />
-        </button>
+        <div>
+          <button
+            className={`button ${collapseResults ? '' : 'active'}`}
+            onClick={() => setCollapseResults(!collapseResults)}
+          >
+            <FontAwesomeIcon icon={faAnglesDown} />
+          </button>
+          <button
+            className={`button invert-icon ${showMoreContext ? 'active' : ''}`}
+            onClick={() => setShowMoreContext(!showMoreContext)}
+          >
+            <FontAwesomeIcon icon={faArrowsLeftRightToLine} />
+          </button>
+        </div>
+        <div>
+          <button
+            className={`button invert-icon ${showMoreContext ? 'active' : ''}`}
+            onClick={props.handleClose}
+          >
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+        </div>
       </div>
       <div className="link-view text-dark-100 dark:text-light-600">
         <div>
           <button
-            className="button link-view__header"
+            className="button link-view__header hover:bg-light-500 hover:dark:bg-dark-200"
             onClick={() => {
               setIsLinkedSectionExpanded(!isLinkedSectionExpanded);
             }}
@@ -154,7 +167,7 @@ const LinkView = (props: Props) => {
 
         <div>
           <button
-            className="button link-view__header"
+            className="button link-view__header hover:bg-light-500 hover:dark:bg-dark-200"
             onClick={() => {
               setIsUnlinkedSectionExpanded(!isUnlinkedSectionExpanded);
             }}

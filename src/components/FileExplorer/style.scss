@@ -28,6 +28,13 @@
   grid-template-columns: 1fr auto;
 }
 
+.file-explorer__header__action button {
+  padding: 0 10px;
+}
+.file-explorer__header__action button:hover {
+  color: var(--color-primary-100);
+}
+
 .file-explorer__body {
   overflow: auto;
   height: calc(100vh - var(--oak-app-layout-topbar-height));

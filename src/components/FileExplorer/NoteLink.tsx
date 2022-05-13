@@ -23,6 +23,7 @@ interface Props {
   handleNoteChange: any;
   handleNoteDelete: any;
   level: number;
+  selectedNoteId: string;
 }
 
 const NoteLink = (props: Props) => {
@@ -141,7 +142,11 @@ const NoteLink = (props: Props) => {
       <div>
         {!isEdit && (
           <button
-            className="button note-link"
+            className={`button note-link hover:bg-light-500 hover:dark:bg-dark-200 ${
+              props.selectedNoteId === props.note.reference
+                ? 'bg-light-500 dark:bg-dark-200'
+                : ''
+            }`}
             draggable
             onDragStart={onDragStart}
             onDragOver={onDragOver}

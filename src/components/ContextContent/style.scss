@@ -1,0 +1,18 @@
+.context-content {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  transition: right 150ms ease-in-out, background-color 250ms ease-in-out,
+    border-color 250ms ease-in-out;
+  width: var(--oak-app-layout-contextbar-width);
+  border-left: 1px solid #d7d7d7;
+  right: 0;
+  z-index: 1;
+}
+.dark .context-content {
+  border-left: 1px solid #3e3e3e;
+}
+.context-content--inactive {
+  right: calc(0px - var(--oak-app-layout-contextbar-width));
+  // border-left: 1px solid #3e3e3e00;
+}

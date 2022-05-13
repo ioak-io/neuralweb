@@ -31,7 +31,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import DarkModeIcon from '../../../components/Navigation/DarkModeIcon';
 import NavAccountIcon from '../../../components/Navigation/NavAccountIcon';
 import Logo from '../../../components/Logo';
@@ -43,16 +43,27 @@ import { sendMessage } from '../../../events/MessageService';
 import SideNavSubHeading from '../SideNavSubHeading';
 import FileExplorer from '../../../components/FileExplorer';
 
+const queryString = require('query-string');
+
 interface Props {
   cookies: any;
   space: string;
 }
 
 const SideContent = (props: Props) => {
+  const location = useLocation();
   const history = useHistory();
   const profile = useSelector((state: any) => state.profile);
   const authorization = useSelector((state: any) => state.authorization);
   const dispatch = useDispatch();
+  const [queryParam, setQueryParam] = useState({
+    id: '',
+  });
+
+  useEffect(() => {
+    const queryParam = queryString.parse(location.search);
+    setQueryParam(queryParam);
+  }, [location]);
 
   const logout = (
     event: any,
@@ -87,7 +98,7 @@ const SideContent = (props: Props) => {
           : 'side-content__sidebar-inactive'
       } bg-light-300 dark:bg-dark-400`}
     >
-      <FileExplorer space={props.space} />
+      <FileExplorer space={props.space} selectedNoteId={queryParam?.id} />
     </div>
   );
 };

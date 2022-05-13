@@ -9,7 +9,6 @@ import ExpenseModel from '../../../model/ExpenseModel';
 import Topbar from '../../../components/Topbar';
 import { getNotelinks, getNotetags, GRAPH_DATA } from './service';
 import NetworkGraph from '../../../components/NetworkGraph';
-import ContextContainer from '../../../components/MainContent/ContextContainer';
 import NotelinkModel from '../../../model/NotelinkModel';
 import LinkModel from '../../../model/LinkModel';
 import NodeModel from '../../../model/NodeModel';
@@ -261,9 +260,6 @@ const GraphPage = (props: Props) => {
           space={props.space}
         />
       </div>
-      <ContextContainer space={props.space}>
-        Network chart settings
-      </ContextContainer>
     </>
   );
 };

@@ -5,7 +5,7 @@ const initialState = {
   textSize: 'textsize_medium',
   themeColor: 'themecolor1',
   sidebar: true,
-  contextbar: false,
+  // contextbar: false,
   hideSidebarOnDesktop: true,
 };
 
