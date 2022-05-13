@@ -24,7 +24,7 @@ const Topbar = (props: Props) => {
   };
 
   return (
-    <div className="topbar bg-light-300 text-gray-900 dark:bg-dark-300 dark:text-gray-200">
+    <div className="topbar bg-light-300 text-gray-900 dark:bg-dark-400 dark:text-gray-200">
       <div className="topbar__left">
         <div>{props.title}</div>
       </div>

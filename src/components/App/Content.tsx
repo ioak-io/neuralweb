@@ -135,7 +135,7 @@ const Content = (props: Props) => {
   return (
     <ApolloProvider client={client}>
       <div
-        className={`content-container bg-light-200 dark:bg-dark-200 dark:text-gray-200 App ${
+        className={`content-container bg-light-200 dark:bg-dark-300 dark:text-gray-200 App ${
           profile.theme === 'theme_dark' ? 'dark' : 'light'
         } ${profile.textSize}`}
       >

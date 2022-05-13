@@ -514,14 +514,14 @@ const NetworkGraph = (props: Props) => {
       <svg ref={svgRef} width={1200} height={600} />
       <div className="network-graph__control">
         <button
-          className="button bg-light-300 hover:bg-light-400 dark:bg-dark-300 dark:hover:bg-dark-400"
+          className="button bg-light-300 hover:bg-light-400 dark:bg-dark-400 dark:hover:bg-dark-500"
           onClick={togglePopup}
           ref={referenceElement}
         >
           <FontAwesomeIcon icon={faGear} />
         </button>
         <div
-          className="bg-light-300 dark:bg-dark-300"
+          className="bg-light-300 dark:bg-dark-400"
           ref={popperElement}
           style={styles.popper}
           {...attributes.popper}

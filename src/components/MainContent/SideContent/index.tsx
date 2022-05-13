@@ -85,7 +85,7 @@ const SideContent = (props: Props) => {
         profile.sidebar
           ? 'side-content__sidebar-active'
           : 'side-content__sidebar-inactive'
-      } bg-light-300 dark:bg-dark-300`}
+      } bg-light-300 dark:bg-dark-400`}
     >
       <FileExplorer space={props.space} />
     </div>

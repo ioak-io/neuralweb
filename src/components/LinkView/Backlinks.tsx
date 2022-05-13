@@ -13,6 +13,11 @@ import BacklinkItem from './BacklinkItem';
 interface Props {
   space: string;
   note: NoteModel;
+  showMoreContext: boolean;
+  collapseResults: boolean;
+  textLink?: boolean;
+  backlinks: NotelinkDetailModel[];
+  handleRefetchLinks: any;
 }
 
 const Backlinks = (props: Props) => {
@@ -21,30 +26,20 @@ const Backlinks = (props: Props) => {
   const folderList = useSelector((state: any) => state.folder.items);
   const noteList = useSelector((state: any) => state.note.items);
   const authorization = useSelector((state: any) => state.authorization);
-  const [backlinks, setBacklinks] = useState<NotelinkDetailModel[]>([]);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (props.note.reference && authorization.isAuth) {
-      getNotelinksByReference(
-        props.space,
-        props.note.reference,
-        authorization
-      ).then((response: any[]) => {
-        if (response && response?.length >= 0) {
-          const _backlinks = response.filter(
-            (item: any) => item.linkedNoteRef === props.note.reference
-          );
-          setBacklinks(_backlinks);
-        }
-      });
-    }
-  }, [props.note.reference, authorization]);
 
   return (
     <div className="backlinks">
-      {backlinks.map((item) => (
-        <BacklinkItem key={item._id} space={props.space} backlink={item} />
+      {props.backlinks.map((item) => (
+        <BacklinkItem
+          key={item._id}
+          space={props.space}
+          backlink={item}
+          textLink={props.textLink}
+          showMoreContext={props.showMoreContext}
+          collapseResults={props.collapseResults}
+          handleRefetchLinks={props.handleRefetchLinks}
+        />
       ))}
     </div>
   );

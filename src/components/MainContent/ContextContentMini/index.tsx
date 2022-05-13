@@ -31,8 +31,8 @@ const ContextContentMini = (props: Props) => {
     <div
       className={`context-content-mini ${
         profile.contextbar
-          ? 'bg-light-400 dark:bg-dark-400'
-          : 'bg-light-300 dark:bg-dark-300'
+          ? 'bg-light-400 dark:bg-dark-500'
+          : 'bg-light-300 dark:bg-dark-400'
       }`}
     >
       <div className="context-content-mini__header">

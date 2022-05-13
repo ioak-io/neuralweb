@@ -84,3 +84,48 @@ export const getNotelinksByReference = (
       return Promise.resolve([]);
     });
 };
+
+export const getPossibleLinkedNotes = (
+  space: string,
+  reference: string,
+  authorization: any
+) => {
+  return httpGet(`/notelink/${space}/possiblelink/${reference}`, {
+    headers: {
+      Authorization: authorization.access_token,
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return Promise.resolve(response.data);
+      }
+    })
+    .catch((error) => {
+      return Promise.resolve([]);
+    });
+};
+
+export const addPossibleLink = (
+  space: string,
+  sourceReference: string,
+  targetReference: string,
+  authorization: any
+) => {
+  return httpPost(
+    `/notelink/${space}/possiblelink/${sourceReference}/${targetReference}`,
+    {},
+    {
+      headers: {
+        Authorization: authorization.access_token,
+      },
+    }
+  )
+    .then((response) => {
+      if (response.status === 200) {
+        return Promise.resolve(response.data);
+      }
+    })
+    .catch((error) => {
+      return Promise.resolve([]);
+    });
+};

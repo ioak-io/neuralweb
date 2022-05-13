@@ -56,6 +56,7 @@ const NotePage = (props: Props) => {
 
   useEffect(() => {
     if (queryParam?.id && authorization.isAuth) {
+      setView('view');
       getNoteByReference(props.space, queryParam?.id, authorization).then(
         (response: any) => {
           setState(response);
@@ -98,6 +99,19 @@ const NotePage = (props: Props) => {
         setView('view');
       }
     });
+  };
+
+  const handleSave = (_note: NoteModel) => {
+    // saveNote(props.space, _note, authorization).then((response: any) => {
+    //   if (response && queryParam?.id === response.reference) {
+    //     console.log(
+    //       queryParam?.id,
+    //       response.reference,
+    //       queryString.parse(props.location.search)
+    //     );
+    //     setState(response);
+    //   }
+    // });
   };
 
   // useEffect(() => {
@@ -143,6 +157,7 @@ const NotePage = (props: Props) => {
                 space={props.space}
                 note={state}
                 handleChange={handleChange}
+                handleSave={handleSave}
               />
             )}
             {view === 'view' && state && (
@@ -161,7 +176,9 @@ const NotePage = (props: Props) => {
       </div>
       <ContextContainer space={props.space}>
         {['view', 'edit'].includes(view) && state && (
-          <LinkView space={props.space} note={state} />
+          <div className="note-page__context">
+            <LinkView space={props.space} note={state} />
+          </div>
         )}
       </ContextContainer>
       {view === 'edit' && state && (

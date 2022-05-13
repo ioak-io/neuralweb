@@ -7,6 +7,7 @@ import { useHistory } from 'react-router';
 import { marked } from 'marked';
 import { format } from 'date-fns';
 import CodeMirror from 'codemirror';
+import { isEqual } from 'lodash';
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { languages } from '@codemirror/language-data';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,6 +28,7 @@ interface Props {
   space: string;
   note: NoteModel;
   handleChange: any;
+  handleSave: any;
 }
 
 const FILE_LIST = [
@@ -66,6 +68,20 @@ const Editor = (props: Props) => {
     });
     setNoteMap(_noteMap);
   }, [noteList]);
+
+  useEffect(() => {
+    function onDestroyHandler(e: any) {
+      e.preventDefault();
+      if (!isEqual(props.note, stateRef.current)) {
+        e.returnValue = false;
+      }
+    }
+    window.addEventListener('beforeunload', onDestroyHandler);
+    return () => {
+      props.handleSave(stateRef.current);
+      window.removeEventListener('beforeunload', onDestroyHandler);
+    };
+  }, []);
 
   const cmRef = useRef<any>(null);
 

@@ -32,7 +32,7 @@ const Footer = (props: Props) => {
           : 'footer__contextbar-inactive'
       } ${
         disableContextBar ? 'footer__contextbar-off' : 'footer__contextbar-on'
-      } bg-light-300 text-gray-900 dark:bg-dark-300 dark:text-gray-200`}
+      } bg-light-300 text-gray-900 dark:bg-dark-400 dark:text-gray-200`}
     >
       {props.children}
     </div>

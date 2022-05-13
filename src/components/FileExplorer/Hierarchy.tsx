@@ -234,7 +234,7 @@ const Hierarchy = (props: Props) => {
 
   return (
     <>
-      <div className="hierarchy">
+      <div className="hierarchy text-dark-100 dark:text-light-600">
         {folder && (
           <div className="hierarchy__parent">
             {!isEdit && (

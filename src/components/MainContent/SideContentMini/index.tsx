@@ -96,8 +96,8 @@ const SideContentMini = (props: Props) => {
     <div
       className={`side-content-mini ${
         profile.sidebar
-          ? 'bg-light-400 dark:bg-dark-400'
-          : 'bg-light-300 dark:bg-dark-300'
+          ? 'bg-light-400 dark:bg-dark-500'
+          : 'bg-light-300 dark:bg-dark-400'
       }`}
     >
       <div className="side-content-mini__header">

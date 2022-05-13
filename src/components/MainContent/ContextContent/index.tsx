@@ -57,7 +57,7 @@ const ContextContent = (props: Props) => {
         profile.contextbar
           ? 'context-content__contextbar-active'
           : 'context-content__contextbar-inactive'
-      } bg-light-300 dark:bg-dark-300`}
+      } bg-light-300 dark:bg-dark-400`}
     >
       {props.children}
     </div>
