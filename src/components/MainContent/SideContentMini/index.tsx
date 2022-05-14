@@ -73,9 +73,8 @@ const SideContentMini = (props: Props) => {
     message = 'You have been logged out'
   ) => {
     dispatch(removeAuth());
-    props.cookies.remove(
-      `metamind_${process.env.REACT_APP_ONEAUTH_APPSPACE_ID}`
-    );
+    props.cookies.remove(`metamind-access_token`);
+    props.cookies.remove(`metamind-refresh_token`);
     history.push(`/`);
     sendMessage('notification', true, {
       type,

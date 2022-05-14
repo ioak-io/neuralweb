@@ -42,6 +42,7 @@ import { removeAuth } from '../../../actions/AuthActions';
 import { sendMessage } from '../../../events/MessageService';
 import SideNavSubHeading from '../SideNavSubHeading';
 import FileExplorer from '../../../components/FileExplorer';
+import SearchExplorer from '../../../components/SearchExplorer';
 
 const queryString = require('query-string');
 
@@ -98,6 +99,7 @@ const SideContent = (props: Props) => {
           : 'side-content__sidebar-inactive'
       } bg-light-300 dark:bg-dark-400`}
     >
+      <SearchExplorer space={props.space} selectedNoteId={queryParam?.id} />
       <FileExplorer space={props.space} selectedNoteId={queryParam?.id} />
     </div>
   );

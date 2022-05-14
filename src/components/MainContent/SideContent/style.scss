@@ -8,6 +8,9 @@
   width: var(--oak-app-layout-sidebar-width);
   z-index: 1;
   border-right: 1px solid #d7d7d7;
+  overflow: auto;
+  // height: calc(100vh - var(--oak-app-layout-topbar-height));
+  height: 100vh;
 }
 
 .dark .side-content {

@@ -1,0 +1,18 @@
+.file-name-result-item {
+  padding: 10px 0;
+}
+
+.file-name-result-item {
+  cursor: default;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.file-name-result-item span {
+  background-color: #ebe5ba;
+  color: inherit;
+}
+.dark .file-name-result-item span {
+  background-color: #5f5727;
+}
