@@ -40,22 +40,22 @@ const SearchExplorer = (props: Props) => {
   }, [folderList]);
 
   const handleSearch = (text: string) => {
-    if (text.startsWith('file:')) {
-      const words: string[] = text
-        .substr(5)
-        .replace(/  +/g, ' ')
-        .trim()
-        .toLowerCase()
-        .split(' ');
-      const res = noteList.filter((item: NoteModel) => {
-        return words.every((item2) => item.name.toLowerCase().includes(item2));
-      });
-      setFileNameResults({ results: res, words });
-    } else {
-      searchNote(props.space, text, authorization).then((response) => {
-        console.log(response);
-      });
-    }
+    // if (text.startsWith('file:')) {
+    //   const words: string[] = text
+    //     .substr(5)
+    //     .replace(/  +/g, ' ')
+    //     .trim()
+    //     .toLowerCase()
+    //     .split(' ');
+    //   const res = noteList.filter((item: NoteModel) => {
+    //     return words.every((item2) => item.name.toLowerCase().includes(item2));
+    //   });
+    //   setFileNameResults({ results: res, words });
+    // } else {
+    searchNote(props.space, text, authorization).then((response) => {
+      console.log(response);
+    });
+    // }
   };
 
   return (

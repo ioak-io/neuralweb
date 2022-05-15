@@ -176,7 +176,11 @@ const NotePage = (props: Props) => {
               </div>
             )}
             {view === 'link' && state && (
-              <LinkView space={props.space} note={state} />
+              <LinkView
+                space={props.space}
+                note={state}
+                handleClose={() => setIsContextExpanded(false)}
+              />
             )}
             {['view', 'edit'].includes(view) && !queryParam.id && (
               <div>No file is open</div>
