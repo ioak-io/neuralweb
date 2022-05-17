@@ -1,0 +1,11 @@
+.filter-group {
+  display: grid;
+  grid-auto-flow: row;
+  width: 100%;
+}
+
+.filter-group__list {
+  display: grid;
+  grid-auto-flow: row;
+  row-gap: 10px;
+}

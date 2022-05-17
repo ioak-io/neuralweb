@@ -10,8 +10,7 @@ import FolderModel from '../../model/FolderModel';
 import './style.scss';
 import { searchNote } from './service';
 import SearchBlock from './SearchBlock';
-import NoteModel from '../../model/NoteModel';
-import FileNameResults from './FileNameResults';
+import SearchResults from './SearchResults';
 
 interface Props {
   space: string;
@@ -28,7 +27,13 @@ const SearchExplorer = (props: Props) => {
   const [folderMap, setFolderMap] = useState<any>({});
   const [fileNameResults, setFileNameResults] = useState<any>({
     results: [],
-    words: [],
+    words: [
+      {
+        name: [],
+        path: [],
+        content: [],
+      },
+    ],
   });
 
   useEffect(() => {
@@ -54,6 +59,7 @@ const SearchExplorer = (props: Props) => {
     // } else {
     searchNote(props.space, text, authorization).then((response) => {
       console.log(response);
+      setFileNameResults(response);
     });
     // }
   };
@@ -65,10 +71,10 @@ const SearchExplorer = (props: Props) => {
       </div>
       <div className="search-explorer__body">
         <div className="search-explorer__body__input">
-          <SearchBlock space={props.space} handleSearch={handleSearch} />
+          <SearchBlock space={props.space} handleSubmit={handleSearch} />
         </div>
         <div className="search-explorer__body__result">
-          <FileNameResults
+          <SearchResults
             data={fileNameResults}
             space={props.space}
             selectedNoteId={props.selectedNoteId}

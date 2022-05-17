@@ -14,7 +14,9 @@ import { isEmptyOrSpaces } from '../Utils';
 
 interface Props {
   space: string;
-  handleSearch: any;
+  criteria?: string;
+  handleSubmit?: any;
+  handleChange?: any;
 }
 
 const SearchBlock = (props: Props) => {
@@ -29,6 +31,18 @@ const SearchBlock = (props: Props) => {
     text: '',
   });
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (props.criteria) {
+      setState({ ...state, text: props.criteria });
+    }
+  }, [props.criteria]);
+
+  useEffect(() => {
+    if (props.handleChange) {
+      props.handleChange(state.text);
+    }
+  }, [state.text]);
 
   const handleChange = (event: any) => {
     if (
@@ -47,7 +61,7 @@ const SearchBlock = (props: Props) => {
 
   const handleSearch = (event: any) => {
     event.preventDefault();
-    props.handleSearch(state.text);
+    props.handleSubmit(state.text);
   };
 
   const handleChooseFile = () => {

@@ -1,16 +1,16 @@
-.file-name-results {
+.search-results {
   display: grid;
   grid-auto-flow: row;
   padding: 0 10px;
 }
 
-.file-name-results .file-name-results__item {
+.search-results .search-results__item {
   border-bottom: 1px solid #d7d7d7;
 }
-.dark .file-name-results .file-name-results__item {
+.dark .search-results .search-results__item {
   border-bottom: 1px solid #3e3e3e;
 }
 
-.file-name-results:nth-last-child() {
+.search-results:nth-last-child() {
   border-bottom: none;
 }

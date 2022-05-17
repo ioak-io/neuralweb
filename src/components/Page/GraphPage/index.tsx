@@ -244,6 +244,7 @@ const GraphPage = (props: Props) => {
         name: item.name,
         reference: item.reference,
         group: 'note',
+        color: item.color,
       }))
     );
   }, [notes]);

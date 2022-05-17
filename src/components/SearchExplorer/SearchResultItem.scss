@@ -1,0 +1,18 @@
+.search-result-item {
+  padding: 10px 0;
+  cursor: default;
+  width: 100%;
+  display: grid;
+  grid-auto-flow: row;
+  justify-content: flex-start;
+  justify-items: flex-start;
+  text-align: left;
+}
+
+.search-result-item span {
+  background-color: #ebe5ba;
+  color: inherit;
+}
+.dark .search-result-item span {
+  background-color: #5f5727;
+}

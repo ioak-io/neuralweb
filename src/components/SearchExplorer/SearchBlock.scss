@@ -2,6 +2,10 @@
   position: relative;
 }
 
+.search-block input {
+  width: 100%;
+}
+
 .search-block__popup {
   position: absolute;
   width: 100%;
@@ -12,6 +16,7 @@
   transition: background-color 250ms ease-in-out, border-color 250ms ease-in-out;
   display: grid;
   grid-auto-flow: row;
+  z-index: 2;
 }
 
 .dark .search-block__popup {

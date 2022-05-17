@@ -19,6 +19,8 @@ import NoteModel from '../../model/NoteModel';
 import NotelinkModel from '../../model/NotelinkModel';
 import LinkModel from '../../model/LinkModel';
 import NodeModel from '../../model/NodeModel';
+import FilterGroup from './FilterGroup';
+import { getFilterGroup, updateFilterGroup } from './service';
 
 const queryString = require('query-string');
 
@@ -44,6 +46,7 @@ const NetworkGraph = (props: Props) => {
   const companyList = useSelector((state: any) => state.company.items);
   const [data, setData] = useState<any>();
   const [references, setReferences] = useState<any>({});
+  const [filterGroup, setFilterGroup] = useState<any[]>([]);
 
   const [svg, setSvg] = useState<any>();
   const referenceElement = useRef<any>(null);
@@ -66,14 +69,25 @@ const NetworkGraph = (props: Props) => {
   const [eventNode, setEventNode] = useState<any>();
   const [simulation, setSimulation] = useState<any>();
 
-  const color = d3
+  useEffect(() => {
+    console.log('**auth');
+    if (authorization.isAuth) {
+      getFilterGroup(props.space, authorization).then((response: any) => {
+        if (response) {
+          setFilterGroup(response);
+        }
+      });
+    }
+  }, [authorization]);
+
+  const nodeColor = d3
     .scaleOrdinal()
     .domain(['note', 'tag'])
-    .range(['#4e79a7', '#f28e2c']);
-  const colorDisabled = d3
+    .range(['#7c7c7c', '#d39e6a']);
+  const nodeColorDark = d3
     .scaleOrdinal()
     .domain(['note', 'tag'])
-    .range(['#4e79a720', '#f28e2c20']);
+    .range(['#c1c1c1', '#ab7948']);
 
   const { styles, attributes, update, forceUpdate } = usePopper(
     referenceElement.current,
@@ -202,18 +216,20 @@ const NetworkGraph = (props: Props) => {
             )
             .attr('stroke-opacity', state.linkOpacity / 10);
           eventNode
-            .style('fill', function (d: any) {
-              return colorDisabled(d.group);
-            })
+            .style('opacity', 0.2)
+            // .style('fill', function (d: any) {
+            //   return d.color;
+            // })
             .filter(
               (n: any) =>
                 n.reference === d.reference ||
                 (references[d.reference] &&
                   references[d.reference].includes(n.reference))
             )
-            .style('fill', function (d: any) {
-              return color(d.group);
-            });
+            .style('opacity', 1);
+          // .style('fill', function (d: any) {
+          //   return d.color;
+          // });
 
           textNode
             .style('opacity', '0')
@@ -236,9 +252,10 @@ const NetworkGraph = (props: Props) => {
         .on('mouseleave', (evt: any, d: any) => {
           // link.attr('display', 'block');
           linkNode.attr('stroke-opacity', state.linkOpacity / 10);
-          eventNode.style('fill', function (d: any) {
-            return color(d.group);
-          });
+          eventNode.style('opacity', 1);
+          // eventNode.style('fill', function (d: any) {
+          //   return d.color;
+          // });
 
           textNode.style('opacity', state.fontOpacity / 10);
           if (state.charge > state.textFade) {
@@ -396,7 +413,13 @@ const NetworkGraph = (props: Props) => {
         .join('g')
         .attr('class', 'node')
         .style('fill', function (d: any) {
-          return color(d.group);
+          console.log(d.group, nodeColorDark(d.group));
+          if (d.color) {
+            return d.color;
+          }
+          return profile.theme === 'theme_dark'
+            ? nodeColorDark(d.group)
+            : nodeColor(d.group);
         })
         .call(drag(_simulation));
 
@@ -509,12 +532,18 @@ const NetworkGraph = (props: Props) => {
     });
   };
 
+  const handleUpdateFilterGroup = (payload: any) => {
+    updateFilterGroup(props.space, payload, authorization).then(
+      (response: any) => {}
+    );
+  };
+
   return (
     <div className="network-graph" ref={divRef}>
       <svg ref={svgRef} width={1200} height={600} />
       <div className="network-graph__control">
         <button
-          className="button bg-light-300 hover:bg-light-400 dark:bg-dark-400 dark:hover:bg-dark-500"
+          className="button network-graph__control__button bg-light-300 hover:bg-light-400 dark:bg-dark-400 dark:hover:bg-dark-500"
           onClick={togglePopup}
           ref={referenceElement}
         >
@@ -529,10 +558,20 @@ const NetworkGraph = (props: Props) => {
           {isOpen && (
             <div className="network-graph__control__content">
               <div className="network-graph__control__content__title text-bold">
+                Groups
+              </div>
+              <div className="network-graph__control__content__body">
+                <FilterGroup
+                  space={props.space}
+                  data={filterGroup}
+                  handleUpdate={handleUpdateFilterGroup}
+                />
+              </div>
+              <div className="network-graph__control__content__title text-bold">
                 Forces
               </div>
               <div className="network-graph__control__content__body text-bold">
-                <div>
+                <div className="network-graph__control__content__body__item">
                   <label>Repel force-{state.charge}</label>
                   <input
                     type="range"
@@ -544,7 +583,7 @@ const NetworkGraph = (props: Props) => {
                     className="ui-slider"
                   />
                 </div>
-                <div>
+                <div className="network-graph__control__content__body__item">
                   <label>Collide force</label>
                   <input
                     type="range"
@@ -556,7 +595,7 @@ const NetworkGraph = (props: Props) => {
                     className="ui-slider"
                   />
                 </div>
-                <div>
+                <div className="network-graph__control__content__body__item">
                   <label>Link distance (experimental)</label>
                   <input
                     type="range"
@@ -568,7 +607,7 @@ const NetworkGraph = (props: Props) => {
                     className="ui-slider"
                   />
                 </div>
-                <div>
+                <div className="network-graph__control__content__body__item">
                   <label>Font size</label>
                   <input
                     type="range"
@@ -580,7 +619,7 @@ const NetworkGraph = (props: Props) => {
                     className="ui-slider"
                   />
                 </div>
-                <div>
+                <div className="network-graph__control__content__body__item">
                   <label>Text opacity</label>
                   <input
                     type="range"
@@ -592,7 +631,7 @@ const NetworkGraph = (props: Props) => {
                     className="ui-slider"
                   />
                 </div>
-                <div>
+                <div className="network-graph__control__content__body__item">
                   <label>Text fade threshold</label>
                   <input
                     type="range"
@@ -604,7 +643,7 @@ const NetworkGraph = (props: Props) => {
                     className="ui-slider"
                   />
                 </div>
-                <div>
+                <div className="network-graph__control__content__body__item">
                   <label>Link opacity</label>
                   <input
                     type="range"
@@ -616,7 +655,7 @@ const NetworkGraph = (props: Props) => {
                     className="ui-slider"
                   />
                 </div>
-                <div>
+                <div className="network-graph__control__content__body__item">
                   <label>Link thickness</label>
                   <input
                     type="range"
@@ -628,7 +667,7 @@ const NetworkGraph = (props: Props) => {
                     className="ui-slider"
                   />
                 </div>
-                <div>
+                <div className="network-graph__control__content__body__item">
                   <label>Node size</label>
                   <input
                     type="range"

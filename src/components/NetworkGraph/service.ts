@@ -1,5 +1,40 @@
-/* eslint-disable import/prefer-default-export */
-import * as d3 from 'd3';
+import { httpGet, httpPut } from '../Lib/RestTemplate';
+
+export const getFilterGroup = (space: string, authorization: any) => {
+  return httpGet(`/filter-group/${space}`, {
+    headers: {
+      Authorization: authorization.access_token,
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return Promise.resolve(response.data);
+      }
+    })
+    .catch((error) => {
+      return Promise.resolve([]);
+    });
+};
+
+export const updateFilterGroup = (
+  space: string,
+  payload: any,
+  authorization: any
+) => {
+  return httpPut(`/filter-group/${space}`, payload, {
+    headers: {
+      Authorization: authorization.access_token,
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return Promise.resolve(response.data);
+      }
+    })
+    .catch((error) => {
+      return Promise.resolve([]);
+    });
+};
 
 export const GRAPH_DATA = {
   nodes: [
