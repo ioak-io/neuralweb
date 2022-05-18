@@ -127,7 +127,7 @@ const LinkView = (props: Props) => {
       <div className="link-view text-dark-100 dark:text-light-600">
         <div>
           <button
-            className="button link-view__header hover:bg-light-500 hover:dark:bg-dark-200"
+            className="button link-view__header hover:bg-light-400 hover:dark:bg-dark-300"
             onClick={() => {
               setIsLinkedSectionExpanded(!isLinkedSectionExpanded);
             }}
@@ -167,7 +167,7 @@ const LinkView = (props: Props) => {
 
         <div>
           <button
-            className="button link-view__header hover:bg-light-500 hover:dark:bg-dark-200"
+            className="button link-view__header hover:bg-light-400 hover:dark:bg-dark-300"
             onClick={() => {
               setIsUnlinkedSectionExpanded(!isUnlinkedSectionExpanded);
             }}

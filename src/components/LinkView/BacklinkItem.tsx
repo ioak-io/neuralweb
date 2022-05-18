@@ -181,17 +181,6 @@ const BacklinkItem = (props: Props) => {
     text += _text.substr(effectiveStartIndex, effectiveEndIndex).trim();
     text += effectiveEndIndex !== _text.length ? '...' : '';
 
-    console.log({
-      startIndex: effectiveStartIndex,
-      endIndex: effectiveEndIndex,
-      text,
-      sourceText: _text,
-      showMoreAtStart: startIndex !== 0,
-      showMoreAtEnd: endIndex !== _text.length,
-      hasMoreAtStart: effectiveStartIndex !== 0,
-      hasMoreAtEnd: effectiveEndIndex !== _text.length,
-      textLength: _text.length,
-    });
     return {
       startIndex: effectiveStartIndex,
       endIndex: effectiveEndIndex,
@@ -238,7 +227,7 @@ const BacklinkItem = (props: Props) => {
         </button>
       </div>
       <div
-        className={`backlink-item__description hover:bg-light-200 dark:hover:bg-dark-300 ${
+        className={`backlink-item__description hover:bg-light-400 dark:hover:bg-dark-300 ${
           isExpanded
             ? 'backlink-item__description--expanded'
             : 'backlink-item__description--collapsed'
