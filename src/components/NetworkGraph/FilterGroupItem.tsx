@@ -20,7 +20,7 @@ import NotelinkModel from '../../model/NotelinkModel';
 import LinkModel from '../../model/LinkModel';
 import NodeModel from '../../model/NodeModel';
 import { getFilterGroup } from './service';
-import SearchBlock from '../SearchExplorer/SearchBlock';
+import SearchBlock from '../FilterExplorer/SearchBlock';
 
 const queryString = require('query-string');
 

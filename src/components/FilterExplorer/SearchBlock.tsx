@@ -9,7 +9,6 @@ import { faCircleDot, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import FolderModel from '../../model/FolderModel';
 
 import './SearchBlock.scss';
-import { searchNote } from './service';
 import { isEmptyOrSpaces } from '../Utils';
 
 interface Props {

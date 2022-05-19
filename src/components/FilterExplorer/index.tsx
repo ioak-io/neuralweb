@@ -8,16 +8,16 @@ import { faCircleDot, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import FolderModel from '../../model/FolderModel';
 
 import './style.scss';
-import { searchNote } from './service';
+import { filterNote } from './service';
 import SearchBlock from './SearchBlock';
-import SearchResults from './SearchResults';
+import FilterResults from './FilterResults';
 
 interface Props {
   space: string;
   selectedNoteId: string;
 }
 
-const SearchExplorer = (props: Props) => {
+const FilterExplorer = (props: Props) => {
   const history = useHistory();
   const profile = useSelector((state: any) => state.profile);
   const folderList = useSelector((state: any) => state.folder.items);
@@ -57,7 +57,7 @@ const SearchExplorer = (props: Props) => {
     //   });
     //   setFileNameResults({ results: res, words });
     // } else {
-    searchNote(props.space, text, authorization).then((response) => {
+    filterNote(props.space, text, authorization).then((response) => {
       console.log(response);
       setFileNameResults(response);
     });
@@ -74,7 +74,7 @@ const SearchExplorer = (props: Props) => {
           <SearchBlock space={props.space} handleSubmit={handleSearch} />
         </div>
         <div className="search-explorer__body__result">
-          <SearchResults
+          <FilterResults
             data={fileNameResults}
             space={props.space}
             selectedNoteId={props.selectedNoteId}
@@ -85,4 +85,4 @@ const SearchExplorer = (props: Props) => {
   );
 };
 
-export default SearchExplorer;
+export default FilterExplorer;

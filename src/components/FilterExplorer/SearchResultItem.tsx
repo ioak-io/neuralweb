@@ -14,7 +14,7 @@ import {
 import FolderModel from '../../model/FolderModel';
 
 import './SearchResultItem.scss';
-import { searchNote } from './service';
+import { filterNote } from './service';
 import { isEmptyOrSpaces } from '../Utils';
 
 interface Props {

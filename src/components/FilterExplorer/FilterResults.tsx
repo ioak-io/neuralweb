@@ -8,8 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleDot, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import FolderModel from '../../model/FolderModel';
 
-import './SearchResults.scss';
-import { searchNote } from './service';
+import './FilterResults.scss';
 import { isEmptyOrSpaces } from '../Utils';
 import SearchResultItem from './SearchResultItem';
 
@@ -22,14 +21,14 @@ interface Props {
   selectedNoteId: string;
 }
 
-const SearchResults = (props: Props) => {
+const FilterResults = (props: Props) => {
   const history = useHistory();
   const authorization = useSelector((state: any) => state.authorization);
 
   return (
-    <div className="search-results">
+    <div className="filter-results">
       {props.data.results.map((item: any, index: number) => (
-        <div className="search-results__item" key={item._id || index}>
+        <div className="filter-results__item" key={item._id || index}>
           <SearchResultItem
             space={props.space}
             data={item}
@@ -42,4 +41,4 @@ const SearchResults = (props: Props) => {
   );
 };
 
-export default SearchResults;
+export default FilterResults;

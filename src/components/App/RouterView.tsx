@@ -17,6 +17,7 @@ import EditCompany from '../Page/SettingsPage/EditCompany';
 import Permissions from '../Page/SettingsPage/Permissions';
 import BackupAndRestore from '../Page/SettingsPage/BackupAndRestore';
 import GraphPage from '../Page/GraphPage';
+import SearchPage from '../Page/SearchPage';
 
 interface Props {
   cookies: any;
@@ -84,6 +85,18 @@ const RouterView = (props: Props) => {
             {...propsLocal}
             {...props}
             component={GraphPage}
+            middleware={['authenticate']}
+          />
+        )}
+      />
+      <Route
+        path="/:space/search"
+        exact
+        render={(propsLocal) => (
+          <OakRouteApp
+            {...propsLocal}
+            {...props}
+            component={SearchPage}
             middleware={['authenticate']}
           />
         )}

@@ -1,9 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 import { httpGet, httpPost, httpDelete, httpPut } from '../Lib/RestTemplate';
 
-export const searchNote = (space: string, text: string, authorization: any) => {
+export const filterNote = (space: string, text: string, authorization: any) => {
   return httpPost(
-    `/note/${space}/search`,
+    `/note/${space}/filter`,
     { text },
     {
       headers: {
