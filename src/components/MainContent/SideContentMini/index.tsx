@@ -1,34 +1,14 @@
 import {
-  faBalanceScaleRight,
-  faCalendarAlt,
-  faChartArea,
-  faChartBar,
-  faClone,
-  faCog,
   faCogs,
-  faCoins,
-  faCopy,
   faDatabase,
-  faFileExport,
-  faFileImport,
   faFingerprint,
-  faHome,
-  faMoneyBillWave,
-  faMoneyBillWaveAlt,
-  faReceipt,
-  faShoppingBag,
-  faShoppingCart,
   faSignOutAlt,
-  faStickyNote,
-  faTable,
-  faTag,
-  faTags,
   faTh,
-  faThLarge,
-  faUniversity,
   faUserShield,
-  faWallet,
   faCircleNodes,
+  faSearch,
+  faChevronLeft,
+  faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
@@ -44,8 +24,6 @@ import { removeAuth } from '../../../actions/AuthActions';
 import { sendMessage } from '../../../events/MessageService';
 import SideNavSubHeading from '../SideNavSubHeading';
 import { setProfile } from '../../../actions/ProfileActions';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
   cookies: any;
@@ -117,6 +95,11 @@ const SideContentMini = (props: Props) => {
               link={`/${props.space}/graph`}
               icon={faCircleNodes}
               label="Graph"
+            />
+            <SideNavLink
+              link={`/${props.space}/search`}
+              icon={faSearch}
+              label="Search"
             />
             <SideNavLink
               link={`/${props.space}/settings/company`}

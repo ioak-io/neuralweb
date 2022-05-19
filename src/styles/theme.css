@@ -1,6 +1,10 @@
 .light {
   --color-primary-100: #6339c4;
+  --color-primary-200: #6339c4c0;
+  --color-primary-i: #fff;
 }
 .dark {
   --color-primary-100: #a07af8;
+  --color-primary-200: #a07af8c0;
+  --color-primary-i: #000;
 }

@@ -27,6 +27,7 @@ const queryString = require('query-string');
 interface Props {
   space: string;
   data: { nodes: NodeModel[]; links: LinkModel[] };
+  children?: any;
 }
 
 const THEME: any = {
@@ -557,127 +558,138 @@ const NetworkGraph = (props: Props) => {
         >
           {isOpen && (
             <div className="network-graph__control__content">
-              <div className="network-graph__control__content__title text-bold">
-                Groups
+              {props.children && (
+                <div className="network-graph__control__content__container">
+                  {props.children}
+                </div>
+              )}
+
+              <div className="network-graph__control__content__container">
+                <div className="network-graph__control__content__title">
+                  Groups
+                </div>
+                <div className="network-graph__control__content__body">
+                  <FilterGroup
+                    space={props.space}
+                    data={filterGroup}
+                    handleUpdate={handleUpdateFilterGroup}
+                  />
+                </div>
               </div>
-              <div className="network-graph__control__content__body">
-                <FilterGroup
-                  space={props.space}
-                  data={filterGroup}
-                  handleUpdate={handleUpdateFilterGroup}
-                />
-              </div>
-              <div className="network-graph__control__content__title text-bold">
-                Forces
-              </div>
-              <div className="network-graph__control__content__body text-bold">
-                <div className="network-graph__control__content__body__item">
-                  <label>Repel force-{state.charge}</label>
-                  <input
-                    type="range"
-                    min="-10"
-                    max="10000"
-                    onChange={handleSliderReverseChange}
-                    name="charge"
-                    value={0 - state.charge}
-                    className="ui-slider"
-                  />
+
+              <div className="network-graph__control__content__container">
+                <div className="network-graph__control__content__title">
+                  Forces
                 </div>
-                <div className="network-graph__control__content__body__item">
-                  <label>Collide force</label>
-                  <input
-                    type="range"
-                    min="-100"
-                    max="10"
-                    onChange={handleSliderReverseChange}
-                    name="collision"
-                    value={0 - state.collision}
-                    className="ui-slider"
-                  />
-                </div>
-                <div className="network-graph__control__content__body__item">
-                  <label>Link distance (experimental)</label>
-                  <input
-                    type="range"
-                    min="1"
-                    max="100"
-                    onChange={handleSliderChange}
-                    name="distance"
-                    value={state.distance}
-                    className="ui-slider"
-                  />
-                </div>
-                <div className="network-graph__control__content__body__item">
-                  <label>Font size</label>
-                  <input
-                    type="range"
-                    min="8"
-                    max="30"
-                    onChange={handleSliderChange}
-                    name="fontSize"
-                    value={state.fontSize}
-                    className="ui-slider"
-                  />
-                </div>
-                <div className="network-graph__control__content__body__item">
-                  <label>Text opacity</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="10"
-                    onChange={handleSliderChange}
-                    name="fontOpacity"
-                    value={state.fontOpacity}
-                    className="ui-slider"
-                  />
-                </div>
-                <div className="network-graph__control__content__body__item">
-                  <label>Text fade threshold</label>
-                  <input
-                    type="range"
-                    min="-10"
-                    max="10000"
-                    onChange={handleSliderReverseChange}
-                    name="textFade"
-                    value={0 - state.textFade}
-                    className="ui-slider"
-                  />
-                </div>
-                <div className="network-graph__control__content__body__item">
-                  <label>Link opacity</label>
-                  <input
-                    type="range"
-                    min="1"
-                    max="10"
-                    onChange={handleSliderChange}
-                    name="linkOpacity"
-                    value={state.linkOpacity}
-                    className="ui-slider"
-                  />
-                </div>
-                <div className="network-graph__control__content__body__item">
-                  <label>Link thickness</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="10"
-                    onChange={handleSliderChange}
-                    name="linkThickness"
-                    value={state.linkThickness}
-                    className="ui-slider"
-                  />
-                </div>
-                <div className="network-graph__control__content__body__item">
-                  <label>Node size</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    onChange={handleSliderChange}
-                    name="nodeSize"
-                    value={state.nodeSize}
-                    className="ui-slider"
-                  />
+                <div className="network-graph__control__content__body">
+                  <div className="network-graph__control__content__body__item">
+                    <label>Repel force-{state.charge}</label>
+                    <input
+                      type="range"
+                      min="-10"
+                      max="10000"
+                      onChange={handleSliderReverseChange}
+                      name="charge"
+                      value={0 - state.charge}
+                      className="ui-slider"
+                    />
+                  </div>
+                  <div className="network-graph__control__content__body__item">
+                    <label>Collide force</label>
+                    <input
+                      type="range"
+                      min="-100"
+                      max="10"
+                      onChange={handleSliderReverseChange}
+                      name="collision"
+                      value={0 - state.collision}
+                      className="ui-slider"
+                    />
+                  </div>
+                  <div className="network-graph__control__content__body__item">
+                    <label>Link distance (experimental)</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="100"
+                      onChange={handleSliderChange}
+                      name="distance"
+                      value={state.distance}
+                      className="ui-slider"
+                    />
+                  </div>
+                  <div className="network-graph__control__content__body__item">
+                    <label>Font size</label>
+                    <input
+                      type="range"
+                      min="8"
+                      max="30"
+                      onChange={handleSliderChange}
+                      name="fontSize"
+                      value={state.fontSize}
+                      className="ui-slider"
+                    />
+                  </div>
+                  <div className="network-graph__control__content__body__item">
+                    <label>Text opacity</label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="10"
+                      onChange={handleSliderChange}
+                      name="fontOpacity"
+                      value={state.fontOpacity}
+                      className="ui-slider"
+                    />
+                  </div>
+                  <div className="network-graph__control__content__body__item">
+                    <label>Text fade threshold</label>
+                    <input
+                      type="range"
+                      min="-10"
+                      max="10000"
+                      onChange={handleSliderReverseChange}
+                      name="textFade"
+                      value={0 - state.textFade}
+                      className="ui-slider"
+                    />
+                  </div>
+                  <div className="network-graph__control__content__body__item">
+                    <label>Link opacity</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="10"
+                      onChange={handleSliderChange}
+                      name="linkOpacity"
+                      value={state.linkOpacity}
+                      className="ui-slider"
+                    />
+                  </div>
+                  <div className="network-graph__control__content__body__item">
+                    <label>Link thickness</label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="10"
+                      onChange={handleSliderChange}
+                      name="linkThickness"
+                      value={state.linkThickness}
+                      className="ui-slider"
+                    />
+                  </div>
+                  <div className="network-graph__control__content__body__item">
+                    <label>Node size</label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      onChange={handleSliderChange}
+                      name="nodeSize"
+                      value={state.nodeSize}
+                      className="ui-slider"
+                    />
+                  </div>
                 </div>
               </div>
             </div>

@@ -25,6 +25,7 @@ import Footer from '../../../components/Footer';
 import { getNoteByReference, saveNote } from './service';
 import NotelinkModel from '../../../model/NotelinkModel';
 import LinkView from '../../../components/LinkView';
+import GraphView from '../../../components/GraphView';
 
 interface Props {
   location: any;
@@ -83,10 +84,6 @@ const NotePage = (props: Props) => {
 
   const openViewMode = () => {
     setView('view');
-  };
-
-  const openLinkMode = () => {
-    setView('link');
   };
 
   const closeNote = () => {
@@ -161,26 +158,24 @@ const NotePage = (props: Props) => {
           </div>
         </Topbar>
         <div className="note-page__left">
-          <div className="main note-page__main">
+          <div className="note-page__main">
             {view === 'edit' && state && (
-              <Editor
-                space={props.space}
-                note={state}
-                handleChange={handleChange}
-                handleSave={handleSave}
-              />
+              <div className="main">
+                <Editor
+                  space={props.space}
+                  note={state}
+                  handleChange={handleChange}
+                  handleSave={handleSave}
+                />
+              </div>
             )}
             {view === 'view' && state && (
-              <div className="viewer-container">
+              <div className="viewer-container main">
                 <Viewer space={props.space} note={state} />
               </div>
             )}
-            {view === 'link' && state && (
-              <LinkView
-                space={props.space}
-                note={state}
-                handleClose={() => setIsContextExpanded(false)}
-              />
+            {view === 'graph' && state && (
+              <GraphView space={props.space} noteref={state.reference} />
             )}
             {['view', 'edit'].includes(view) && !queryParam.id && (
               <div>No file is open</div>

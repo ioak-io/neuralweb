@@ -40,6 +40,8 @@
   overflow: auto;
   border-radius: 4px;
   border: 1px solid rgb(207, 207, 207);
+  display: grid;
+  grid-auto-flow: row;
 }
 
 .dark .network-graph__control__content {
@@ -89,3 +91,20 @@
   background: #a07af8;
   // cursor: move;
 }
+
+.network-graph__control__content__title {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.network-graph__control__content > div {
+  border-bottom: 1px solid #d7d7d7;
+  padding: 10px 0;
+}
+.dark .network-graph__control__content > div {
+  border-bottom: 1px solid #3e3e3e;
+}
+
+// .network-graph__control__content > div:nth-last-child() {
+//   border-bottom: none;
+// }
