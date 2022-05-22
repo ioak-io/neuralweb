@@ -13,7 +13,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import FolderModel from '../../model/FolderModel';
 
-import './SearchResultItem.scss';
+import './FilterResultItem.scss';
 import { filterNote } from './service';
 import { isEmptyOrSpaces } from '../Utils';
 
@@ -24,7 +24,7 @@ interface Props {
   selectedNoteId: string;
 }
 
-const SearchResultItem = (props: Props) => {
+const FilterResultItem = (props: Props) => {
   const history = useHistory();
   const authorization = useSelector((state: any) => state.authorization);
   const [showingMore, setShowingMore] = useState<boolean>(false);
@@ -139,9 +139,9 @@ const SearchResultItem = (props: Props) => {
   };
 
   return (
-    <div className="search-result-item">
+    <div className="filter-result-item">
       <button
-        className={`button text-tiny search-result-item__main text-dark-100 dark:text-light-600 hover:bg-light-400 hover:dark:bg-dark-300 ${
+        className={`button text-tiny filter-result-item__main text-dark-100 dark:text-light-600 hover:bg-light-400 hover:dark:bg-dark-300 ${
           props.selectedNoteId === props.data.reference
             ? 'bg-light-400 dark:bg-dark-300'
             : ''
@@ -149,17 +149,17 @@ const SearchResultItem = (props: Props) => {
         onClick={goToNote}
       >
         <div
-          className="search-result-item__main__title"
+          className="filter-result-item__main__title"
           dangerouslySetInnerHTML={{ __html: name }}
         />
         <div dangerouslySetInnerHTML={{ __html: content.text }} />
       </button>
       {content.showMoreAtStart && (
         <button
-          className={`search-result-item__expand-start  ${
+          className={`filter-result-item__expand-start  ${
             content.hasMoreAtStart
-              ? 'search-result-item__expand-start'
-              : 'search-result-item__expand-start--invert'
+              ? 'filter-result-item__expand-start'
+              : 'filter-result-item__expand-start--invert'
           }`}
           onClick={toggleExpandStart}
         >
@@ -168,10 +168,10 @@ const SearchResultItem = (props: Props) => {
       )}
       {content.showMoreAtEnd && (
         <button
-          className={`search-result-item__expand-end  ${
+          className={`filter-result-item__expand-end  ${
             content.hasMoreAtEnd
-              ? 'search-result-item__expand-end'
-              : 'search-result-item__expand-end--invert'
+              ? 'filter-result-item__expand-end'
+              : 'filter-result-item__expand-end--invert'
           }`}
           onClick={toggleExpandEnd}
         >
@@ -182,4 +182,4 @@ const SearchResultItem = (props: Props) => {
   );
 };
 
-export default SearchResultItem;
+export default FilterResultItem;

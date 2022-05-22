@@ -178,6 +178,7 @@ const NetworkGraph = (props: Props) => {
 
     setData(_data);
     setReferences(_references);
+    console.log('****', props.data);
   }, [props.data, state.nodeSize]);
 
   useEffect(() => {
