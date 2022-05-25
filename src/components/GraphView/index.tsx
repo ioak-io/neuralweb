@@ -19,6 +19,7 @@ const queryString = require('query-string');
 interface Props {
   space: string;
   noteref: string;
+  isContextExpanded: boolean;
 }
 
 const GraphView = (props: Props) => {
@@ -31,6 +32,7 @@ const GraphView = (props: Props) => {
   const [tagNodes, setTagNodes] = useState<NodeModel[]>([]);
   const [noteLinks, setNoteLinks] = useState<LinkModel[]>([]);
   const [tagLinks, setTagLinks] = useState<LinkModel[]>([]);
+  const [data, setData] = useState<any>({ nodes: [], links: [] });
   const [depth, setDepth] = useState<number>(2);
 
   useEffect(() => {
@@ -84,6 +86,14 @@ const GraphView = (props: Props) => {
     );
   }, [notes]);
 
+  useEffect(() => {
+    const _nodes = [...noteNodes];
+    setData({
+      nodes: [...noteNodes, ...tagNodes],
+      links: [...noteLinks, ...tagLinks],
+    });
+  }, [noteLinks, noteNodes, tagLinks, tagNodes]);
+
   const increaseDepth = () => {
     setDepth(depth + 1);
   };
@@ -95,11 +105,9 @@ const GraphView = (props: Props) => {
     <>
       <div>
         <NetworkGraph
-          data={{
-            nodes: [...noteNodes, ...tagNodes],
-            links: [...noteLinks, ...tagLinks],
-          }}
+          data={data}
           space={props.space}
+          offsetX={props.isContextExpanded ? 350 : 0}
         >
           <div className="graph-view__depth-control">
             <div className="graph-view__depth-control__text">Depth</div>

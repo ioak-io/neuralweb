@@ -175,10 +175,14 @@ const NotePage = (props: Props) => {
               </div>
             )}
             {view === 'graph' && state && (
-              <GraphView space={props.space} noteref={state.reference} />
+              <GraphView
+                space={props.space}
+                noteref={state.reference}
+                isContextExpanded={isContextExpanded}
+              />
             )}
             {['view', 'edit'].includes(view) && !queryParam.id && (
-              <div>No file is open</div>
+              <div className="main">No file is open</div>
             )}
           </div>
         </div>

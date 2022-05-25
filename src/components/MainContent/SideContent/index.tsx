@@ -3,6 +3,7 @@ import {
   faCalendarAlt,
   faChartArea,
   faChartBar,
+  faCircleDot,
   faClone,
   faCog,
   faCogs,
@@ -12,7 +13,10 @@ import {
   faFileExport,
   faFileImport,
   faFingerprint,
+  faFolderOpen,
+  faFolderPlus,
   faHome,
+  faMagnifyingGlass,
   faMoneyBillWave,
   faMoneyBillWaveAlt,
   faReceipt,
@@ -24,6 +28,7 @@ import {
   faTags,
   faTh,
   faThLarge,
+  faThumbTack,
   faUniversity,
   faUserShield,
   faWallet,
@@ -32,6 +37,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
+import { Subject } from 'rxjs';
 import DarkModeIcon from '../../../components/Navigation/DarkModeIcon';
 import NavAccountIcon from '../../../components/Navigation/NavAccountIcon';
 import Logo from '../../../components/Logo';
@@ -60,6 +66,9 @@ const SideContent = (props: Props) => {
   const [queryParam, setQueryParam] = useState({
     id: '',
   });
+  const [view, setView] = useState<'file' | 'search' | 'pin'>('file');
+  const [addFolderCommand, setAddFolderCommand] = useState(0);
+  const [locateFolderCommand, setLocateFolderCommand] = useState(0);
 
   useEffect(() => {
     const queryParam = queryString.parse(location.search);
@@ -87,8 +96,18 @@ const SideContent = (props: Props) => {
     window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/realm/${process.env.REACT_APP_ONEAUTH_APPSPACE_ID}/login/${process.env.REACT_APP_ONEAUTH_APP_ID}`;
   };
 
-  const chooseCompany = () => {
-    history.push('/home');
+  const handleAddFolder = () => {
+    setAddFolderCommand(addFolderCommand + 1);
+  };
+
+  const handleLocateFolder = () => {
+    setLocateFolderCommand(locateFolderCommand + 1);
+  };
+
+  const changeToFileView = () => {
+    setAddFolderCommand(0);
+    setLocateFolderCommand(0);
+    setView('file');
   };
 
   return (
@@ -99,8 +118,51 @@ const SideContent = (props: Props) => {
           : 'side-content__sidebar-inactive'
       } bg-light-300 dark:bg-dark-400`}
     >
-      <FilterExplorer space={props.space} selectedNoteId={queryParam?.id} />
-      <FileExplorer space={props.space} selectedNoteId={queryParam?.id} />
+      <div className="side-content__header">
+        <div className="side-content__header__left">
+          <button
+            className={`button ${view === 'file' ? 'active' : ''}`}
+            onClick={changeToFileView}
+          >
+            <FontAwesomeIcon icon={faFolderOpen} />
+          </button>
+          <button
+            className={`button ${view === 'search' ? 'active' : ''}`}
+            onClick={() => setView('search')}
+          >
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
+          </button>
+          <button
+            className={`button ${view === 'pin' ? 'active' : ''}`}
+            onClick={() => setView('pin')}
+          >
+            <FontAwesomeIcon icon={faThumbTack} />
+          </button>
+        </div>
+        {view === 'file' && (
+          <div className="side-content__header__right">
+            <button className="button" onClick={handleLocateFolder}>
+              <FontAwesomeIcon icon={faCircleDot} />
+            </button>
+            <button className="button" onClick={handleAddFolder}>
+              <FontAwesomeIcon icon={faFolderPlus} />
+            </button>
+          </div>
+        )}
+      </div>
+      <div className="side-content__body">
+        {view === 'search' && (
+          <FilterExplorer space={props.space} selectedNoteId={queryParam?.id} />
+        )}
+        {view === 'file' && (
+          <FileExplorer
+            space={props.space}
+            selectedNoteId={queryParam?.id}
+            addFolderCommand={addFolderCommand}
+            locateFolderCommand={locateFolderCommand}
+          />
+        )}
+      </div>
     </div>
   );
 };

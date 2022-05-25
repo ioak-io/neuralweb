@@ -2,9 +2,22 @@
   --color-primary-100: #6339c4;
   --color-primary-200: #6339c4c0;
   --color-primary-i: #fff;
+  --color-base-100: #ffffff;
+  --color-base-200: #fafafa;
+  --color-base-300: #f4f4f4;
+  --color-base-400: #e4e4e4;
+  --color-base-500: #d0d0d0;
+  --color-base-600: #c0c0c0;
+  --color-base-700: #b0b0b0;
 }
 .dark {
   --color-primary-100: #a07af8;
   --color-primary-200: #a07af8c0;
   --color-primary-i: #000;
+  --color-base-100: #505050;
+  --color-base-200: #414141;
+  --color-base-300: #2c2c2c;
+  --color-base-400: #202020;
+  --color-base-500: #161616;
+  --color-base-600: #000000;
 }

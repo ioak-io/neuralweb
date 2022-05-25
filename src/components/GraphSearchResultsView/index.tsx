@@ -13,6 +13,7 @@ import LinkModel from '../../model/LinkModel';
 import NodeModel from '../../model/NodeModel';
 import NotetagModel from '../../model/NotetagModel';
 import NoteModel from '../../model/NoteModel';
+import BinaryChoiceInput from '../NetworkGraph/BinaryChoiceInput';
 
 const queryString = require('query-string');
 
@@ -33,10 +34,9 @@ const GraphSearchResultsView = (props: Props) => {
   const [noteLinks, setNoteLinks] = useState<LinkModel[]>([]);
   const [tagLinks, setTagLinks] = useState<LinkModel[]>([]);
   const [showAllNodes, setShowAllNodes] = useState(true);
-  const [coloredNodes, setColoredNodes] = useState(true);
+  const [data, setData] = useState<any>({ nodes: [], links: [] });
 
   useEffect(() => {
-    console.log('**auth');
     if (authorization.isAuth) {
       getNotelinks(props.space, authorization).then((response: any) => {
         if (response) {
@@ -77,7 +77,7 @@ const GraphSearchResultsView = (props: Props) => {
           name: item.name,
           reference: item.reference,
           group: 'note',
-          color: coloredNodes ? item.color : undefined,
+          color: item.color,
         }))
       );
     } else {
@@ -90,11 +90,11 @@ const GraphSearchResultsView = (props: Props) => {
           name: item.name,
           reference: item.reference,
           group: 'note',
-          color: coloredNodes ? _noteMap[item.reference]?.color : undefined,
+          color: _noteMap[item.reference]?.color,
         }))
       );
     }
-  }, [props.noteNodes, notes, coloredNodes, showAllNodes]);
+  }, [props.noteNodes, notes, showAllNodes]);
 
   useEffect(() => {
     const _tagNodeIdList: string[] = [];
@@ -118,75 +118,21 @@ const GraphSearchResultsView = (props: Props) => {
     );
   }, [tagLinks, tagNodes, noteNodes]);
 
+  useEffect(() => {
+    setData({
+      nodes: [...noteNodes, ...tagNodesFiltered],
+      links: [...noteLinks, ...tagLinks],
+    });
+  }, [noteNodes, tagNodesFiltered, noteLinks, tagLinks]);
+
   return (
-    <>
-      <div>
-        <NetworkGraph
-          data={{
-            nodes: [...noteNodes, ...tagNodesFiltered],
-            links: [...noteLinks, ...tagLinks],
-          }}
-          space={props.space}
-        >
-          <div className="graph-search-results-view__control__container">
-            <div className="graph-search-results-view__control">
-              <div className="graph-search-results-view__control__text">
-                Show all nodes
-              </div>
-              <div className="graph-search-results-view__control__action">
-                <button
-                  className={`button graph-search-results-view__control__action__button ${
-                    showAllNodes
-                      ? 'graph-search-results-view__control__action__button--active'
-                      : ''
-                  }`}
-                  onClick={() => setShowAllNodes(true)}
-                >
-                  Yes
-                </button>
-                <button
-                  className={`button graph-search-results-view__control__action__button ${
-                    showAllNodes
-                      ? ''
-                      : 'graph-search-results-view__control__action__button--active'
-                  }`}
-                  onClick={() => setShowAllNodes(false)}
-                >
-                  No
-                </button>
-              </div>
-            </div>
-            <div className="graph-search-results-view__control">
-              <div className="graph-search-results-view__control__text">
-                Apply color to nodes
-              </div>
-              <div className="graph-search-results-view__control__action">
-                <button
-                  className={`button graph-search-results-view__control__action__button ${
-                    coloredNodes
-                      ? 'graph-search-results-view__control__action__button--active'
-                      : ''
-                  }`}
-                  onClick={() => setColoredNodes(true)}
-                >
-                  Yes
-                </button>
-                <button
-                  className={`button graph-search-results-view__control__action__button ${
-                    coloredNodes
-                      ? ''
-                      : 'graph-search-results-view__control__action__button--active'
-                  }`}
-                  onClick={() => setColoredNodes(false)}
-                >
-                  No
-                </button>
-              </div>
-            </div>
-          </div>
-        </NetworkGraph>
-      </div>
-    </>
+    <NetworkGraph data={data} space={props.space} offsetY={136}>
+      <BinaryChoiceInput
+        label="Show all nodes"
+        value={showAllNodes}
+        handleUpdate={(value: boolean) => setShowAllNodes(value)}
+      />
+    </NetworkGraph>
   );
 };
 

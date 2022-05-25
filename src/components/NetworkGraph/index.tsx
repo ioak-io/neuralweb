@@ -21,10 +21,13 @@ import LinkModel from '../../model/LinkModel';
 import NodeModel from '../../model/NodeModel';
 import FilterGroup from './FilterGroup';
 import { getFilterGroup, updateFilterGroup } from './service';
+import BinaryChoiceInput from './BinaryChoiceInput';
 
 const queryString = require('query-string');
 
 interface Props {
+  offsetX?: number;
+  offsetY?: number;
   space: string;
   data: { nodes: NodeModel[]; links: LinkModel[] };
   children?: any;
@@ -49,6 +52,10 @@ const NetworkGraph = (props: Props) => {
   const [references, setReferences] = useState<any>({});
   const [filterGroup, setFilterGroup] = useState<any[]>([]);
 
+  const [hideOrphanNodes, setHideOrphanNodes] = useState(false);
+  const [disableNodeColors, setDisableNodeColors] = useState(false);
+  const [dynamicNodeSize, setDynamicNodeSize] = useState(true);
+
   const [svg, setSvg] = useState<any>();
   const referenceElement = useRef<any>(null);
   const popperElement = useRef<any>(null);
@@ -71,7 +78,6 @@ const NetworkGraph = (props: Props) => {
   const [simulation, setSimulation] = useState<any>();
 
   useEffect(() => {
-    console.log('**auth');
     if (authorization.isAuth) {
       getFilterGroup(props.space, authorization).then((response: any) => {
         if (response) {
@@ -94,7 +100,7 @@ const NetworkGraph = (props: Props) => {
     referenceElement.current,
     popperElement.current,
     {
-      placement: 'bottom-end',
+      placement: 'top-end',
       modifiers: [
         {
           name: 'flip',
@@ -176,14 +182,26 @@ const NetworkGraph = (props: Props) => {
       };
     });
 
+    if (hideOrphanNodes) {
+      _data.nodes = _data.nodes.filter(
+        (item: any) => !!nodeCountMap[item.reference]
+      );
+    }
+
     setData(_data);
     setReferences(_references);
-    console.log('****', props.data);
-  }, [props.data, state.nodeSize]);
+  }, [props.data, state.nodeSize, hideOrphanNodes]);
 
   useEffect(() => {
     simulateNetwork();
-  }, [profile, data]);
+  }, [
+    profile,
+    data,
+    disableNodeColors,
+    dynamicNodeSize,
+    props.offsetX,
+    props.offsetY,
+  ]);
 
   useEffect(() => {
     modifyForceParameters();
@@ -287,7 +305,9 @@ const NetworkGraph = (props: Props) => {
             .forceCollide()
             .radius(
               (d: any) =>
-                Math.sqrt(d.weight || state.nodeSize) + state.collision
+                (dynamicNodeSize
+                  ? Math.sqrt(d.weight || state.nodeSize)
+                  : Math.sqrt(state.nodeSize)) + state.collision
             )
         );
       // .force('link', d3.forceLink().distance(state.distance).strength(0.1));
@@ -313,8 +333,8 @@ const NetworkGraph = (props: Props) => {
   };
 
   const simulateNetwork = () => {
-    const height = window.innerHeight - 50;
-    let width = window.innerWidth - 80 - 40;
+    const height = window.innerHeight - 50 - (props.offsetY || 0);
+    let width = window.innerWidth - 80 - (props.offsetX || 0);
     if (profile.sidebar) {
       width -= 350;
     }
@@ -335,11 +355,6 @@ const NetworkGraph = (props: Props) => {
         '#A500B1',
         '#DD3D1C',
       ]);
-    const linkColorDisabled = d3
-      .scaleOrdinal()
-      .domain(['', 'ai', 'link'])
-      .range(['#90909020', '#A500B120', '#DD3D1C20']);
-    // const color = d3.scaleOrdinal(nodeGroups, colors);
     const r = 20;
     const _nodes = data?.nodes;
     const _links = data?.links;
@@ -386,7 +401,9 @@ const NetworkGraph = (props: Props) => {
             .forceCollide()
             .radius(
               (d: any) =>
-                Math.sqrt(d.weight || state.nodeSize) + state.collision
+                (dynamicNodeSize
+                  ? Math.sqrt(d.weight || state.nodeSize)
+                  : Math.sqrt(state.nodeSize)) + state.collision
             )
         )
         .force('charge', d3.forceManyBody().strength(state.charge))
@@ -415,8 +432,7 @@ const NetworkGraph = (props: Props) => {
         .join('g')
         .attr('class', 'node')
         .style('fill', function (d: any) {
-          console.log(d.group, nodeColorDark(d.group));
-          if (d.color) {
+          if (d.color && !disableNodeColors) {
             return d.color;
           }
           return profile.theme === 'theme_dark'
@@ -449,7 +465,9 @@ const NetworkGraph = (props: Props) => {
       const _eventNode = node
         .append('circle')
         .attr('r', function (d: any) {
-          return Math.sqrt(d.weight || state.nodeSize);
+          return dynamicNodeSize
+            ? Math.sqrt(d.weight || state.nodeSize)
+            : Math.sqrt(state.nodeSize);
         })
         // .attr('fill', '#AE65FF')
         .attr('stroke-width', 1)
@@ -542,10 +560,14 @@ const NetworkGraph = (props: Props) => {
 
   return (
     <div className="network-graph" ref={divRef}>
-      <svg ref={svgRef} width={1200} height={600} />
+      <svg ref={svgRef} />
       <div className="network-graph__control">
         <button
-          className="button network-graph__control__button bg-light-300 hover:bg-light-400 dark:bg-dark-400 dark:hover:bg-dark-500"
+          className={`button network-graph__control__button ${
+            isOpen
+              ? 'network-graph__control__button--active'
+              : 'network-graph__control__button--inactive'
+          }`}
           onClick={togglePopup}
           ref={referenceElement}
         >
@@ -559,24 +581,39 @@ const NetworkGraph = (props: Props) => {
         >
           {isOpen && (
             <div className="network-graph__control__content">
-              {props.children && (
+              <div className="network-graph__control__content__related-group">
+                <BinaryChoiceInput
+                  label="Hide orphan nodes"
+                  value={hideOrphanNodes}
+                  handleUpdate={(value: boolean) => setHideOrphanNodes(value)}
+                />
+                <BinaryChoiceInput
+                  label="Dynamic node size"
+                  value={dynamicNodeSize}
+                  handleUpdate={(value: boolean) => setDynamicNodeSize(value)}
+                />
+                <BinaryChoiceInput
+                  label="Disable node colors"
+                  value={disableNodeColors}
+                  handleUpdate={(value: boolean) => setDisableNodeColors(value)}
+                />
+                {props.children && <>{props.children}</>}
+              </div>
+
+              {!disableNodeColors && (
                 <div className="network-graph__control__content__container">
-                  {props.children}
+                  <div className="network-graph__control__content__title">
+                    Groups
+                  </div>
+                  <div className="network-graph__control__content__body">
+                    <FilterGroup
+                      space={props.space}
+                      data={filterGroup}
+                      handleUpdate={handleUpdateFilterGroup}
+                    />
+                  </div>
                 </div>
               )}
-
-              <div className="network-graph__control__content__container">
-                <div className="network-graph__control__content__title">
-                  Groups
-                </div>
-                <div className="network-graph__control__content__body">
-                  <FilterGroup
-                    space={props.space}
-                    data={filterGroup}
-                    handleUpdate={handleUpdateFilterGroup}
-                  />
-                </div>
-              </div>
 
               <div className="network-graph__control__content__container">
                 <div className="network-graph__control__content__title">
@@ -684,7 +721,7 @@ const NetworkGraph = (props: Props) => {
                     <input
                       type="range"
                       min="0"
-                      max="100"
+                      max="500"
                       onChange={handleSliderChange}
                       name="nodeSize"
                       value={state.nodeSize}

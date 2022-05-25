@@ -29,7 +29,7 @@ export const getNotetags = (
   level: number,
   authorization: any
 ) => {
-  return httpGet(`/note/tag/${space}/${id}/${level}`, {
+  return httpGet(`/note/tag/${space}`, {
     headers: {
       Authorization: authorization.access_token,
     },

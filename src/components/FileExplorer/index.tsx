@@ -5,6 +5,7 @@ import { useHistory, useLocation } from 'react-router';
 import { cloneDeep, sortBy, uniqBy } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleDot, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import MoveFolderCommand from '../../events/MoveFolderCommand';
 import MoveNoteCommand from '../../events/MoveNoteCommand';
 import FolderModel from '../../model/FolderModel';
@@ -30,6 +31,8 @@ import ShowSelectedNoteCommand from '../../events/ShowSelectedNoteCommand';
 interface Props {
   space: string;
   selectedNoteId: string;
+  addFolderCommand: number;
+  locateFolderCommand: number;
 }
 
 const FileExplorer = (props: Props) => {
@@ -48,6 +51,18 @@ const FileExplorer = (props: Props) => {
     });
     setFolderMap(_folderMap);
   }, [folderList]);
+
+  useEffect(() => {
+    if (props.addFolderCommand > 0) {
+      handleAddFolder();
+    }
+  }, [props.addFolderCommand]);
+
+  useEffect(() => {
+    if (props.locateFolderCommand > 0) {
+      showOpenedNote();
+    }
+  }, [props.locateFolderCommand]);
 
   const handleFolderChange = (_folder: FolderModel) => {
     saveFolder(props.space, _folder, authorization).then((response: any) => {
@@ -166,6 +181,7 @@ const FileExplorer = (props: Props) => {
   };
 
   const showOpenedNote = () => {
+    console.log(props.selectedNoteId, noteList);
     if (!props.selectedNoteId) {
       return;
     }
@@ -190,7 +206,7 @@ const FileExplorer = (props: Props) => {
 
   return (
     <div className="file-explorer">
-      <div className="file-explorer__header">
+      {/* <div className="file-explorer__header">
         <div>File explorer</div>
         <div className="file-explorer__header__action">
           <button className="button" onClick={showOpenedNote}>
@@ -200,7 +216,7 @@ const FileExplorer = (props: Props) => {
             <FontAwesomeIcon icon={faFolderPlus} />
           </button>
         </div>
-      </div>
+      </div> */}
       <div className="file-explorer__body">
         <Hierarchy
           space={props.space}

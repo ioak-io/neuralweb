@@ -25,7 +25,7 @@ const FilterExplorer = (props: Props) => {
   const authorization = useSelector((state: any) => state.authorization);
   const dispatch = useDispatch();
   const [folderMap, setFolderMap] = useState<any>({});
-  const [fileNameResults, setFileNameResults] = useState<any>({
+  const [results, setResults] = useState<any>({
     results: [],
     words: [
       {
@@ -45,37 +45,23 @@ const FilterExplorer = (props: Props) => {
   }, [folderList]);
 
   const handleSearch = (text: string) => {
-    // if (text.startsWith('file:')) {
-    //   const words: string[] = text
-    //     .substr(5)
-    //     .replace(/  +/g, ' ')
-    //     .trim()
-    //     .toLowerCase()
-    //     .split(' ');
-    //   const res = noteList.filter((item: NoteModel) => {
-    //     return words.every((item2) => item.name.toLowerCase().includes(item2));
-    //   });
-    //   setFileNameResults({ results: res, words });
-    // } else {
     filterNote(props.space, text, authorization).then((response) => {
-      console.log(response);
-      setFileNameResults(response);
+      setResults(response);
     });
-    // }
   };
 
   return (
     <div className="search-explorer">
-      <div className="search-explorer__header">
+      {/* <div className="search-explorer__header">
         <div>Search explorer</div>
-      </div>
+      </div> */}
       <div className="search-explorer__body">
         <div className="search-explorer__body__input">
           <SearchBlock space={props.space} handleSubmit={handleSearch} />
         </div>
         <div className="search-explorer__body__result">
           <FilterResults
-            data={fileNameResults}
+            data={results}
             space={props.space}
             selectedNoteId={props.selectedNoteId}
           />

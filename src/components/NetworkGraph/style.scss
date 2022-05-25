@@ -20,16 +20,28 @@
 .network-graph__control {
   box-sizing: border-box;
   position: absolute;
-  top: 10px;
-  right: 10px;
+  bottom: 20px;
+  right: 20px;
 }
 .network-graph__control__button {
-  border-radius: 4px;
-  height: 36px;
-  width: 36px;
+  border-radius: 50px;
+  height: 50px;
+  width: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 2px solid var(--color-primary-100);
+}
+.network-graph__control__button--inactive:hover {
+  color: var(--color-primary-100);
+}
+.network-graph__control__button--active {
+  border-color: var(--color-base-700);
+  color: var(--color-base-700);
+}
+.dark .network-graph__control__button--active {
+  border-color: var(--color-base-100);
+  color: var(--color-base-100);
 }
 
 .network-graph__control__content {
@@ -108,3 +120,9 @@
 // .network-graph__control__content > div:nth-last-child() {
 //   border-bottom: none;
 // }
+
+.network-graph__control__content__related-group {
+  display: grid;
+  grid-auto-flow: row;
+  row-gap: 16px;
+}
