@@ -49,6 +49,7 @@ import { sendMessage } from '../../../events/MessageService';
 import SideNavSubHeading from '../SideNavSubHeading';
 import FileExplorer from '../../../components/FileExplorer';
 import FilterExplorer from '../../../components/FilterExplorer';
+import { filterNote } from '../../../components/FilterExplorer/service';
 
 const queryString = require('query-string');
 
@@ -69,6 +70,26 @@ const SideContent = (props: Props) => {
   const [view, setView] = useState<'file' | 'search' | 'pin'>('file');
   const [addFolderCommand, setAddFolderCommand] = useState(0);
   const [locateFolderCommand, setLocateFolderCommand] = useState(0);
+
+  const [searchText, setSearchText] = useState<string>('');
+
+  const [searchResults, setSearchResults] = useState<any>({
+    results: [],
+    words: [
+      {
+        name: [],
+        path: [],
+        content: [],
+      },
+    ],
+  });
+
+  const handleSearch = (text: string) => {
+    setSearchText(text);
+    filterNote(props.space, text, authorization).then((response) => {
+      setSearchResults(response);
+    });
+  };
 
   useEffect(() => {
     const queryParam = queryString.parse(location.search);
@@ -152,7 +173,13 @@ const SideContent = (props: Props) => {
       </div>
       <div className="side-content__body">
         {view === 'search' && (
-          <FilterExplorer space={props.space} selectedNoteId={queryParam?.id} />
+          <FilterExplorer
+            space={props.space}
+            selectedNoteId={queryParam?.id}
+            searchText={searchText}
+            results={searchResults}
+            handleSearch={handleSearch}
+          />
         )}
         {view === 'file' && (
           <FileExplorer

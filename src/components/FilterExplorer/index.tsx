@@ -15,6 +15,12 @@ import FilterResults from './FilterResults';
 interface Props {
   space: string;
   selectedNoteId: string;
+  results: {
+    results: any[];
+    words: string[];
+  };
+  searchText: string;
+  handleSearch: any;
 }
 
 const FilterExplorer = (props: Props) => {
@@ -25,16 +31,6 @@ const FilterExplorer = (props: Props) => {
   const authorization = useSelector((state: any) => state.authorization);
   const dispatch = useDispatch();
   const [folderMap, setFolderMap] = useState<any>({});
-  const [results, setResults] = useState<any>({
-    results: [],
-    words: [
-      {
-        name: [],
-        path: [],
-        content: [],
-      },
-    ],
-  });
 
   useEffect(() => {
     const _folderMap: any = {};
@@ -45,9 +41,7 @@ const FilterExplorer = (props: Props) => {
   }, [folderList]);
 
   const handleSearch = (text: string) => {
-    filterNote(props.space, text, authorization).then((response) => {
-      setResults(response);
-    });
+    props.handleSearch(text);
   };
 
   return (
@@ -57,11 +51,15 @@ const FilterExplorer = (props: Props) => {
       </div> */}
       <div className="search-explorer__body">
         <div className="search-explorer__body__input">
-          <SearchBlock space={props.space} handleSubmit={handleSearch} />
+          <SearchBlock
+            space={props.space}
+            handleSubmit={handleSearch}
+            criteria={props.searchText}
+          />
         </div>
         <div className="search-explorer__body__result">
           <FilterResults
-            data={results}
+            data={props.results}
             space={props.space}
             selectedNoteId={props.selectedNoteId}
           />
