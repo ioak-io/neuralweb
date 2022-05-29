@@ -33,7 +33,7 @@ const GraphSearchResultsView = (props: Props) => {
   const [tagNodesFiltered, setTagNodesFiltered] = useState<NodeModel[]>([]);
   const [noteLinks, setNoteLinks] = useState<LinkModel[]>([]);
   const [tagLinks, setTagLinks] = useState<LinkModel[]>([]);
-  const [showAllNodes, setShowAllNodes] = useState(true);
+  const [showAllNodes, setShowAllNodes] = useState(false);
   const [data, setData] = useState<any>({ nodes: [], links: [] });
 
   useEffect(() => {
