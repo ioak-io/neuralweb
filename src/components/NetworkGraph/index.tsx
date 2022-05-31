@@ -224,8 +224,12 @@ const NetworkGraph = (props: Props) => {
   useEffect(() => {
     if (eventNode) {
       eventNode
-        .on('click', function (d: any, e: any) {
-          history.push(`/${props.space}/note?id=${e.reference}`);
+        .on('click', function (e: any, d: any) {
+          if (d.group === 'note') {
+            history.push(`/${props.space}/note?id=${d.reference}`);
+          } else {
+            history.push(`/${props.space}/search?text=tag:${d.reference}`);
+          }
         })
         .on('mouseenter', (evt: any, d: any) => {
           linkNode
