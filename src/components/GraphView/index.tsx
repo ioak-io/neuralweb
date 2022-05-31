@@ -75,7 +75,6 @@ const GraphView = (props: Props) => {
   }, [authorization, props.noteref, depth]);
 
   useEffect(() => {
-    console.log('**notes');
     setNoteNodes(
       notes.map((item: NoteModel) => ({
         name: item.name,
@@ -87,10 +86,34 @@ const GraphView = (props: Props) => {
   }, [notes]);
 
   useEffect(() => {
-    const _nodes = [...noteNodes];
+    const _links = [...noteLinks, ...tagLinks];
+
+    const _linkedNoteNodes: string[] = [];
+    const _linkedTagNodes: string[] = [];
+    noteLinks.forEach((item) => {
+      _linkedNoteNodes.push(item.source);
+      _linkedNoteNodes.push(item.target);
+    });
+    tagLinks
+      .filter(
+        (item) =>
+          _linkedNoteNodes.includes(item.source) ||
+          _linkedNoteNodes.includes(item.target)
+      )
+      .forEach((item) => {
+        _linkedTagNodes.push(item.source);
+        _linkedTagNodes.push(item.target);
+      });
+
+    const _nodes = [...noteNodes, ...tagNodes].filter(
+      (item) =>
+        _linkedNoteNodes.includes(item.reference) ||
+        _linkedTagNodes.includes(item.reference)
+    );
+
     setData({
-      nodes: [...noteNodes, ...tagNodes],
-      links: [...noteLinks, ...tagLinks],
+      nodes: _nodes,
+      links: _links,
     });
   }, [noteLinks, noteNodes, tagLinks, tagNodes]);
 
@@ -108,6 +131,7 @@ const GraphView = (props: Props) => {
           data={data}
           space={props.space}
           offsetX={props.isContextExpanded ? 350 : 0}
+          focusNodeRef={props.noteref}
         >
           <div className="graph-view__depth-control">
             <div className="graph-view__depth-control__text">Depth</div>

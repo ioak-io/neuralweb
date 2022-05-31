@@ -31,10 +31,11 @@ interface Props {
   space: string;
   data: { nodes: NodeModel[]; links: LinkModel[] };
   children?: any;
+  focusNodeRef?: string;
 }
 
-const THEME: any = {
-  DARK_BG: '#202020',
+const THEME = {
+  DARK_BG: '#2c2c2c',
   LIGHT_BG: '#fafafa',
   DARK_TEXT: '#fcfcfc',
   LIGHT_TEXT: '#0a0a0a',
@@ -432,6 +433,11 @@ const NetworkGraph = (props: Props) => {
         .join('g')
         .attr('class', 'node')
         .style('fill', function (d: any) {
+          if (props.focusNodeRef && d.reference === props.focusNodeRef) {
+            return profile.theme === 'theme_dark'
+              ? THEME.DARK_BG
+              : THEME.LIGHT_BG;
+          }
           if (d.color && !disableNodeColors) {
             return d.color;
           }
@@ -471,11 +477,16 @@ const NetworkGraph = (props: Props) => {
         })
         // .attr('fill', '#AE65FF')
         .attr('stroke-width', 1)
-        .attr('stroke', '#26465c')
-        .attr(
-          'stroke',
-          profile.theme === 'theme_dark' ? THEME.DARK_BG : THEME.LIGHT_BG
-        );
+        .attr('stroke', function (d: any) {
+          if (props.focusNodeRef && d.reference === props.focusNodeRef) {
+            return profile.theme === 'theme_dark'
+              ? THEME.DARK_TEXT
+              : THEME.LIGHT_TEXT;
+          }
+          return profile.theme === 'theme_dark'
+            ? THEME.DARK_BG
+            : THEME.LIGHT_BG;
+        });
 
       setEventNode(_eventNode);
 

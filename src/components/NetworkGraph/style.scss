@@ -11,8 +11,16 @@
   circle {
     cursor: pointer;
     &:hover {
-      fill: #a07af8 !important;
-      stroke: #fcfcfca0;
+      fill: var(--color-primary-100) !important;
+      stroke: #d1d1d1;
+    }
+  }
+}
+
+.dark .network-graph {
+  circle {
+    &:hover {
+      stroke: #c0c0c0;
     }
   }
 }
