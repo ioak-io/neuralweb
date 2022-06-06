@@ -111,11 +111,11 @@ const SideContentMini = (props: Props) => {
               icon={faUserShield}
               label="User"
             />
-            <SideNavLink
+            {/* <SideNavLink
               link={`/${props.space}/settings/backup`}
               icon={faDatabase}
               label="Backup and restore"
-            />
+            /> */}
           </>
         )}
       </div>

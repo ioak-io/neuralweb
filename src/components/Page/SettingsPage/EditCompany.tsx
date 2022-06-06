@@ -19,8 +19,6 @@ const EMPTY_COMPANY: CompanyModel = {
   name: '',
   description: '',
   reference: null,
-  numberFormat: 'en-US',
-  currency: 'USD',
 };
 
 const EditCompany = (props: Props) => {
@@ -79,18 +77,6 @@ const EditCompany = (props: Props) => {
                   value={state.description}
                   onChange={handleChange}
                   type="textarea"
-                  required
-                />
-                <input
-                  name="currency"
-                  value={state.currency}
-                  onChange={handleChange}
-                  required
-                />
-                <input
-                  name="numberFormat"
-                  value={state.numberFormat}
-                  onChange={handleChange}
                   required
                 />
               </div>
