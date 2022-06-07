@@ -21,8 +21,6 @@ const EMPTY_COMPANY: CompanyModel = {
   name: '',
   description: '',
   reference: null,
-  numberFormat: 'en-US',
-  currency: 'USD',
 };
 
 const EditCompanyPage = (props: Props) => {
@@ -61,27 +59,36 @@ const EditCompanyPage = (props: Props) => {
         <form onSubmit={save}>
           <div className="form">
             <div className="form-two-column">
+              <div>
+                <label>Name</label>
+                <input
+                  name="name"
+                  value={state.name}
+                  onChange={handleChange}
+                  autoFocus
+                  required
+                />
+              </div>
+              <div>
+                <label>Reference</label>
+                <input
+                  name="reference"
+                  value={state.reference || ''}
+                  onChange={handleChange}
+                  disabled
+                />
+              </div>
+            </div>
+            <div>
+              <label>Description</label>
               <input
-                name="name"
-                value={state.name}
+                name="description"
+                value={state.description}
                 onChange={handleChange}
-                autoFocus
+                type="textarea"
                 required
               />
-              <input
-                name="reference"
-                value={state.reference || ''}
-                onChange={handleChange}
-                disabled
-              />
             </div>
-            <input
-              name="description"
-              value={state.description}
-              onChange={handleChange}
-              type="textarea"
-              required
-            />
           </div>
         </form>
       </div>

@@ -118,6 +118,30 @@
   // }
 }
 
+.primary-button,
+.default-button {
+  display: grid;
+  grid-auto-flow: column;
+  column-gap: 12px;
+  padding: 6px 16px;
+  border-radius: 4px;
+  align-content: center;
+  align-items: center;
+  background-color: var(--color-primary-100);
+  &:hover,
+  &:focus {
+    background-color: var(--color-primary-100);
+  }
+}
+
+.default-button {
+  background-color: var(--color-base-100);
+  &:hover,
+  &:focus {
+    background-color: var(--color-base-200);
+  }
+}
+
 .footer-action {
   display: grid;
   grid-auto-flow: column;
@@ -157,6 +181,39 @@
 .page-animate {
   -webkit-animation: page-animate 500ms forwards ease-in-out;
   animation: page-animate 250ms forwards ease-in-out;
+}
+
+input {
+  border: 1px solid rgb(184, 184, 184);
+  border-radius: 4px;
+  &:hover:not(:focus) {
+    border-color: rgb(124, 124, 124);
+  }
+}
+
+.dark input {
+  border: 1px solid rgb(83, 83, 83);
+  &:hover:not(:focus) {
+    border-color: rgb(124, 124, 124);
+  }
+}
+
+input {
+  background-color: inherit;
+  color: inherit;
+  padding: 6px 12px;
+  transition: border-color 250ms ease-in-out;
+  &:focus {
+    border-color: var(--color-primary-100);
+    outline: none;
+  }
+  width: 100%;
+}
+
+label {
+  font-size: 12px;
+  display: flex;
+  margin-bottom: 2px;
 }
 
 @-webkit-keyframes page-animate {

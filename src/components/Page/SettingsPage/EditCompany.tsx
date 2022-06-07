@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import './EditCompany.scss';
 import { newId } from '../../../events/MessageService';
 import CompanyModel from '../../../model/CompanyModel';
 import { saveCompany } from '../EditCompanyPage/service';
 import Topbar from '../../../components/Topbar';
+import Footer from '../../../components/Footer';
 
 const queryString = require('query-string');
 
@@ -39,14 +42,21 @@ const EditCompany = (props: Props) => {
     }
   }, [company]);
 
-  const handleChange = (detail: any) => {
-    setState({ ...state, [detail.name]: detail.value });
+  const handleChange = (event: any) => {
+    setState({
+      ...state,
+      [event.currentTarget.name]: event.currentTarget.value,
+    });
   };
 
   const save = () => {
     saveCompany(state, authorization).then((response: any) => {
       console.log('company details updated');
     });
+  };
+
+  const goBack = () => {
+    history.goBack();
   };
 
   return (
@@ -58,27 +68,36 @@ const EditCompany = (props: Props) => {
             <form onSubmit={save}>
               <div className="form">
                 <div className="form-two-column">
+                  <div>
+                    <label>Name</label>
+                    <input
+                      name="name"
+                      value={state.name}
+                      onChange={handleChange}
+                      autoFocus
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label>Reference</label>
+                    <input
+                      name="reference"
+                      value={state.reference || ''}
+                      onChange={handleChange}
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label>Description</label>
                   <input
-                    name="name"
-                    value={state.name}
+                    name="description"
+                    value={state.description}
                     onChange={handleChange}
-                    autoFocus
+                    type="textarea"
                     required
                   />
-                  <input
-                    name="reference"
-                    value={state.reference || ''}
-                    onChange={handleChange}
-                    disabled
-                  />
                 </div>
-                <input
-                  name="description"
-                  value={state.description}
-                  onChange={handleChange}
-                  type="textarea"
-                  required
-                />
               </div>
             </form>
           )}
@@ -87,6 +106,21 @@ const EditCompany = (props: Props) => {
           )}
         </div>
       </div>
+      <Footer>
+        <div className="footer-action">
+          <button
+            className="button primary-button"
+            type="submit"
+            onClick={save}
+          >
+            <FontAwesomeIcon icon={faCheck} />
+            Save
+          </button>
+          <button className="button default-button" onClick={goBack}>
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+        </div>
+      </Footer>
     </div>
   );
 };
