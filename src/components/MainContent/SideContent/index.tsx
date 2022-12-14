@@ -103,7 +103,7 @@ const SideContent = (props: Props) => {
   ) => {
     dispatch(removeAuth());
     props.cookies.remove(
-      `metamind_${process.env.REACT_APP_ONEAUTH_APPSPACE_ID}`
+      `neuralweb_${process.env.REACT_APP_ONEAUTH_APPSPACE_ID}`
     );
     history.push(`/`);
     sendMessage('notification', true, {

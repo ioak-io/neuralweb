@@ -18,7 +18,7 @@ const Topbar = (props: Props) => {
 
   const toggleSidebar = () => {
     sessionStorage.setItem(
-      'metamind_pref_sidebar_status',
+      'neuralweb_pref_sidebar_status',
       profile.sidebar ? 'collapsed' : 'expanded'
     );
 

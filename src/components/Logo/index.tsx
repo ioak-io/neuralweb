@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, connect, useDispatch } from 'react-redux';
 import './style.scss';
-import metamindWhiteSmall from '../../images/new.svg';
-import metamindWhiteText from '../../images/metamind_white_text.svg';
-import metamindBlackSmall from '../../images/metamind_black_small.svg';
-import metamindBlackText from '../../images/metamind_black_text.svg';
-import metamindBlack from '../../images/metamind_black.svg';
+import neuralwebWhiteSmall from '../../images/new.svg';
+import neuralwebWhiteText from '../../images/neuralweb_white_text.svg';
+import neuralwebBlackSmall from '../../images/neuralweb_black_small.svg';
+import neuralwebBlackText from '../../images/neuralweb_black_text.svg';
+import neuralwebBlack from '../../images/neuralweb_black.svg';
 
 interface Props {
   variant: 'full' | 'short';
@@ -22,15 +22,15 @@ const Logo = (props: Props) => {
     <div className="logo">
       <div className="logo--image">
         {profile.theme === 'theme_light' && (
-          <img src={metamindWhiteSmall} alt="Fortuna logo" />
+          <img src={neuralwebWhiteSmall} alt="Neuralweb logo" />
         )}
         {profile.theme !== 'theme_light' && (
-          <img src={metamindWhiteSmall} alt="Fortuna logo" />
+          <img src={neuralwebWhiteSmall} alt="Neuralweb logo" />
         )}
       </div>
       {props.variant === 'full' && (
         <div className="logo--text">
-          <img src={metamindWhiteText} alt="Fortuna logo" />
+          <img src={neuralwebWhiteText} alt="Neuralweb logo" />
         </div>
       )}
     </div>

@@ -1,9 +1,9 @@
 {
-  "name": "metamind",
+  "name": "neuralweb",
   "version": "1.0.0",
-  "description": "Fortuna app",
+  "description": "Neuralweb app",
   "main": "index.js",
-  "homepage": "https://metamind-app.ioak.io",
+  "homepage": "https://neuralweb-app.ioak.io",
   "scripts": {
     "start": "tsc && webpack serve --env target=development --config webpack.config.js --mode development",
     "start:fast": "webpack serve --env target=development --config webpack.config.js --mode development",

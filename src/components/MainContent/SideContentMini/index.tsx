@@ -38,7 +38,7 @@ const SideContentMini = (props: Props) => {
 
   const toggleSidebar = () => {
     sessionStorage.setItem(
-      'metamind_pref_sidebar_status',
+      'neuralweb_pref_sidebar_status',
       profile.sidebar ? 'collapsed' : 'expanded'
     );
 
@@ -51,8 +51,8 @@ const SideContentMini = (props: Props) => {
     message = 'You have been logged out'
   ) => {
     dispatch(removeAuth());
-    props.cookies.remove(`metamind-access_token`);
-    props.cookies.remove(`metamind-refresh_token`);
+    props.cookies.remove(`neuralweb-access_token`);
+    props.cookies.remove(`neuralweb-refresh_token`);
     history.push(`/`);
     sendMessage('notification', true, {
       type,

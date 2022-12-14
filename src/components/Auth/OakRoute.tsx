@@ -55,8 +55,8 @@ const OakRoute = (props: Props) => {
     if (authorization.isAuth) {
       return true;
     }
-    const accessToken = props.cookies.get(`metamind-access_token`);
-    const refreshToken = props.cookies.get(`metamind-refresh_token`);
+    const accessToken = props.cookies.get(`neuralweb-access_token`);
+    const refreshToken = props.cookies.get(`neuralweb-refresh_token`);
     if (accessToken && refreshToken) {
       httpPost(
         `/user/${props.match.params.space}/authorize_user`,
@@ -68,7 +68,7 @@ const OakRoute = (props: Props) => {
             let newAccessToken = accessToken;
             if (response.data.access_token) {
               newAccessToken = response.data.access_token;
-              props.cookies.set(`metamind-access_token`, newAccessToken);
+              props.cookies.set(`neuralweb-access_token`, newAccessToken);
             }
             dispatch(
               addAuth({
@@ -80,8 +80,8 @@ const OakRoute = (props: Props) => {
           }
         })
         .catch((error: any) => {
-          props.cookies.remove(`metamind-access_token`);
-          props.cookies.remove(`metamind-refresh_token`);
+          props.cookies.remove(`neuralweb-access_token`);
+          props.cookies.remove(`neuralweb-refresh_token`);
           if (redirect && error.response.status === 404) {
             sendMessage('notification', true, {
               type: 'failure',

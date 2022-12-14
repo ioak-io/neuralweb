@@ -28,7 +28,7 @@ const Login = (props: Props) => {
     );
   };
 
-  const metamindLogin = () => {
+  const neuralwebLogin = () => {
     console.log('not yet implemented');
   };
 
@@ -49,7 +49,7 @@ const Login = (props: Props) => {
       <br />
       Choose the preferred authentication method to continue
       <div className="view-asset-item">
-        <div className="space-top-3 metamind-signin">
+        <div className="space-top-3 neuralweb-signin">
           <div className="login-home">
             <LoginMethod
               action={oaLogin}
@@ -57,7 +57,7 @@ const Login = (props: Props) => {
               label="Enterprise Login"
             />
             <LoginMethod
-              action={metamindLogin}
+              action={neuralwebLogin}
               icon="people"
               label="Individual Login"
             />

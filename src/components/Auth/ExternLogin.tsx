@@ -30,7 +30,7 @@ const ExternLogin = (props: Props) => {
     });
     if (data?.newExternSession?.sessionId) {
       props.cookies.set(
-        `metamind_${props.asset}`,
+        `neuralweb_${props.asset}`,
         `extern ${data?.newExternSession?.sessionId}`
       );
       props.history.push(`/${props.asset}/article`);

@@ -82,9 +82,9 @@ const Init = () => {
   };
 
   const initializeProfileFromSession = () => {
-    const colorMode = sessionStorage.getItem('metamind_pref_profile_colormode');
+    const colorMode = sessionStorage.getItem('neuralweb_pref_profile_colormode');
     const sidebarStatus = sessionStorage.getItem(
-      'metamind_pref_sidebar_status'
+      'neuralweb_pref_sidebar_status'
     );
 
     if (colorMode || sidebarStatus) {

@@ -5,8 +5,8 @@ import { withRouter } from 'react-router';
 import { withCookies } from 'react-cookie';
 import { MenuOpen } from '@material-ui/icons';
 import { getProfile, setProfile } from '../../actions/ProfileActions';
-import packetWhite from '../../images/metamind_white.svg';
-import packetBlack from '../../images/metamind_black.svg';
+import packetWhite from '../../images/neuralweb_white.svg';
+import packetBlack from '../../images/neuralweb_black.svg';
 
 import { Profile } from '../Types/GeneralTypes';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
