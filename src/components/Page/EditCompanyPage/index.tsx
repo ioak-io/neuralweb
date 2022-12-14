@@ -66,6 +66,7 @@ const EditCompanyPage = (props: Props) => {
                   value={state.name}
                   onChange={handleChange}
                   autoFocus
+                  autoComplete='off'
                   required
                 />
               </div>
@@ -75,6 +76,7 @@ const EditCompanyPage = (props: Props) => {
                   name="reference"
                   value={state.reference || ''}
                   onChange={handleChange}
+                  autoComplete='off'
                   disabled
                 />
               </div>
@@ -86,6 +88,7 @@ const EditCompanyPage = (props: Props) => {
                 value={state.description}
                 onChange={handleChange}
                 type="textarea"
+                autoComplete='off'
                 required
               />
             </div>
