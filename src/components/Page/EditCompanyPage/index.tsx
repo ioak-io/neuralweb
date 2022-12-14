@@ -36,8 +36,8 @@ const EditCompanyPage = (props: Props) => {
     setQueryParam(query);
   }, [props.location.search]);
 
-  const handleChange = (detail: any) => {
-    setState({ ...state, [detail.name]: detail.value });
+  const handleChange = (event: any) => {
+    setState({ ...state, [event.currentTarget.name]: event.currentTarget.value });
   };
 
   const save = () => {

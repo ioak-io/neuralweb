@@ -99,12 +99,12 @@
 .backlink-item__description__link {
   top: 6px;
   right: 36px;
-  background-color: #a07af8e5;
+  background-color: var(--color-primary-100);
   color: #fff;
   border-radius: 4px;
   padding: 0 10px;
   &:hover {
-    background-color: #a07af8;
+    background-color: var(--color-primary-200);
   }
 }
 

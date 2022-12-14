@@ -108,6 +108,7 @@ const SearchPage = (props: Props) => {
             name="text"
             value={text}
             onInput={handleChange}
+            autoComplete="off"
             placeholder="Type a text to search"
             autoFocus
           />

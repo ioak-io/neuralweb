@@ -33,8 +33,8 @@
 }
 .network-graph__control__button {
   border-radius: 50px;
-  height: 50px;
-  width: 50px;
+  height: 40px;
+  width: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -100,7 +100,7 @@
   width: 14px;
   height: 14px;
   border-radius: 14px;
-  background: #a07af8;
+  background: var(--color-primary-100);
   // cursor: move;
 }
 
@@ -108,7 +108,7 @@
   width: 14px;
   height: 14px;
   border-radius: 14px;
-  background: #a07af8;
+  background: var(--color-primary-100);
   // cursor: move;
 }
 

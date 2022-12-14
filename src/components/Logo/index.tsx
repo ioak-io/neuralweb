@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, connect, useDispatch } from 'react-redux';
 import './style.scss';
-import metamindWhiteSmall from '../../images/metamind_white_small.svg';
+import metamindWhiteSmall from '../../images/new.svg';
 import metamindWhiteText from '../../images/metamind_white_text.svg';
 import metamindBlackSmall from '../../images/metamind_black_small.svg';
 import metamindBlackText from '../../images/metamind_black_text.svg';

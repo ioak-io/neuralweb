@@ -12,13 +12,18 @@
 }
 
 .binary-choice-input__text {
-  font-weight: 600;
+  // font-weight: 600;
+  font-size: 14px;
 }
 
 .binary-choice-input__action__button {
   padding: 0 10px;
   border-radius: 4px;
+  font-size: 14px;
 }
-.binary-choice-input__action__button--active {
-  background-color: var(--color-primary-100);
+.dark .binary-choice-input__action__button--active {
+  background-color: #ffffff20;
+}
+.light .binary-choice-input__action__button--active {
+  background-color: #00000020;
 }

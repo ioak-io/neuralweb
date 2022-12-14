@@ -13,7 +13,7 @@
 // }
 
 a {
-  color: #a07af8;
+  color: var(--color-primary-100);
   &:hover {
     text-decoration: underline;
     // color: #6035fd;
