@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, connect, useDispatch } from 'react-redux';
 import './style.scss';
-import neuralwebWhiteSmall from '../../images/new.svg';
+import neuralwebWhiteSmall from '../../images/neuralweb_white_small.svg';
 import neuralwebWhiteText from '../../images/neuralweb_white_text.svg';
 import neuralwebBlackSmall from '../../images/neuralweb_black_small.svg';
 import neuralwebBlackText from '../../images/neuralweb_black_text.svg';
@@ -22,7 +22,7 @@ const Logo = (props: Props) => {
     <div className="logo">
       <div className="logo--image">
         {profile.theme === 'theme_light' && (
-          <img src={neuralwebWhiteSmall} alt="Neuralweb logo" />
+          <img src={neuralwebBlackSmall} alt="Neuralweb logo" />
         )}
         {profile.theme !== 'theme_light' && (
           <img src={neuralwebWhiteSmall} alt="Neuralweb logo" />
