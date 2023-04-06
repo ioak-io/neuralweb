@@ -25,7 +25,16 @@ const Spinner = (props: Props) => {
     });
   }, []);
 
-  return <>{state.length > 0 && <div className="spinner">SPINNER</div>}</>;
+  return (
+    <>
+      {state.length > 0 && (
+        <div className="spinner">
+          {/* <BouncingDots /> */}
+          Dots
+        </div>
+      )}
+    </>
+  );
 };
 
 export default Spinner;

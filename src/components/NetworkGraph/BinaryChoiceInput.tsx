@@ -3,8 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import './BinaryChoiceInput.scss';
 
-const queryString = require('query-string');
-
 interface Props {
   label: string;
   value: boolean;

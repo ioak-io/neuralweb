@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
 import { uniqBy } from 'lodash';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import './style.scss';
 import { getNotelinks, getNotetags } from './service';
@@ -15,15 +12,12 @@ import NotetagModel from '../../model/NotetagModel';
 import NoteModel from '../../model/NoteModel';
 import BinaryChoiceInput from '../NetworkGraph/BinaryChoiceInput';
 
-const queryString = require('query-string');
-
 interface Props {
   space: string;
   noteNodes: NoteModel[];
 }
 
 const GraphSearchResultsView = (props: Props) => {
-  const history = useHistory();
 
   const authorization = useSelector((state: any) => state.authorization);
   const companyList = useSelector((state: any) => state.company.items);

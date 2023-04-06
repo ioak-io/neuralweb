@@ -1,28 +1,10 @@
 /* eslint-disable no-plusplus */
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
-import { usePopper } from 'react-popper';
-import { addDays, format } from 'date-fns';
-import {
-  faCheck,
-  faGear,
-  faPlus,
-  faTimes,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as d3 from 'd3';
-import { cloneDeep } from 'lodash';
+import { useNavigate } from 'react-router';
 
 import './FilterGroup.scss';
-import NoteModel from '../../model/NoteModel';
-import NotelinkModel from '../../model/NotelinkModel';
-import LinkModel from '../../model/LinkModel';
-import NodeModel from '../../model/NodeModel';
-import { getFilterGroup } from './service';
 import FilterGroupItem from './FilterGroupItem';
-
-const queryString = require('query-string');
 
 interface Props {
   space: string;
@@ -31,7 +13,7 @@ interface Props {
 }
 
 const FilterGroup = (props: Props) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const authorization = useSelector((state: any) => state.authorization);
   const profile = useSelector((state: any) => state.profile);

@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Input, Button, Select } from 'basicui';
 import Topbar from '../../../components/Topbar';
 import './style.scss';
 import { newId } from '../../../events/MessageService';
 import CompanyModel from '../../../model/CompanyModel';
 import { saveCompany } from './service';
-
-const queryString = require('query-string');
 
 interface Props {
   history: any;
@@ -21,20 +20,17 @@ const EMPTY_COMPANY: CompanyModel = {
   name: '',
   description: '',
   reference: null,
+  numberFormat: 'en-US',
+  currency: 'USD',
 };
 
 const EditCompanyPage = (props: Props) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
   const companyList = useSelector((state: any) => state.company.items);
-  const [queryParam, setQueryParam] = useState<any>({});
+  const [searchParams] = useSearchParams();
   const [formId, setFormId] = useState(newId());
   const [state, setState] = useState<CompanyModel>({ ...EMPTY_COMPANY });
-
-  useEffect(() => {
-    const query = queryString.parse(props.location.search);
-    setQueryParam(query);
-  }, [props.location.search]);
 
   const handleChange = (event: any) => {
     setState({ ...state, [event.currentTarget.name]: event.currentTarget.value });
@@ -47,64 +43,58 @@ const EditCompanyPage = (props: Props) => {
   };
 
   const goBack = () => {
-    history.goBack();
+    navigate(-1);
   };
 
   return (
     <div className="edit-company-page">
-      <Topbar title={queryParam.id ? 'Edit company' : 'New company'}>
+      <Topbar title={searchParams.get('id') ? 'Edit company' : 'New company'}>
         right
       </Topbar>
       <div className="edit-company-page__main main-section content-section page-width">
-        <form onSubmit={save}>
+        <form id={formId} onSubmit={save}>
           <div className="form">
             <div className="form-two-column">
-              <div>
-                <label>Name</label>
-                <input
-                  name="name"
-                  value={state.name}
-                  onChange={handleChange}
-                  autoFocus
-                  autoComplete='off'
-                  required
-                />
-              </div>
-              <div>
-                <label>Reference</label>
-                <input
-                  name="reference"
-                  value={state.reference || ''}
-                  onChange={handleChange}
-                  autoComplete='off'
-                  disabled
-                />
-              </div>
-            </div>
-            <div>
-              <label>Description</label>
-              <input
-                name="description"
-                value={state.description}
-                onChange={handleChange}
-                type="textarea"
-                autoComplete='off'
-                required
+              <Input
+                name="name"
+                value={state.name}
+                onInput={handleChange}
+                label="Company name"
+              />
+              <Input
+                name="reference"
+                value={state.reference || ''}
+                onInput={handleChange}
+                label="Company ID"
+                disabled
+                tooltip={
+                  !state.reference ? 'Auto generated after creation' : ''
+                }
               />
             </div>
+            <Input
+              name="description"
+              value={state.description}
+              onInput={handleChange}
+              label="Description"
+              type="textarea"
+            />
           </div>
         </form>
       </div>
       <div className="footer">
         <div />
         <div className="footer-right">
-          <button type="submit" onClick={save}>
+          <Button
+            type="submit"
+            onClick={save}
+          >
             <FontAwesomeIcon icon={faCheck} />
-            {queryParam.id ? 'Save' : 'Save and go back'}
-          </button>
-          <button onClick={goBack}>
+            {searchParams.get('id') ? 'Save' : 'Save and go back'}
+          </Button>
+          <Button onClick={goBack}>
             <FontAwesomeIcon icon={faTimes} />
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -1,0 +1,27 @@
+.budget-page__main {
+  display: grid;
+  grid-auto-flow: row;
+  row-gap: 20px;
+  margin: 20px 20px;
+}
+
+.budget-page__main__year {
+  display: grid;
+  justify-content: flex-end;
+  grid-template-columns: 20px 50px 20px;
+  column-gap: 10px;
+  align-content: center;
+  justify-items: center;
+
+  .button {
+    cursor: pointer;
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+}
+.budget-page__main__table {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}

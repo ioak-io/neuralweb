@@ -27,3 +27,17 @@
 .search-page__results {
   padding: 0;
 }
+
+
+.search-page-form input {
+  height: 50px;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.search-page-form input,
+.search-page-form input:hover,
+.search-page-form input:focus,
+.search-page-form input:active {
+  // border: none;
+}

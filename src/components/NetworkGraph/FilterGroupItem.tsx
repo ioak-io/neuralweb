@@ -1,9 +1,7 @@
 /* eslint-disable no-plusplus */
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
-import { usePopper } from 'react-popper';
-import { addDays, format } from 'date-fns';
+import { useNavigate } from 'react-router';
 import {
   faCheck,
   faGear,
@@ -11,18 +9,9 @@ import {
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as d3 from 'd3';
-import { cloneDeep } from 'lodash';
 
 import './FilterGroupItem.scss';
-import NoteModel from '../../model/NoteModel';
-import NotelinkModel from '../../model/NotelinkModel';
-import LinkModel from '../../model/LinkModel';
-import NodeModel from '../../model/NodeModel';
-import { getFilterGroup } from './service';
-import SearchBlock from '../FilterExplorer/SearchBlock';
-
-const queryString = require('query-string');
+// import SearchBlock from '../FilterExplorer/SearchBlock';
 
 interface Props {
   space: string;
@@ -31,7 +20,6 @@ interface Props {
 }
 
 const FilterGroupItem = (props: Props) => {
-  const history = useHistory();
 
   const authorization = useSelector((state: any) => state.authorization);
   const profile = useSelector((state: any) => state.profile);
@@ -57,11 +45,12 @@ const FilterGroupItem = (props: Props) => {
 
   return (
     <div className="filter-group-item">
-      <SearchBlock
+      {/* <SearchBlock
         space={props.space}
         handleChange={handleCriteriaChange}
         criteria={state.criteria}
-      />
+      /> */}
+      search block
       <input
         className="filter-group-item__color"
         value={state.color}

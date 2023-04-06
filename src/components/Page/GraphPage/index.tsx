@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
 import { uniqBy } from 'lodash';
 
 import './style.scss';
@@ -14,8 +13,6 @@ import LinkModel from '../../../model/LinkModel';
 import NodeModel from '../../../model/NodeModel';
 import NotetagModel from '../../../model/NotetagModel';
 import NoteModel from '../../../model/NoteModel';
-
-const queryString = require('query-string');
 
 interface Props {
   space: string;
@@ -192,18 +189,16 @@ interface Props {
 // ];
 
 const GraphPage = (props: Props) => {
-  const history = useHistory();
 
   const authorization = useSelector((state: any) => state.authorization);
   const companyList = useSelector((state: any) => state.company.items);
-  const notes = useSelector((state: any) => state.note.items);
+  const notes = useSelector((state: any) => state.note?.items);
   const [noteNodes, setNoteNodes] = useState<NodeModel[]>([]);
   const [tagNodes, setTagNodes] = useState<NodeModel[]>([]);
   const [noteLinks, setNoteLinks] = useState<LinkModel[]>([]);
   const [tagLinks, setTagLinks] = useState<LinkModel[]>([]);
 
   useEffect(() => {
-    console.log('**auth');
     if (authorization.isAuth) {
       getNotelinks(props.space, authorization).then((response: any) => {
         if (response) {
@@ -238,15 +233,17 @@ const GraphPage = (props: Props) => {
   }, [authorization]);
 
   useEffect(() => {
-    console.log('**notes');
-    setNoteNodes(
-      notes.map((item: NoteModel) => ({
-        name: item.name,
-        reference: item.reference,
-        group: 'note',
-        color: item.color,
-      }))
-    );
+    console.log("----", notes)
+    if (notes) {
+      setNoteNodes(
+        notes.map((item: NoteModel) => ({
+          name: item.name,
+          reference: item.reference,
+          group: 'note',
+          color: item.color,
+        }))
+      );
+    }
   }, [notes]);
 
   return (

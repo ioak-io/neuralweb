@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router';
+import {Button, Input} from 'basicui';
 import './EditCompany.scss';
 import { newId } from '../../../events/MessageService';
 import CompanyModel from '../../../model/CompanyModel';
 import { saveCompany } from '../EditCompanyPage/service';
 import Topbar from '../../../components/Topbar';
-import Footer from '../../../components/Footer';
-
-const queryString = require('query-string');
 
 interface Props {
   space: string;
@@ -22,10 +18,12 @@ const EMPTY_COMPANY: CompanyModel = {
   name: '',
   description: '',
   reference: null,
+  numberFormat: 'en-US',
+  currency: 'USD',
 };
 
 const EditCompany = (props: Props) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
   const company = useSelector((state: any) =>
     state.company.items.find(
@@ -43,10 +41,7 @@ const EditCompany = (props: Props) => {
   }, [company]);
 
   const handleChange = (event: any) => {
-    setState({
-      ...state,
-      [event.currentTarget.name]: event.currentTarget.value,
-    });
+    setState({ ...state, [event.currentTarget.name]: event.currentTarget.value });
   };
 
   const save = () => {
@@ -55,49 +50,56 @@ const EditCompany = (props: Props) => {
     });
   };
 
-  const goBack = () => {
-    history.goBack();
-  };
-
   return (
     <div>
       <Topbar title="Company details" />
       <div className="main-section">
         <div className="edit-company page-width content-section">
           {company && (
-            <form onSubmit={save}>
+            <form id={formId} onSubmit={save}>
               <div className="form">
                 <div className="form-two-column">
-                  <div>
-                    <label>Name</label>
-                    <input
-                      name="name"
-                      value={state.name}
-                      onChange={handleChange}
-                      autoFocus
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label>Reference</label>
-                    <input
-                      name="reference"
-                      value={state.reference || ''}
-                      onChange={handleChange}
-                      disabled
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label>Description</label>
-                  <input
-                    name="description"
-                    value={state.description}
-                    onChange={handleChange}
-                    type="textarea"
+                  <Input
+                    name="name"
+                    value={state.name}
+                    onInput={handleChange}
+                    label="Company name"
+                    autofocus
                     required
                   />
+                  <Input
+                    name="reference"
+                    value={state.reference || ''}
+                    onInput={handleChange}
+                    label="Company ID"
+                    disabled
+                    tooltip={
+                      !state.reference ? 'Auto generated after creation' : ''
+                    }
+                  />
                 </div>
+                <Input
+                  name="description"
+                  value={state.description}
+                  onInput={handleChange}
+                  label="Description"
+                  type="textarea"
+                  required
+                />
+                <Input
+                  name="currency"
+                  value={state.currency}
+                  onInput={handleChange}
+                  label="Currency"
+                  required
+                />
+                <Input
+                  name="numberFormat"
+                  value={state.numberFormat}
+                  onInput={handleChange}
+                  label="Number format"
+                  required
+                />
               </div>
             </form>
           )}
@@ -106,21 +108,10 @@ const EditCompany = (props: Props) => {
           )}
         </div>
       </div>
-      <Footer>
-        <div className="footer-action">
-          <button
-            className="button primary-button"
-            type="submit"
-            onClick={save}
-          >
-            <FontAwesomeIcon icon={faCheck} />
-            Save
-          </button>
-          <button className="button default-button" onClick={goBack}>
-            <FontAwesomeIcon icon={faTimes} />
-          </button>
+      <div className='footer'>
+        <div/>
+        <div className="footer-right"><Button onClick={save}>Save</Button></div>
         </div>
-      </Footer>
     </div>
   );
 };

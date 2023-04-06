@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { Input } from 'basicui';
 import { isEmptyOrSpaces } from '../../Utils';
 import { fetchSpace } from '../../Auth/AuthService';
 import SpaceItem from './SpaceItem';
 import './style.scss';
+import { useSearchParams } from 'react-router-dom';
 
 interface Props {
   history: any;
@@ -11,9 +13,8 @@ interface Props {
   asset: string;
 }
 
-const queryString = require('query-string');
-
 const OneAuth = (props: Props) => {
+  const [searchParams] = useSearchParams();
   const authorization = useSelector((state: any) => state.authorization);
   const [view, setView] = useState<Array<any> | undefined>(undefined);
   const [searchCriteria, setSearchCriteria] = useState({ text: '' });
@@ -21,9 +22,8 @@ const OneAuth = (props: Props) => {
   const [queryParam, setQueryParam] = useState<any>();
 
   useEffect(() => {
-    const queryParam = queryString.parse(props.location.search);
-    if (queryParam.space) {
-      window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${queryParam.space}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${props.asset}&from=${queryParam.from}`;
+    if (searchParams.has("space")) {
+      window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${queryParam.space}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${props.asset}&from=${searchParams.get("from")}`;
     }
     setQueryParam(queryParam);
   }, []);
@@ -46,21 +46,21 @@ const OneAuth = (props: Props) => {
     );
   };
 
-  const handleSearchCriteria = (detail: any) => {
+  const handleSearchCriteria = (event: any) => {
     setSearchCriteria({
       ...searchCriteria,
-      [detail.name]: detail.value,
+      [event.currentTarget.name]: event.currentTarget.value,
     });
   };
 
   useEffect(() => {
     if (authorization.isAuth) {
-      props.history.push(`/${props.asset}/article`);
+      navigate(`/${props.asset}/article`);
     }
   }, [authorization]);
 
   const goBack = () => {
-    props.history.goBack();
+    navigate(-1)
   };
 
   const getHeadingLinks = () => {
@@ -88,8 +88,9 @@ const OneAuth = (props: Props) => {
         </div>
 
         {!loading && view && view.length > 0 && (
-          <input
-            onChange={handleSearchCriteria}
+          <Input
+            label="Type company name to filter"
+            onInput={handleSearchCriteria}
             name="text"
             value={searchCriteria.text}
           />

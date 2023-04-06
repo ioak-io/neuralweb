@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { HashRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { InMemoryCache } from 'apollo-boost';
-import ApolloClient from 'apollo-client';
-import { createHttpLink } from 'apollo-link-http';
-import { setContext } from 'apollo-link-context';
-import { ApolloProvider } from '@apollo/client';
+// TODO Chart JS responsiveness does not work after 4.1.1 version
+// https://github.com/chartjs/Chart.js/issues/11005
+
 import {
   Chart,
   ArcElement,
@@ -26,21 +24,21 @@ import {
 } from 'chart.js';
 
 import './style.scss';
-import { withCookies } from 'react-cookie';
 
 import Notification from '../Notification';
-import { fetchAllSpaces } from '../../actions/SpaceActions';
 import Init from './Init';
 import TopbarContainer from './TopbarContainer';
 import SidebarContainer from './SidebarContainer';
 import BodyContainer from './BodyContainer';
 import { receiveMessage } from '../../events/MessageService';
-import { setProfile } from '../../actions/ProfileActions';
-import NavigationContainer from './NavigationContainer';
+import OakNotification from '../../oakui/wc/OakNotification';
+import OakAppLayout from '../../oakui/wc/OakAppLayout';
 import MakeNavBarTransparentCommand from '../../events/MakeNavBarTransparentCommand';
 import HideNavBarCommand from '../../events/HideNavBarCommand';
 import MainContent from '../MainContent';
 import Spinner from '../Spinner';
+import { setProfile } from '../../store/actions/ProfileActions';
+import { fetchAllSpaces } from '../../store/actions/SpaceActions';
 
 Chart.register(
   DoughnutController,
@@ -60,7 +58,6 @@ Chart.register(
 );
 
 interface Props {
-  cookies: any;
 }
 
 const Content = (props: Props) => {
@@ -96,36 +93,18 @@ const Content = (props: Props) => {
     dispatch(fetchAllSpaces());
   }, []);
 
-  const httpLink = createHttpLink({
-    uri: process.env.REACT_APP_GRAPHQL_URL,
-  });
-
-  const authLink = setContext((_, { headers }) => {
-    return {
-      headers: {
-        ...headers,
-        authorization: `${space} ${authorization?.accessToken}` || '',
-      },
-    };
-  });
-
-  const client: any = new ApolloClient({
-    link: authLink.concat(httpLink),
-    cache: new InMemoryCache(),
-  });
-
   // useEffect(() => {
   //   Chart.defaults.global.defaultFontColor =
-  //     profile.theme === 'theme_dark' ? '#e0e0e0' : '#626262';
+  //     profile.theme === 'basicui-dark' ? '#e0e0e0' : '#626262';
   // }, [profile]);
 
-  const handleClose = (detail: any) => {
-    switch (detail.name) {
+  const handleClose = (event: any) => {
+    switch (event.currentTarget.name) {
       case 'left':
-        dispatch(setProfile({ ...profile, sidebar: !detail.value }));
+        dispatch(setProfile({ ...profile, sidebar: !event.currentTarget.value }));
         break;
       case 'right':
-        dispatch(setProfile({ ...profile, rightSidebar: !detail.value }));
+        dispatch(setProfile({ ...profile, rightSidebar: !event.currentTarget.value }));
         break;
       default:
         break;
@@ -133,20 +112,14 @@ const Content = (props: Props) => {
   };
 
   return (
-    <ApolloProvider client={client}>
-      <div
-        className={`content-container bg-light-200 dark:bg-dark-300 dark:text-gray-200 App ${
-          profile.theme === 'theme_dark' ? 'dark' : 'light'
-        } ${profile.textSize}`}
-      >
-        <HashRouter>
-          <Init />
-          <Spinner />
-          <MainContent cookies={props.cookies} space={space} />
-        </HashRouter>
-      </div>
-    </ApolloProvider>
+    <div className={`App ${profile.theme} ${profile.textSize}`}>
+      <HashRouter>
+        <Init />
+        <Spinner />
+        <MainContent space={space} />
+      </HashRouter>
+    </div>
   );
 };
 
-export default withCookies(Content);
+export default Content;

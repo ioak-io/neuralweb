@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchAndSetIncomeItems } from '../actions/IncomeActions';
+import { fetchAndSetIncomeItems } from '../store/actions/IncomeActions';
 
 interface Props {
   space: any;

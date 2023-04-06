@@ -7,8 +7,7 @@
     display: flex;
     align-items: center;
     img {
-      height: 42px;
-      padding: 6px;
+      height: 36px;
     }
   }
 }
@@ -21,13 +20,7 @@
 }
 
 .logo--image {
-  // width: 60px;
+  width: 60px;
   display: flex;
   justify-content: center;
-  // background-color: #c0c0c0;
-  border-radius: 100px;
-}
-
-.dark .logo--image {
-  // background-color: #464646;
 }

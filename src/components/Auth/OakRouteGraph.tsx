@@ -1,7 +1,7 @@
 import React from 'react';
 import { useApolloClient } from '@apollo/client';
 import { useSelector, useDispatch } from 'react-redux';
-import { addAuth } from '../../actions/AuthActions';
+import { addAuth } from '../../store/actions/AuthActions';
 import { Authorization } from '../Types/GeneralTypes';
 import { sendMessage } from '../../events/MessageService';
 import { authorizeUserQuery, GET_SESSION } from '../Types/schema';
@@ -57,8 +57,8 @@ const OakRouteGraph = (props: Props) => {
     if (authorization.isAuth) {
       return true;
     }
-    const accessToken = props.cookies.get(`neuralweb-access_token`);
-    const refreshToken = props.cookies.get(`neuralweb-refresh_token`);
+    const accessToken = getSessionValue(`neuralweb-access_token`);
+    const refreshToken = getSessionValue(`neuralweb-refresh_token`);
     if (accessToken && refreshToken) {
       const { data } = await gqlClient.query({
         query: authorizeUserQuery,
@@ -73,7 +73,7 @@ const OakRouteGraph = (props: Props) => {
         let newAccessToken = accessToken;
         if (data.authorizeUser.accessToken) {
           newAccessToken = data.authorizeUser.accessToken;
-          props.cookies.set(`neuralweb-access_token`, newAccessToken);
+          setSessionValue(`neuralweb-access_token`, newAccessToken);
         }
         dispatch(
           addAuth({
@@ -83,8 +83,8 @@ const OakRouteGraph = (props: Props) => {
           })
         );
       } else {
-        props.cookies.remove(`neuralweb-access_token`);
-        props.cookies.remove(`neuralweb-refresh_token`);
+        removeSessionValue(`neuralweb-access_token`);
+        removeSessionValue(`neuralweb-refresh_token`);
 
         if (redirect) {
           sendMessage('notification', true, {
@@ -109,13 +109,13 @@ const OakRouteGraph = (props: Props) => {
 
   const redirectToLogin = (space: string) => {
     // window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${spaceId}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
-    props.history.push(
+    navigate(
       `/${space}/login/home?from=${props.history.location.pathname}${props.history.location.search}`
     );
   };
 
   const redirectToUnauthorized = () => {
-    props.history.push(`/${profile.space}/unauthorized`);
+    navigate(`/${profile.space}/unauthorized`);
   };
 
   return (

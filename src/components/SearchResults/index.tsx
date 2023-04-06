@@ -2,28 +2,12 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
-import { marked } from 'marked';
-import { format } from 'date-fns';
-import CodeMirror from 'codemirror';
-import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
-import { languages } from '@codemirror/language-data';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCompressAlt,
-  faExpandAlt,
-  faFileExport,
-  faPlus,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
 
 import './style.scss';
 import NoteModel from '../../model/NoteModel';
 import SearchResultItem from './SearchResultItem';
 import NotetagModel from '../../model/NotetagModel';
 import { getNotetags } from '../Page/GraphPage/service';
-
-require('codemirror/mode/gfm/gfm');
 
 interface Props {
   space: string;
@@ -32,7 +16,6 @@ interface Props {
 }
 
 const SearchResults = (props: Props) => {
-  const history = useHistory();
   const dispatch = useDispatch();
   const noteList = useSelector((state: any) => state.note.items);
   const authorization = useSelector((state: any) => state.authorization);

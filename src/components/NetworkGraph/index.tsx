@@ -1,7 +1,6 @@
 /* eslint-disable no-plusplus */
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
 import { usePopper } from 'react-popper';
 import { addDays, format } from 'date-fns';
 import {
@@ -22,8 +21,7 @@ import NodeModel from '../../model/NodeModel';
 import FilterGroup from './FilterGroup';
 import { getFilterGroup, updateFilterGroup } from './service';
 import BinaryChoiceInput from './BinaryChoiceInput';
-
-const queryString = require('query-string');
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   offsetX?: number;
@@ -44,7 +42,7 @@ const THEME = {
 const NetworkGraph = (props: Props) => {
   const svgRef = React.useRef<any>(null);
   const divRef = React.useRef(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const authorization = useSelector((state: any) => state.authorization);
   const profile = useSelector((state: any) => state.profile);
@@ -226,9 +224,9 @@ const NetworkGraph = (props: Props) => {
       eventNode
         .on('click', function (e: any, d: any) {
           if (d.group === 'note') {
-            history.push(`/${props.space}/note?id=${d.reference}`);
+            navigate(`/${props.space}/note?id=${d.reference}`);
           } else {
-            history.push(`/${props.space}/search?text=tag:${d.reference}`);
+            navigate(`/${props.space}/search?text=tag:${d.reference}`);
           }
         })
         .on('mouseenter', (evt: any, d: any) => {

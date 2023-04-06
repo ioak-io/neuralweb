@@ -70,18 +70,21 @@ const SideNavLink = (props: Props) => {
   return (
     <div
       className={`side-navbar-link side-navbar-link--${
-        profile.sidebar ? 'sidebar-inactive' : 'sidebar-inactive'
+        profile.sidebar ? 'sidebar-active' : 'sidebar-inactive'
       }`}
     >
       {!props.children && (
         <NavLink
           to={props.link}
-          className="side-navbar-link__action dark:text-gray-200 text-gray-900"
+          className="side-navbar-link__action"
           activeClassName="side-navbar-link__action--active"
         >
           <div className="side-navbar-link__action__icon">
             <FontAwesomeIcon icon={props.icon} />
           </div>
+          {profile.sidebar && (
+            <div className="side-navbar-link__action__label">{props.label}</div>
+          )}
         </NavLink>
       )}
       {props.children && (

@@ -1,96 +1,34 @@
-import {
-  faCheck,
-  faCircleNodes,
-  faFileExport,
-  faFilter,
-  faGlasses,
-  faLink,
-  faPen,
-  faPlus,
-  faTimes,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
 import './style.scss';
 import Topbar from '../../../components/Topbar';
-import Editor from '../../../components/Editor';
 import NoteModel from '../../../model/NoteModel';
-import Viewer from '../../../components/Viewer';
-import FileExplorer from '../../../components/FileExplorer';
-import ContextContent from '../../../components/ContextContent';
-import DisableContextBarCommand from '../../../events/DisableContextBarCommand';
-import Footer from '../../../components/Footer';
 import { getNoteByReference, saveNote } from './service';
-import NotelinkModel from '../../../model/NotelinkModel';
-import LinkView from '../../../components/LinkView';
 import GraphView from '../../../components/GraphView';
+import { useParams } from 'react-router-dom';
+import MainSection from '../../../components/MainSection';
+import ContentSection from '../../../components/Note/ContentSection';
 
 interface Props {
   location: any;
   space: string;
 }
 
-const queryString = require('query-string');
-
 const NotePage = (props: Props) => {
-  const history = useHistory();
-  const profile = useSelector((state: any) => state.profile);
   const authorization = useSelector((state: any) => state.authorization);
-  const dispatch = useDispatch();
-  const id = useRef('');
-
-  const [view, setView] = useState('view');
-  const [isContextExpanded, setIsContextExpanded] = useState(false);
-
-  const [state, setState] = useState<NoteModel | null>(null);
-
-  const [queryParam, setQueryParam] = useState<any>({});
+  const params = useParams();
+  const [note, setNote] = useState<NoteModel | null>(null);
 
   useEffect(() => {
-    DisableContextBarCommand.next(false);
-  }, []);
-
-  useEffect(() => {
-    const queryParam = queryString.parse(props.location.search);
-    setQueryParam(queryParam);
-    id.current = queryParam?.id || '';
-  }, [props.location]);
-
-  useEffect(() => {
-    if (queryParam?.id && authorization.isAuth) {
-      setView('view');
-      getNoteByReference(props.space, queryParam?.id, authorization).then(
+    if (params.id && authorization.isAuth) {
+      getNoteByReference(props.space, params.id, authorization).then(
         (response: any) => {
-          setState(response);
-          setView('view');
+          setNote(response);
         }
       );
     }
-  }, [queryParam, authorization]);
+  }, [params, authorization]);
 
-  const handleChange = (_state: NoteModel) => {
-    setState(_state);
-  };
-
-  const openGraphMode = () => {
-    setView('graph');
-  };
-
-  const openEditMode = () => {
-    setView('edit');
-  };
-
-  const openViewMode = () => {
-    setView('view');
-  };
-
-  const closeNote = () => {
-    setView('view');
-    setState(null);
-    history.push(`/${props.space}/note`);
-  };
 
   // const saveChanges = () => {
   //   saveNote(props.space, state, authorization).then((response: any) => {
@@ -103,8 +41,8 @@ const NotePage = (props: Props) => {
 
   const handleSave = (_note: NoteModel) => {
     saveNote(props.space, _note, authorization).then((response: any) => {
-      if (response && id.current === response.reference) {
-        setState(response);
+      if (response && params.id === response.reference) {
+        setNote(response);
       }
     });
   };
@@ -115,98 +53,15 @@ const NotePage = (props: Props) => {
 
   return (
     <>
-      <div
-        className={`note-page page-animate ${
-          isContextExpanded
-            ? 'note-page--context-active'
-            : 'note-page--context-inactive'
-        }`}
-      >
-        <Topbar
-          title={state?.name || 'Untitled'}
-          fixed
-          isContextExpanded={isContextExpanded}
-        >
-          <div className="topbar-actions">
-            <button
-              className={`button ${view === 'view' ? 'active' : ''}`}
-              onClick={openViewMode}
-            >
-              <FontAwesomeIcon icon={faGlasses} />
-              <span className="menu-highlight-line" />
-            </button>
-            <button
-              className={`button ${view === 'edit' ? 'active' : ''}`}
-              onClick={openEditMode}
-            >
-              <FontAwesomeIcon icon={faPen} />
-              <span className="menu-highlight-line" />
-            </button>
-            <button
-              className={`button ${view === 'graph' ? 'active' : ''}`}
-              onClick={openGraphMode}
-            >
-              <FontAwesomeIcon icon={faCircleNodes} />
-              <span className="menu-highlight-line" />
-            </button>
-            <button
-              className={`button ${isContextExpanded ? 'active' : ''}`}
-              onClick={() => setIsContextExpanded(!isContextExpanded)}
-            >
-              <FontAwesomeIcon icon={faLink} />
-            </button>
-          </div>
-        </Topbar>
-        <div className="note-page__left">
-          <div className="note-page__main">
-            {view === 'edit' && state && (
-              <div className="main">
-                <Editor
-                  space={props.space}
-                  note={state}
-                  handleChange={handleChange}
-                  handleSave={handleSave}
-                />
-              </div>
-            )}
-            {view === 'view' && state && (
-              <div className="viewer-container main">
-                <Viewer space={props.space} note={state} />
-              </div>
-            )}
-            {view === 'graph' && state && (
-              <GraphView
-                space={props.space}
-                noteref={state.reference}
-                isContextExpanded={isContextExpanded}
-              />
-            )}
-            {['view', 'edit'].includes(view) && !queryParam.id && (
-              <div className="main">No file is open</div>
-            )}
-          </div>
-        </div>
+      <div className='note-page page-animate'>
+        <Topbar title={note?.name || 'Untitled'} />
+        <MainSection>
+          {note && <div>
+            <ContentSection note={note} space={props.space} />
+          </div>}
+        </MainSection>
+
       </div>
-      <ContextContent space={props.space} isExpanded={isContextExpanded}>
-        {state && (
-          <div className="note-page__context">
-            <LinkView
-              space={props.space}
-              note={state}
-              handleClose={() => setIsContextExpanded(false)}
-            />
-          </div>
-        )}
-      </ContextContent>
-      {/* {view === 'edit' && state && (
-        <Footer>
-          <div className="footer-action">
-            <button className="button" onClick={saveChanges}>
-              <FontAwesomeIcon icon={faCheck} /> Save
-            </button>
-          </div>
-        </Footer>
-      )} */}
     </>
   );
 };

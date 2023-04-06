@@ -40,7 +40,7 @@ module.exports = (env) => {
           ],
         },
         {
-          test: /\.(scss)$/,
+          test: /\.(scss|css)$/,
           use: [
             {
               loader: 'style-loader',
@@ -56,20 +56,18 @@ module.exports = (env) => {
             },
           ],
         },
-        {
-          test: /\.css$/i,
-          use: ['style-loader', 'css-loader', 'postcss-loader'],
-        },
       ],
     },
     devServer: {
-      contentBase: path.join(__dirname, 'build'),
+      static: path.join(__dirname, 'build'),
       historyApiFallback: true,
       host: '0.0.0.0',
       compress: true,
       hot: true,
       port: 3000,
-      publicPath: '/',
+      devMiddleware: {
+        publicPath: '/',
+      }
     },
     devtool: 'source-map',
     output: {

@@ -1,10 +1,10 @@
 .dark-mode-icon {
   display: flex;
-  color: #fff;
-  &.theme_dark {
-    color: #fff;
-  }
-  &.theme_light {
-    color: #000;
-  }
+  color: var(--theme-adaptive-100i);
+  // &.basicui-dark {
+  //   color: var(--color-1);
+  // }
+  // &.basicui-light {
+  //   color: var(--color-1);
+  // }
 }

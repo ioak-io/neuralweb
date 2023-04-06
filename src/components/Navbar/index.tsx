@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, connect, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faHamburger } from '@fortawesome/free-solid-svg-icons';
 
@@ -9,7 +9,7 @@ import './style.scss';
 
 import Logo from '../Logo';
 import RightNav from './RightNav';
-import { setProfile } from '../../actions/ProfileActions';
+import { setProfile } from '../../store/actions/ProfileActions';
 // import RightNav from '../Topbar/RightNav';
 
 interface Props {
@@ -21,7 +21,7 @@ interface Props {
 }
 
 const Navbar = (props: Props) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
 
   const profile = useSelector((state: any) => state.profile);
