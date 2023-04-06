@@ -1,31 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import './Edit.scss';
-import NoteModel from '../../../model/NoteModel';
+import './style.scss';
+import NoteModel from '../../../../model/NoteModel';
 import { useParams } from 'react-router-dom';
 import { Input, Label, Textarea } from 'basicui';
 import { Editor, Bold, Italic, Underline, HighlightColor, ClearFormatting, BulletList, OrderedList, BlockQuote } from 'writeup';
 
 interface Props {
   note: NoteModel;
-  space: string;
   editor: any;
-  onChange: any;
 }
 
-const EditContent = (props: Props) => {
-  const authorization = useSelector((state: any) => state.authorization);
-  const params = useParams();
-
-  const handleChange = (event: any) => {
-    props.onChange({
-      ...props.note,
-      [event.currentTarget.name]: event.currentTarget.value
-    })
-  }
-
+const ContentEditor = (props: Props) => {
   return (
-    <div className='note-content-section-edit'>
+    <div className='head-editor'>
       <div>
         <Label>
           Content
@@ -45,4 +33,4 @@ const EditContent = (props: Props) => {
   );
 };
 
-export default EditContent;
+export default ContentEditor;

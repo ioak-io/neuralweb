@@ -9,7 +9,6 @@ import { isEmptyOrSpaces } from '../../../../components/Utils';
 
 interface Props {
   note: NoteModel;
-  space: string;
   onChange: any;
 }
 
