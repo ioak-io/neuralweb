@@ -3,5 +3,6 @@ export default interface MetadataDefinitionModel {
   name: string;
   group: string;
   reference: string;
+  linkable: boolean;
   type: 'short-text' | 'long-text';
 }

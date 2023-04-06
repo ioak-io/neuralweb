@@ -20,6 +20,7 @@ import { fetchAndSetNoteItems } from '../../store/actions/NoteActions';
 import { useParams } from 'react-router-dom';
 import { fetchAndSetLabelItems } from '../../store/actions/LabelActions';
 import { fetchAndSetMetadataDefinitionItems } from '../../store/actions/MetadataDefinitionActions';
+import { fetchAndSetMetadataValueItems } from '../../store/actions/MetadataValueActions';
 
 const Init = () => {
   const authorization = useSelector((state: any) => state.authorization);
@@ -39,6 +40,7 @@ const Init = () => {
       dispatch(fetchAndSetNoteItems(space, authorization));
       dispatch(fetchAndSetLabelItems(space, authorization));
       dispatch(fetchAndSetMetadataDefinitionItems(space, authorization));
+      dispatch(fetchAndSetMetadataValueItems(space, authorization));
     }
   }, [authorization, space]);
 

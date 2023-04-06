@@ -1,0 +1,80 @@
+.metadata-picker input {
+    border-color: var(--theme-primary-transparent-300);
+    // background-color: var(--theme-white-500);
+}
+
+.basicui-dark .metadata-picker input {
+    border-color: var(--theme-primary-transparent-300);
+    // background-color: var(--theme-black-200);
+}
+
+.metadata-picker__item {
+    height: var(--basicui-formelement-height);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    border-radius: var(--basicui-formelement-border-radius);
+    border: 1px solid transparent;
+    width: 100%;
+    background-color: var(--theme-white-500);
+    color: var(--theme-white-500i);
+    cursor: pointer;
+}
+
+.basicui-dark .metadata-picker__item {
+    background-color: var(--theme-black-200);
+    color: var(--theme-black-200i);
+}
+
+.metadata-picker__item:hover,
+.metadata-picker__item:focus,
+.metadata-picker__item:active {
+    border: 1px solid var(--theme-primary-transparent-600);
+}
+
+.metadata-picker__item--active,
+.metadata-picker__item--active:hover,
+.metadata-picker__item--active:focus,
+.metadata-picker__item--active:active,
+.basicui-dark .metadata-picker__item--active {
+    background-color: var(--theme-primary-transparent-300);
+    border-color: transparent;
+    cursor: default;
+}
+
+.metadata-picker__view {
+    padding-bottom: 10px;
+}
+
+.metadata-picker__results__container {
+    // padding-bottom: 10px;
+}
+
+.metadata-picker__results {
+    display: grid;
+    row-gap: 10px;
+    background-color: var(--basicui-formelement-background-color);
+    padding: 6px 6px;
+    border-radius: 0 0 var(--basicui-formelement-border-radius) var(--basicui-formelement-border-radius);
+
+    input {
+        border-color: var(--theme-black-600);
+    }
+}
+
+.metadata-picker__results__info {
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.metadata-picker__results__info-secondary {
+    font-size: 12px;
+    opacity: 0.5;
+}
+
+.metadata-picker__results__list {
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 6px;
+    justify-items: flex-start;
+}

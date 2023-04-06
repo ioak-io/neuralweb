@@ -3,29 +3,22 @@ import './style.scss';
 import NoteModel from '../../../../model/NoteModel';
 import { Input, Label, Textarea } from 'basicui';
 import { Editor, Bold, Italic, Underline, HighlightColor, ClearFormatting, BulletList, OrderedList, BlockQuote } from 'writeup';
+import MetadataDefinitionModel from 'src/model/MetadataDefinitionModel';
+import LineItem from './LineItem';
 
 interface Props {
   note: NoteModel;
+  group: string;
+  onChange: any;
+  metadataDefinitionList: MetadataDefinitionModel[];
 }
 
 const MetadataEditor = (props: Props) => {
   return (
-    <div className='head-editor'>
-      <div>
-        <Label>
-          Content
-        </Label>
-        <Editor editor={props.editor}>
-          <Bold editor={props.editor} />
-          <Italic editor={props.editor} />
-          <Underline editor={props.editor} />
-          <BulletList editor={props.editor} />
-          <OrderedList editor={props.editor} />
-          <BlockQuote editor={props.editor} />
-          <HighlightColor editor={props.editor} />
-          <ClearFormatting editor={props.editor} />
-        </Editor>
-      </div>
+    <div className='metadata-editor'>
+      {props.metadataDefinitionList.map(item =>
+        <LineItem onChange={props.onChange} note={props.note} metadataDefinition={item} />
+      )}
     </div>
   );
 };
