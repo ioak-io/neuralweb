@@ -9,6 +9,7 @@ import FilterExpenseReducer from './reducers/FilterExpenseReducer';
 import IncomeCategoryReducer from './reducers/IncomeCategoryReducer';
 import IncomeReducer from './reducers/IncomeReducer';
 import LabelReducer from './reducers/LabelReducer';
+import MetadataDefinitionReducer from './reducers/MetadataDefinitionReducer';
 import NoteReducer from './reducers/NoteReducer';
 import ProfileReducer from './reducers/ProfileReducer';
 import ReceiptReducer from './reducers/ReceiptReducer';
@@ -38,7 +39,8 @@ const store = configureStore(
       filterExpense: FilterExpenseReducer,
       incomeCategory: IncomeCategoryReducer,
       note: NoteReducer,
-      label: LabelReducer
+      label: LabelReducer,
+      metadataDefinition: MetadataDefinitionReducer
     }
   }
 );

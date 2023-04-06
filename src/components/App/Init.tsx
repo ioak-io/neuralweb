@@ -19,6 +19,7 @@ import IncomeStateActions from '../../simplestates/IncomeStateActions';
 import { fetchAndSetNoteItems } from '../../store/actions/NoteActions';
 import { useParams } from 'react-router-dom';
 import { fetchAndSetLabelItems } from '../../store/actions/LabelActions';
+import { fetchAndSetMetadataDefinitionItems } from '../../store/actions/MetadataDefinitionActions';
 
 const Init = () => {
   const authorization = useSelector((state: any) => state.authorization);
@@ -37,6 +38,7 @@ const Init = () => {
       dispatch(fetchAndSetUserItems(space, authorization));
       dispatch(fetchAndSetNoteItems(space, authorization));
       dispatch(fetchAndSetLabelItems(space, authorization));
+      dispatch(fetchAndSetMetadataDefinitionItems(space, authorization));
     }
   }, [authorization, space]);
 

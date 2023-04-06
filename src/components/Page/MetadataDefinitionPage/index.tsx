@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { v4 as uuidv4 } from 'uuid';
@@ -23,6 +23,7 @@ import {
 import MetadataDefinitionItems from './MetadataDefinitionItems';
 import MetadataDefinitionModel from '../../../model/MetadataDefinitionModel';
 import MainSection from '../../../components/MainSection';
+import { updateMetadataDefinitionItems } from '../../../store/actions/MetadataDefinitionActions';
 
 interface Props {
   space: string;
@@ -39,19 +40,15 @@ const EMPTY_ACCOUNT: MetadataDefinitionModel = {
 
 const MetadataDefinitionPage = (props: Props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const authorization = useSelector((state: any) => state.authorization);
+  const metadataDefinitionList = useSelector((state: any) => state.metadataDefinition.items);
   const [formId, setFormId] = useState(newId());
   const [state, setState] = useState<MetadataDefinitionModel[]>([]);
 
   useEffect(() => {
-    if (authorization.isAuth) {
-      getMetadataDefinition(props.space, authorization).then((response: any) => {
-        if (response) {
-          setState(response);
-        }
-      });
-    }
-  }, [authorization]);
+    setState([...metadataDefinitionList]);
+  }, [metadataDefinitionList]);
 
   const handleChange = (event: any, record: MetadataDefinitionModel, index: number) => {
     const _state = [...state];
@@ -65,7 +62,7 @@ const MetadataDefinitionPage = (props: Props) => {
 
   const save = () => {
     saveMetadataDefinition(props.space, state, authorization).then((response: any) => {
-      setState(response);
+      dispatch(updateMetadataDefinitionItems(response));
     });
   };
 

@@ -17,8 +17,6 @@ interface Props {
 }
 
 const MetadataDefinitionItems = (props: Props) => {
-  const categories = useSelector((state: any) => state.category.categories);
-
   const handleCheckboxChange = (event: any, record: any, index: number) => {
     const _event = {
       currentTarget: {
