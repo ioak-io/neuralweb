@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import './Edit.scss';
 import NoteModel from '../../../model/NoteModel';
 import { Input, Label, Textarea } from 'basicui';
-import LabelEditor from './LabelEditor';
+import LabelEditor from '../sections/LabelEditor';
 
 interface Props {
   note: NoteModel;

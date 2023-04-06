@@ -5,7 +5,6 @@ import NoteModel from '../../../model/NoteModel';
 import { useParams } from 'react-router-dom';
 import { Input, Label, Textarea } from 'basicui';
 import { Editor, Bold, Italic, Underline, HighlightColor, ClearFormatting, BulletList, OrderedList, BlockQuote } from 'writeup';
-import LabelEditor from './LabelEditor';
 
 interface Props {
   note: NoteModel;

@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import './LabelEditor.scss';
-import NoteModel from '../../../model/NoteModel';
-import { useParams } from 'react-router-dom';
+import './style.scss';
+import NoteModel from '../../../../model/NoteModel';
 import { Input, Label, Textarea } from 'basicui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { isEmptyOrSpaces } from '../../../components/Utils';
+import { isEmptyOrSpaces } from '../../../../components/Utils';
 
 interface Props {
   note: NoteModel;
@@ -60,11 +59,11 @@ const LabelEditor = (props: Props) => {
   }
 
   return (
-    <div className='note-content-section-label-editor'>
+    <div className='label-editor'>
       <Label>
         Labels
       </Label>
-      <div className='note-label-list note-content-section-label-editor__view'>
+      <div className='note-label-list label-editor__view'>
         {props.note.labels?.map((label) =>
           <div className='note-label'>
             <div>
@@ -77,20 +76,20 @@ const LabelEditor = (props: Props) => {
         )}
       </div>
       <Input name="searchText" value={searchText} placeholder="Search or create new label" onInput={handleSearchTextChange} />
-      <div className="note-content-section-label-editor__results">
-        <div className="note-content-section-label-editor__results__container">
-          <div className="note-content-section-label-editor__results__info">
+      <div className="label-editor__results">
+        <div className="label-editor__results__container">
+          <div className="label-editor__results__info">
             Existing labels
           </div>
           {isEmptyOrSpaces(searchText) &&
-            <div className="note-content-section-label-editor__results__info-secondary">
+            <div className="label-editor__results__info-secondary">
               Type to see suggestion
             </div>}
           {!isEmptyOrSpaces(searchText) && searchResults.length === 0 &&
-            <div className="note-content-section-label-editor__results__info-secondary">
+            <div className="label-editor__results__info-secondary">
               -
             </div>}
-          {!isEmptyOrSpaces(searchText) && <div className="note-label-list note-content-section-label-editor__results__list">
+          {!isEmptyOrSpaces(searchText) && <div className="note-label-list label-editor__results__list">
             {searchResults.map(item =>
               <button className="note-label" onClick={() => addLabel(item)}>
                 {item}
@@ -98,16 +97,16 @@ const LabelEditor = (props: Props) => {
             )}
           </div>}
         </div>
-        <div className="note-content-section-label-editor__results__container">
-          <div className="note-content-section-label-editor__results__info">
+        <div className="label-editor__results__container">
+          <div className="label-editor__results__info">
             New label
           </div>
-          {(isEmptyOrSpaces(searchText) || props.note.labels.includes(searchText) || searchResults.includes(searchText)) && <div className="note-content-section-label-editor__results__info-secondary">
+          {(isEmptyOrSpaces(searchText) || props.note.labels.includes(searchText) || searchResults.includes(searchText)) && <div className="label-editor__results__info-secondary">
             <div>
               -
             </div>
           </div>}
-          {!isEmptyOrSpaces(searchText) && !props.note.labels.includes(searchText) && !searchResults.includes(searchText) && <div className="note-label-list note-content-section-label-editor__results__list">
+          {!isEmptyOrSpaces(searchText) && !props.note.labels.includes(searchText) && !searchResults.includes(searchText) && <div className="note-label-list label-editor__results__list">
             <button className="note-label" onClick={() => addLabel(searchText)}>
               {searchText}
             </button>

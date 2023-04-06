@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './LabelViewer.scss';
-import NoteModel from '../../../model/NoteModel';
+import './style.scss';
+import NoteModel from '../../../../model/NoteModel';
 
 interface Props {
   note: NoteModel;
@@ -8,7 +8,7 @@ interface Props {
 
 const LabelViewer = (props: Props) => {
   return (
-    <div className='note-content-section-label-viewer'>
+    <div className='label-viewer'>
       <div className='note-label-list'>
         {props.note.labels?.map((label) =>
           <div className='note-label'>

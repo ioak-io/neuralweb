@@ -6,13 +6,14 @@ import './style.scss';
 
 interface Props {
   onEdit: any;
+  disable: boolean;
 }
 
 const ViewControls = (props: Props) => {
 
   return (
     <div className='note-section-view-controls'>
-      <IconButton onClick={props.onEdit} circle variant={ButtonVariantType.fill} theme={ThemeType.default}>
+      <IconButton disabled={props.disable} onClick={props.onEdit} circle variant={ButtonVariantType.fill} theme={ThemeType.default}>
         <FontAwesomeIcon icon={faPenClip} />
       </IconButton>
     </div>

@@ -1,9 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import './View.scss';
 import NoteModel from '../../../model/NoteModel';
-import { useParams } from 'react-router-dom';
-import LabelViewer from './LabelViewer';
 
 interface Props {
   note: NoteModel;

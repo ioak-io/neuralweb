@@ -25,6 +25,7 @@ const ContentSection = (props: Props) => {
   const params = useParams();
   const [isEditTitle, setIsEditTitle] = useState(false);
   const [isEditContent, setIsEditContent] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [state, setState] = useState<NoteModel>({
     _id: '',
     content: '',
@@ -46,10 +47,12 @@ const ContentSection = (props: Props) => {
   const onCancelTitle = () => {
     reset();
     setIsEditTitle(false);
+    setIsEdit(false);
   }
   const onCancelContent = () => {
     reset();
     setIsEditContent(false);
+    setIsEdit(false);
   }
 
   const reset = () => {
@@ -59,9 +62,11 @@ const ContentSection = (props: Props) => {
 
   const onEditTitle = () => {
     setIsEditTitle(true);
+    setIsEdit(true);
   }
   const onEditContent = () => {
     setIsEditContent(true);
+    setIsEdit(true);
   }
 
   const onSave = () => {
@@ -70,6 +75,7 @@ const ContentSection = (props: Props) => {
       props.onPostNoteSave(response);
       setIsEditContent(false);
       setIsEditTitle(false);
+      setIsEdit(false);
       setSaving(false);
     }).catch(() => setSaving(false));
   }
@@ -84,13 +90,13 @@ const ContentSection = (props: Props) => {
     <div className='note-content-section'>
     <SectionContainer>
       {isEditTitle && <EditControls onCancel={onCancelTitle} onSave={onSave} saving={saving} />}
-      {!isEditTitle && <ViewControls onEdit={onEditTitle} />}
+      {!isEditTitle && <ViewControls onEdit={onEditTitle} disable={isEdit} />}
       {isEditTitle && <EditTitle note={state} space={props.space} editor={editor} onChange={handleEditStateChange} />}
       {!isEditTitle && <ViewTitle note={props.note} space={props.space} />}
     </SectionContainer>
       <SectionContainer>
         {isEditContent && <EditControls onCancel={onCancelContent} onSave={onSave} saving={saving} />}
-        {!isEditContent && <ViewControls onEdit={onEditContent} />}
+        {!isEditContent && <ViewControls onEdit={onEditContent} disable={isEdit} />}
         {isEditContent && <EditContent note={state} space={props.space} editor={editor} onChange={handleEditStateChange} />}
         {!isEditContent && <ViewContent note={props.note} space={props.space} />}
       </SectionContainer>
