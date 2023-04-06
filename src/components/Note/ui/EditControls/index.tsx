@@ -7,13 +7,14 @@ import './style.scss';
 interface Props {
   onSave: any;
   onCancel: any;
+  saving: boolean;
 }
 
 const EditControls = (props: Props) => {
 
   return (
     <div className='note-section-edit-controls'>
-      <IconButton onClick={props.onSave} circle variant={ButtonVariantType.default} theme={ThemeType.primary}>
+      <IconButton loading={props.saving} onClick={props.onSave} circle variant={ButtonVariantType.default} theme={ThemeType.primary}>
         <FontAwesomeIcon icon={faCheck} />
       </IconButton>
       <IconButton onClick={props.onCancel} circle variant={ButtonVariantType.default} theme={ThemeType.default}>

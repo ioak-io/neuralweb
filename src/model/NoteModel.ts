@@ -5,4 +5,5 @@ export default interface NoteModel {
   content: string;
   folderId: string;
   color?: string;
+  labels: string[];
 }

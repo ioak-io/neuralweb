@@ -1,0 +1,10 @@
+.note-content-section-view {
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 12px;
+    row-gap: 6px;
+}
+
+.note-content-section-view__name {
+    font-weight: 500;
+}

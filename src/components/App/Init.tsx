@@ -18,6 +18,7 @@ import ReceiptStateActions from '../../simplestates/ReceiptStateActions';
 import IncomeStateActions from '../../simplestates/IncomeStateActions';
 import { fetchAndSetNoteItems } from '../../store/actions/NoteActions';
 import { useParams } from 'react-router-dom';
+import { fetchAndSetLabelItems } from '../../store/actions/LabelActions';
 
 const Init = () => {
   const authorization = useSelector((state: any) => state.authorization);
@@ -35,6 +36,7 @@ const Init = () => {
       initializeHttpInterceptor();
       dispatch(fetchAndSetUserItems(space, authorization));
       dispatch(fetchAndSetNoteItems(space, authorization));
+      dispatch(fetchAndSetLabelItems(space, authorization));
     }
   }, [authorization, space]);
 

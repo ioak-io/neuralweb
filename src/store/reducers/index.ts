@@ -13,6 +13,7 @@ import ReceiptReducer from './ReceiptReducer';
 import IncomeCategoryReducer from './IncomeCategoryReducer';
 import IncomeReducer from './IncomeReducer';
 import NoteReducer from './NoteReducer';
+import LabelReducer from './LabelReducer';
 
 export default combineReducers({
   authorization: AuthReducer,
@@ -28,5 +29,6 @@ export default combineReducers({
   income: IncomeReducer,
   filterExpense: FilterExpenseReducer,
   incomeCategory: IncomeCategoryReducer,
-  note: NoteReducer
+  note: NoteReducer,
+  label: LabelReducer
 });

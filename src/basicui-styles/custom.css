@@ -27,3 +27,9 @@
 .writeup-dark table, .writeup-dark table th, .writeup-dark table td {
     border: none;
 }
+
+* {
+    --basicui-formelement-font-weight: 300;
+    --basicui-formelement-font-size: 1rem;
+    --writeup-background-color: var(--basicui-formelement-background-color);
+}

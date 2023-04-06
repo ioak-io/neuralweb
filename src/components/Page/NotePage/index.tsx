@@ -51,13 +51,17 @@ const NotePage = (props: Props) => {
   //   console.log(state.content);
   // }, [state.content]);
 
+  const onPostNoteSave = (_note: NoteModel) => {
+    setNote(_note);
+  }
+
   return (
     <>
       <div className='note-page page-animate'>
         <Topbar title={note?.name || 'Untitled'} />
         <MainSection>
           {note && <div>
-            <ContentSection note={note} space={props.space} />
+            <ContentSection note={note} space={props.space} onPostNoteSave={onPostNoteSave} />
           </div>}
         </MainSection>
 
