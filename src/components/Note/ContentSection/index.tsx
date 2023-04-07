@@ -14,6 +14,7 @@ import ContentEditor from '../sections/ContentEditor';
 import ContentViewer from '../sections/ContentViewer';
 import MetadataEditor from '../sections/MetadataEditor';
 import MetadataDefinitionModel from 'src/model/MetadataDefinitionModel';
+import MetadataViewer from '../sections/MetadataViewer';
 
 interface Props {
   note: NoteModel;
@@ -133,6 +134,7 @@ const ContentSection = (props: Props) => {
           {isEditMetadata[group] && <EditControls onCancel={() => onCancelMetadata(group)} onSave={onSave} saving={saving} />}
           {!isEditMetadata[group] && <ViewControls onEdit={() => onEditMetadata(group)} disable={isEdit} />}
           {isEditMetadata[group] && <MetadataEditor onChange={handleEditStateChange} note={state} group={group} metadataDefinitionList={metadataDefinitionMap[group]} />}
+          {!isEditMetadata[group] && <MetadataViewer note={state} group={group} metadataDefinitionList={metadataDefinitionMap[group]} />}
         </SectionContainer>
       )}
     </div>

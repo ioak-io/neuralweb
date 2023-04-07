@@ -1,4 +1,4 @@
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -42,6 +42,9 @@ const Topbar = (props: Props) => {
           </button>
           <button className="button mobile-only" onClick={toggleMobileSidebar}>
             <FontAwesomeIcon icon={faBars} />
+          </button>
+          <button className="button topbar__left__nav" onClick={toggleMobileSidebar}>
+            <FontAwesomeIcon icon={faPlus} /> New note
           </button>
           <div>{props.title}</div>
         </div>

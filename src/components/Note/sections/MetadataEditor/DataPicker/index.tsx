@@ -4,7 +4,7 @@ import './style.scss';
 import NoteModel from '../../../../../model/NoteModel';
 import { Input, Label, Textarea } from 'basicui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleXmark, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faCircleXmark, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { isEmptyOrSpaces } from '../../../../../components/Utils';
 import MetadataDefinitionModel from 'src/model/MetadataDefinitionModel';
 
@@ -33,13 +33,14 @@ const DataPicker = (props: Props) => {
   useEffect(() => {
     if (isEmptyOrSpaces(searchText)) {
       setSearchResults(metadataValueList
-        .filter((item: string) => !props.note.labels.includes(item)));
+        // .filter((item: string) => props.note[props.metadataDefinition._id || ''] !== item)
+      );
     } else {
       setSearchResults(metadataValueList
-        .filter((item: string) => !props.note.labels.includes(item))
+        // .filter((item: string) => props.note[props.metadataDefinition._id || ''] !== item)
         .filter((item: string) => item.toLowerCase().includes(searchText.toLowerCase())));
     }
-  }, [searchText, metadataValueList])
+  }, [searchText, metadataValueList, props.note])
 
   const handleChange = (event: any) => {
     props.onChange({
@@ -66,30 +67,24 @@ const DataPicker = (props: Props) => {
       <Label>
         {props.metadataDefinition.name}
       </Label>
-      <Input name="searchText" value={searchText} placeholder="Search or create new label" onInput={handleSearchTextChange} />
+      <div className="metadata-picker__value">
+        {props.note[props.metadataDefinition._id || '']}
+      </div>
+      <Input name="searchText" value={searchText} placeholder={`Search or add new ${props.metadataDefinition.name}`} onInput={handleSearchTextChange} />
       <div className="metadata-picker__results">
-        <div className="metadata-picker__results__container">
-          <div className="metadata-picker__item metadata-picker__item--active">
-            {props.note[props.metadataDefinition._id || '']}
-          </div>
-        </div>
-
-        <div className="metadata-picker__results__container">
-          {isEmptyOrSpaces(searchText) &&
-            <div className="metadata-picker__results__info-secondary">
-              Type to see suggestion
-            </div>}
-          {!isEmptyOrSpaces(searchText) && <div className="metadata-picker__results__list">
-            {searchResults.map(item =>
-              <button className="metadata-picker__item" onClick={() => updateValue(item)}>
-                {item}
-              </button>
-            )}
-            <button className="metadata-picker__item" onClick={() => updateValue(searchText)}>
-              {searchText}
-            </button>
+        {isEmptyOrSpaces(searchText) &&
+          <div className="metadata-picker__results__info-secondary">
+            Type to see suggestion
           </div>}
-        </div>
+        {!isEmptyOrSpaces(searchText) &&
+          <button className="metadata-picker__item" onClick={() => updateValue(searchText)}>
+            <i>{searchText}</i>
+          </button>}
+        {!isEmptyOrSpaces(searchText) && searchResults.map(item =>
+          <button className="metadata-picker__item" onClick={() => updateValue(item)}>
+            {item}
+          </button>
+        )}
       </div>
     </div>
   );
