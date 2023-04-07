@@ -4,18 +4,20 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import './style.scss';
-import NoteModel from '../../model/NoteModel';
+import NoteModel from '../../../model/NoteModel';
 import SearchResultItem from './SearchResultItem';
-import NotetagModel from '../../model/NotetagModel';
-import { getNotetags } from '../Page/GraphPage/service';
+import NotetagModel from '../../../model/NotetagModel';
+import { getNotetags } from '../../Page/GraphPage/service';
+import { Input } from 'basicui';
 
 interface Props {
   space: string;
-  noteList: NoteModel[];
+  text: string;
   handleChange: any;
+  handleSearch: any;
 }
 
-const SearchResults = (props: Props) => {
+const SearchInput = (props: Props) => {
   const dispatch = useDispatch();
   const noteList = useSelector((state: any) => state.note.items);
   const authorization = useSelector((state: any) => state.authorization);
@@ -45,18 +47,16 @@ const SearchResults = (props: Props) => {
   }, [authorization]);
 
   return (
-    <div className="search-results">
-      {props.noteList.map((item) => (
-        <SearchResultItem
-          key={item._id}
-          space={props.space}
-          note={item}
-          tagsMap={notetagsMap}
-          handleChange={props.handleChange}
-        />
-      ))}
+    <div className="search-input">
+      <form className="main browse-page-form" onSubmit={props.handleSearch}>
+          <Input name="text"
+            value={props.text}
+            onInput={props.handleChange}
+            placeholder="Type to search"
+            autoFocus />
+        </form>
     </div>
   );
 };
 
-export default SearchResults;
+export default SearchInput;

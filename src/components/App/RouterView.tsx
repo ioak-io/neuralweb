@@ -10,24 +10,13 @@ import OaLogin from '../Auth/OaLogin';
 import EditCompanyPage from '../Page/EditCompanyPage';
 import UnauthorizedPage from '../Page/UnauthorizedPage';
 import ExpensePage from '../Page/ExpensePage';
-import DashboardPage from '../Page/DashboardPage';
-import CategoryPage from '../Page/CategoryPage';
-import ReceiptPage from '../Page/ReceiptPage';
-import IncomePage from '../Page/IncomePage';
-import EditBillPage from '../Page/EditBillPage';
-import ScheduleReceiptPage from '../Page/ScheduleReceiptPage';
-import EditScheduleReceiptPage from '../Page/EditScheduleReceiptPage';
-import ScheduleReceiptRunbookPage from '../Page/ScheduleReceiptRunbookPage';
-import BudgetPage from '../Page/BudgetPage';
-import BalancePage from '../Page/BalancePage';
-import DuplicatePage from '../Page/DuplicatePage';
 import EditCompany from '../Page/SettingsPage/EditCompany';
 import Permissions from '../Page/SettingsPage/Permissions';
 import BackupAndRestore from '../Page/SettingsPage/BackupAndRestore';
 import GraphPage from '../Page/GraphPage';
-import SearchPage from '../Page/SearchPage';
 import NotePage from '../Page/NotePage';
 import MetadataDefinitionPage from '../Page/MetadataDefinitionPage';
+import BrowsePage from '../Page/BrowsePage';
 
 interface Props {
 }
@@ -91,10 +80,10 @@ const RouterView = (props: Props) => {
               middleware={['readAuthentication']} component={NotePage} />}
         />
         <Route
-          path="/:space/search"
+          path="/:space/browse"
           element={
             <ProtectedRouteApp
-              middleware={['readAuthentication']} component={SearchPage} />}
+              middleware={['readAuthentication']} component={BrowsePage} />}
         />
         <Route
           path="/:space/graph"

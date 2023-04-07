@@ -224,9 +224,9 @@ const NetworkGraph = (props: Props) => {
       eventNode
         .on('click', function (e: any, d: any) {
           if (d.group === 'note') {
-            navigate(`/${props.space}/note?id=${d.reference}`);
+            navigate(`/${props.space}/note/${d.reference}`);
           } else {
-            navigate(`/${props.space}/search?text=tag:${d.reference}`);
+            navigate(`/${props.space}/browse?text=tag:${d.reference}`);
           }
         })
         .on('mouseenter', (evt: any, d: any) => {
@@ -507,7 +507,7 @@ const NetworkGraph = (props: Props) => {
       zoomHandler(svgEl);
 
       // node.on('click', function (d: any, e: any) {
-      //   history.push(`/${props.space}/note?id=${e._id}`);
+      //   history.push(`/${props.space}/note/${e._id}`);
       // });
 
       setSvg(svgEl);

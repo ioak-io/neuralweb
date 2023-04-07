@@ -130,11 +130,6 @@ const SideContent = (props: Props) => {
               label="Browse"
             />
             <SideNavLink
-              link={`/${props.space}/search`}
-              icon={faMagnifyingGlass}
-              label="Search"
-            />
-            <SideNavLink
               link={`/${props.space}/graph`}
               icon={faCircleNodes}
               label="Graph"

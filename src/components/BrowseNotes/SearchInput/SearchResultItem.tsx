@@ -8,8 +8,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import './SearchResultItem.scss';
-import NoteModel from '../../model/NoteModel';
-import NotetagModel from '../../model/NotetagModel';
+import NoteModel from '../../../model/NoteModel';
+import NotetagModel from '../../../model/NotetagModel';
 import { Link, ThemeType } from 'basicui';
 
 interface Props {

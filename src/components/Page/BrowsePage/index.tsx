@@ -7,19 +7,20 @@ import Topbar from '../../../components/Topbar';
 // import DisableContextBarCommand from '../../../events/DisableContextBarCommand';
 import { searchNote } from './service';
 import NoteModel from '../../../model/NoteModel';
-import SearchResults from '../../../components/SearchResults';
+import SearchResults from '../../../components/BrowseNotes/SearchResults';
 import { isEmptyOrSpaces } from '../../../components/Utils';
 import GraphSearchResultsView from '../../../components/GraphSearchResultsView';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Input } from 'basicui';
 import MainSection from '../../../components/MainSection';
+import SearchInput from '../../../components/BrowseNotes/SearchInput';
 
 interface Props {
   location: any;
   space: string;
 }
 
-const SearchPage = (props: Props) => {
+const BrowsePage = (props: Props) => {
   const navigate = useNavigate();
   const profile = useSelector((state: any) => state.profile);
   const authorization = useSelector((state: any) => state.authorization);
@@ -31,10 +32,6 @@ const SearchPage = (props: Props) => {
   const [results, setResults] = useState<NoteModel[]>([]);
 
   const [searchParams] = useSearchParams();
-
-  // useEffect(() => {
-  //   DisableContextBarCommand.next(false);
-  // }, []);
 
   useEffect(() => {
     setText(searchParams.get('text') || '');
@@ -55,17 +52,12 @@ const SearchPage = (props: Props) => {
   };
 
   const handleChangeAndSubmit = (_text: string) => {
-    navigate(`/${props.space}/search?text=${_text}`);
+    navigate(`/${props.space}/browse?text=${_text}`);
   };
 
   const handleSearch = (event: any) => {
     event.preventDefault();
-    navigate(`/${props.space}/search?text=${text}`);
-    // saveNote(props.space, _note, authorization).then((response: any) => {
-    //   if (response && id.current === response.reference) {
-    //     setState(response);
-    //   }
-    // });
+    navigate(`/${props.space}/browse?text=${text}`);
   };
 
   const openGraphMode = () => {
@@ -78,7 +70,7 @@ const SearchPage = (props: Props) => {
 
   return (
     <div className="page-animate">
-      <Topbar title="Search">
+      <Topbar title="Browse">
         <div className="topbar-actions">
           <button
             className={`button ${view === 'graph' ? 'active' : ''}`}
@@ -97,15 +89,9 @@ const SearchPage = (props: Props) => {
         </div>
       </Topbar>
       <MainSection>
-        <form className="main search-page-form" onSubmit={handleSearch}>
-          <Input name="text"
-            value={text}
-            onInput={handleChange}
-            placeholder="Type to search"
-            autoFocus />
-        </form>
+        <SearchInput space={props.space} text={text} handleSearch={handleSearch} handleChange={handleChange}/>
         {view === 'list' && (
-          <div className="search-page__results main">
+          <div className="browse-page__results main">
             <SearchResults
               space={props.space}
               noteList={results}
@@ -114,7 +100,7 @@ const SearchPage = (props: Props) => {
           </div>
         )}
         {view === 'graph' && (
-          <div className="search-page__graph">
+          <div className="browse-page__graph">
             <GraphSearchResultsView space={props.space} noteNodes={results} />
           </div>
         )}
@@ -123,4 +109,4 @@ const SearchPage = (props: Props) => {
   );
 };
 
-export default SearchPage;
+export default BrowsePage;
