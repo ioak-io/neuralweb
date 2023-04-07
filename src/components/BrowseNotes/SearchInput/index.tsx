@@ -4,57 +4,90 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import './style.scss';
-import NoteModel from '../../../model/NoteModel';
-import SearchResultItem from './SearchResultItem';
-import NotetagModel from '../../../model/NotetagModel';
-import { getNotetags } from '../../Page/GraphPage/service';
 import { Input } from 'basicui';
+import SearchPref from './SearchPref';
+import { SearchOptionType } from './SearchOptionType';
+import MetadataDefinitionModel from 'src/model/MetadataDefinitionModel';
 
 interface Props {
   space: string;
   text: string;
   handleChange: any;
-  handleSearch: any;
+  onSearch: any;
 }
 
 const SearchInput = (props: Props) => {
   const dispatch = useDispatch();
-  const noteList = useSelector((state: any) => state.note.items);
+  const [text, setText] = useState('');
   const authorization = useSelector((state: any) => state.authorization);
-  const company = useSelector((state: any) =>
-    state.company.items.find(
-      (item: any) => item.reference === parseInt(props.space, 10)
-    )
-  );
-
-  const [notetagsMap, setNotetagsMap] = useState<any>({});
+  const metadataDefinitionList = useSelector((state: any) => state.metadataDefinition.items);
+  const [searchByOptions, setSearchByOptions] = useState<SearchOptionType[]>([]);
+  const [searchPref, setSearchPref] = useState<any>({});
 
   useEffect(() => {
-    if (authorization.isAuth) {
-      getNotetags(props.space, authorization).then(
-        (response: NotetagModel[]) => {
-          const _notetagsMap: any = {};
-          response?.forEach((item) => {
-            _notetagsMap[item.noteRef] = [
-              ...(_notetagsMap[item.noteRef] || []),
-              item,
-            ];
-          });
-          setNotetagsMap(_notetagsMap);
-        }
-      );
+    setText(props.text);
+  }, [props.text]);
+
+  useEffect(() => {
+    const _searchByOptions: SearchOptionType[] = [
+      {
+        name: 'name',
+        label: 'Name'
+      },
+      {
+        name: 'content',
+        label: 'Content'
+      },
+      {
+        name: 'labels',
+        label: 'Label'
+      }
+    ];
+    const _searchPref: any = {
+      name: false,
+      content: true,
+      labels: false,
+      ...searchPref
     }
-  }, [authorization]);
+
+    metadataDefinitionList.forEach((item: MetadataDefinitionModel) => {
+      _searchByOptions.push({
+        name: item._id || '',
+        label: `${item.group} | ${item.name}`
+      })
+      _searchPref[item._id || ''] = false;
+    })
+
+    setSearchByOptions(_searchByOptions);
+    setSearchPref(_searchPref);
+  }, [metadataDefinitionList]);
+
+  const handleTextChange = (event: any) => {
+    setText(event.currentTarget.value);
+  }
+
+  const handleSearchPrefChange = (_searchPref: any) => {
+    setSearchPref(_searchPref);
+  }
+
+  const onSearch = (event: any) => {
+    event.preventDefault();
+    props.onSearch({
+      text,
+      searchPref
+    })
+  }
 
   return (
     <div className="search-input">
-      <form className="main browse-page-form" onSubmit={props.handleSearch}>
-          <Input name="text"
-            value={props.text}
-            onInput={props.handleChange}
-            placeholder="Type to search"
-            autoFocus />
-        </form>
+      <form className="main browse-page-form" onSubmit={onSearch}>
+        <Input name="text"
+          value={text}
+          onInput={handleTextChange}
+          placeholder="Type to search"
+          autoFocus />
+      </form>
+      <SearchPref searchPref={searchPref} options={searchByOptions} handleChange={handleSearchPrefChange} />
     </div>
   );
 };

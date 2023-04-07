@@ -14,6 +14,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Input } from 'basicui';
 import MainSection from '../../../components/MainSection';
 import SearchInput from '../../../components/BrowseNotes/SearchInput';
+import { getSessionValue, getSessionValueAsJson, setSessionValue, setSessionValueAsJson } from '../../../utils/SessionUtils';
 
 interface Props {
   location: any;
@@ -34,17 +35,19 @@ const BrowsePage = (props: Props) => {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    setText(searchParams.get('text') || '');
-    if (!isEmptyOrSpaces(searchParams.get('text')) && authorization.isAuth) {
-      searchNote(props.space, { text: searchParams.get('text') }, authorization).then(
+    const _text = searchParams.get('text') || '';
+    const _searchPref = getSessionValueAsJson('neuralweb-searchpref-browse');
+    setText(_text);
+    if (authorization.isAuth) {
+      searchNote(props.space, { text: _text, searchPref: _searchPref }, authorization).then(
         (response: NoteModel[]) => {
           setResults(response);
         }
       );
     }
-    if (isEmptyOrSpaces(searchParams.get('text')) && authorization.isAuth) {
-      setResults([]);
-    }
+    // if (isEmptyOrSpaces(_text) && authorization.isAuth) {
+    //   setResults([]);
+    // }
   }, [searchParams, authorization]);
 
   const handleChange = (event: any) => {
@@ -55,9 +58,9 @@ const BrowsePage = (props: Props) => {
     navigate(`/${props.space}/browse?text=${_text}`);
   };
 
-  const handleSearch = (event: any) => {
-    event.preventDefault();
-    navigate(`/${props.space}/browse?text=${text}`);
+  const handleSearch = (_data: any) => {
+    setSessionValueAsJson('neuralweb-searchpref-browse', _data.searchPref);
+    navigate(`/${props.space}/browse?text=${_data.text}`);
   };
 
   const openGraphMode = () => {
@@ -89,15 +92,13 @@ const BrowsePage = (props: Props) => {
         </div>
       </Topbar>
       <MainSection>
-        <SearchInput space={props.space} text={text} handleSearch={handleSearch} handleChange={handleChange}/>
+        <SearchInput space={props.space} text={text} onSearch={handleSearch} handleChange={handleChange} />
         {view === 'list' && (
-          <div className="browse-page__results main">
-            <SearchResults
-              space={props.space}
-              noteList={results}
-              handleChange={handleChangeAndSubmit}
-            />
-          </div>
+          <SearchResults
+            space={props.space}
+            noteList={results}
+            handleChange={handleChangeAndSubmit}
+          />
         )}
         {view === 'graph' && (
           <div className="browse-page__graph">

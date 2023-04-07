@@ -1,8 +1,6 @@
-.search-results {
+@import './searchbox';
+
+.search-input {
   display: grid;
-  grid-auto-flow: row;
-  justify-content: flex-start;
-  justify-items: flex-start;
-  row-gap: 24px;
-  margin-top: 24px;
+  // row-gap: 12px;
 }

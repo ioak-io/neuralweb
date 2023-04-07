@@ -15,7 +15,6 @@ import { Link, ThemeType } from 'basicui';
 interface Props {
   space: string;
   note: NoteModel;
-  tagsMap: any;
   handleChange: any;
 }
 
@@ -25,19 +24,14 @@ const SearchResultItem = (props: Props) => {
       <Link href={`/#/${props.space}/note/${props.note.reference}`} theme={ThemeType.primary}>
         <h4>{props.note.name}</h4>
       </Link>
-      <div>{props.note.content.substr(0, 500)}</div>
       <div className="search-result-item__tag">
-        {props.tagsMap[props.note.reference]?.map((item: NotetagModel) => (
-          <button
-            key={item._id}
-            className="button search-result-item__tag__item bg-light-400 dark:bg-dark-200 hover:bg-light-500 hover:dark:bg-dark-100"
-            onClick={() => props.handleChange(`tag:${item.name}`)}
-          >
-            <FontAwesomeIcon icon={faTag} />
-            {item.name}
-          </button>
+        {props.note.labels?.map((label: string) => (
+          <div className="note-label">
+            {label}
+          </div>
         ))}
       </div>
+      <div>{props.note.content.substr(0, 500)}</div>
     </div>
   );
 };

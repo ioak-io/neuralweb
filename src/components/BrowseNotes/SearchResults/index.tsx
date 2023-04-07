@@ -16,33 +16,7 @@ interface Props {
 }
 
 const SearchResults = (props: Props) => {
-  const dispatch = useDispatch();
-  const noteList = useSelector((state: any) => state.note.items);
   const authorization = useSelector((state: any) => state.authorization);
-  const company = useSelector((state: any) =>
-    state.company.items.find(
-      (item: any) => item.reference === parseInt(props.space, 10)
-    )
-  );
-
-  const [notetagsMap, setNotetagsMap] = useState<any>({});
-
-  useEffect(() => {
-    if (authorization.isAuth) {
-      getNotetags(props.space, authorization).then(
-        (response: NotetagModel[]) => {
-          const _notetagsMap: any = {};
-          response?.forEach((item) => {
-            _notetagsMap[item.noteRef] = [
-              ...(_notetagsMap[item.noteRef] || []),
-              item,
-            ];
-          });
-          setNotetagsMap(_notetagsMap);
-        }
-      );
-    }
-  }, [authorization]);
 
   return (
     <div className="search-results">
@@ -51,7 +25,6 @@ const SearchResults = (props: Props) => {
           key={item._id}
           space={props.space}
           note={item}
-          tagsMap={notetagsMap}
           handleChange={props.handleChange}
         />
       ))}
