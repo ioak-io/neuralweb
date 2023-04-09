@@ -73,7 +73,7 @@ const BrowsePage = (props: Props) => {
 
   return (
     <div className="page-animate">
-      <Topbar title="Browse">
+      <Topbar title="Browse" space={props.space}>
         <div className="topbar-actions">
           <button
             className={`button ${view === 'graph' ? 'active' : ''}`}

@@ -15,23 +15,22 @@ import { Link, ThemeType } from 'basicui';
 interface Props {
   space: string;
   note: NoteModel;
-  handleChange: any;
 }
 
 const SearchResultItem = (props: Props) => {
   return (
     <div className="search-result-item">
       <Link href={`/#/${props.space}/note/${props.note.reference}`} theme={ThemeType.primary}>
-        <h4>{props.note.name}</h4>
+        <p>{props.note.name}</p>
       </Link>
-      <div className="search-result-item__tag">
+      {/* <div className="search-result-item__tag">
         {props.note.labels?.map((label: string) => (
           <div className="note-label">
             {label}
           </div>
         ))}
-      </div>
-      <div>{props.note.content.substr(0, 500)}</div>
+      </div> */}
+      {/* <div>{props.note.content.substr(0, 500)}</div> */}
     </div>
   );
 };

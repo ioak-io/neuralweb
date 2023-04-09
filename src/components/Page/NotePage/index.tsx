@@ -58,7 +58,7 @@ const NotePage = (props: Props) => {
   return (
     <>
       <div className='note-page page-animate'>
-        <Topbar title="Note" />
+        <Topbar title="Note" space={props.space} />
         {/* <Topbar title={note?.name || 'Untitled'} /> */}
         <MainSection>
           {note && <div>

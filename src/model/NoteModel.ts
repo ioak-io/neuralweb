@@ -1,5 +1,5 @@
 export default interface NoteModel {
-  _id: string;
+  _id?: string;
   name: string;
   reference: string;
   content: string;

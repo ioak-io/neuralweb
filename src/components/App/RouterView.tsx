@@ -17,6 +17,7 @@ import GraphPage from '../Page/GraphPage';
 import NotePage from '../Page/NotePage';
 import MetadataDefinitionPage from '../Page/MetadataDefinitionPage';
 import BrowsePage from '../Page/BrowsePage';
+import NewNotePage from '../Page/NewNotePage';
 
 interface Props {
 }
@@ -72,6 +73,12 @@ const RouterView = (props: Props) => {
           element={
             <ProtectedRouteApp
               middleware={['readAuthentication']} component={ExpensePage} />}
+        />
+        <Route
+          path="/:space/new-note"
+          element={
+            <ProtectedRouteApp
+              middleware={['readAuthentication']} component={NewNotePage} />}
         />
         <Route
           path="/:space/note/:id"

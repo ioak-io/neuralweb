@@ -5,13 +5,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setProfile } from '../../store/actions/ProfileActions';
 import MobileSidebar from '../MobileSidebar';
 import './style.scss';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   title: string;
   children?: any;
+  space?: string;
 }
 
 const Topbar = (props: Props) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const profile = useSelector((state: any) => state.profile);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -33,6 +36,10 @@ const Topbar = (props: Props) => {
     dispatch(setProfile({ ...profile, sidebar: !profile.sidebar }));
   };
 
+  const openNewNotePage = () => {
+    navigate(`/${props.space}/new-note`);
+  }
+
   return (
     <>
       <div className="topbar">
@@ -43,7 +50,7 @@ const Topbar = (props: Props) => {
           <button className="button mobile-only" onClick={toggleMobileSidebar}>
             <FontAwesomeIcon icon={faBars} />
           </button>
-          <button className="button topbar__left__nav" onClick={toggleMobileSidebar}>
+          <button className="button topbar__left__nav" onClick={openNewNotePage}>
             <FontAwesomeIcon icon={faPlus} /> New note
           </button>
           <div>{props.title}</div>
