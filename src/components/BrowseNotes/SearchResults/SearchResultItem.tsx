@@ -21,7 +21,7 @@ const SearchResultItem = (props: Props) => {
   return (
     <div className="search-result-item">
       <Link href={`/#/${props.space}/note/${props.note.reference}`} theme={ThemeType.primary}>
-        <p>{props.note.name}</p>
+        {props.note.name}
       </Link>
       {/* <div className="search-result-item__tag">
         {props.note.labels?.map((label: string) => (

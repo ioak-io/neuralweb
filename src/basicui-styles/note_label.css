@@ -9,6 +9,7 @@
     grid-auto-flow: column;
     column-gap: 10px;
     align-items: center;
+    text-align: left;
     padding: 4px 12px;
     border-radius: 4px;
     font-size: 12px;

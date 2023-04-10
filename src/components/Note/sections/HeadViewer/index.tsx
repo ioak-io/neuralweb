@@ -4,6 +4,7 @@ import './style.scss';
 import NoteModel from '../../../../model/NoteModel';
 import { useParams } from 'react-router-dom';
 import LabelViewer from '../../sections/LabelViewer';
+import { Label } from 'basicui';
 
 interface Props {
   note: NoteModel;
@@ -12,10 +13,15 @@ interface Props {
 const HeadViewer = (props: Props) => {
   return (
     <div className='head-viewer'>
-      <div className='head-viewer__name'>
+      <div>
+        <Label>Name</Label>
         {props.note.name}
       </div>
-      <LabelViewer note={props.note} />
+      <div>
+        <Label>Labels</Label>
+        {props.note.labels.length > 0 && <LabelViewer note={props.note} />}
+        {props.note.labels.length === 0 && '-'}
+      </div>
     </div>
   );
 };

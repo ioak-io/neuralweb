@@ -17,10 +17,16 @@ interface Props {
 
 const SearchByOption = (props: Props) => {
 
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    setActive(props.searchPref[props.option.name]);
+  }, [props.searchPref, props.option]);
+
   return (
     <button
       onClick={props.onClick}
-      className={`search-by-option ${props.searchPref[props.option.name] ? 'search-by-option--active' : ''}`}>
+      className={`search-by-option ${active ? 'search-by-option--active' : ''}`}>
       {props.option.label}
     </button>
   );

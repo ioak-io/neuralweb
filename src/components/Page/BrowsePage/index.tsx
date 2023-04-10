@@ -23,44 +23,28 @@ interface Props {
 
 const BrowsePage = (props: Props) => {
   const navigate = useNavigate();
-  const profile = useSelector((state: any) => state.profile);
   const authorization = useSelector((state: any) => state.authorization);
   const dispatch = useDispatch();
 
   const [view, setView] = useState('list');
 
-  const [text, setText] = useState('');
   const [results, setResults] = useState<NoteModel[]>([]);
 
-  const [searchParams] = useSearchParams();
-
   useEffect(() => {
-    const _text = searchParams.get('text') || '';
-    const _searchPref = getSessionValueAsJson('neuralweb-searchpref-browse');
-    setText(_text);
+    const searchConfig = getSessionValueAsJson('neuralweb-searchconfig-browse');
     if (authorization.isAuth) {
-      searchNote(props.space, { text: _text, searchPref: _searchPref }, authorization).then(
-        (response: NoteModel[]) => {
-          setResults(response);
-        }
-      );
+      handleSearch(searchConfig);
     }
-    // if (isEmptyOrSpaces(_text) && authorization.isAuth) {
-    //   setResults([]);
-    // }
-  }, [searchParams, authorization]);
+  }, [authorization]);
 
-  const handleChange = (event: any) => {
-    setText(event.target.value);
-  };
-
-  const handleChangeAndSubmit = (_text: string) => {
-    navigate(`/${props.space}/browse?text=${_text}`);
-  };
-
-  const handleSearch = (_data: any) => {
-    setSessionValueAsJson('neuralweb-searchpref-browse', _data.searchPref);
-    navigate(`/${props.space}/browse?text=${_data.text}`);
+  const handleSearch = (searchConfig: any) => {
+    console.log(searchConfig);
+    setSessionValueAsJson('neuralweb-searchconfig-browse', searchConfig);
+    searchNote(props.space, searchConfig, authorization).then(
+      (response: NoteModel[]) => {
+        setResults(response);
+      }
+    );
   };
 
   const openGraphMode = () => {
@@ -92,12 +76,12 @@ const BrowsePage = (props: Props) => {
         </div>
       </Topbar>
       <MainSection>
-        <SearchInput space={props.space} text={text} onSearch={handleSearch} handleChange={handleChange} />
+        <SearchInput space={props.space} onSearch={handleSearch} />
         {view === 'list' && (
           <SearchResults
             space={props.space}
             noteList={results}
-            handleChange={handleChangeAndSubmit}
+            handleChange={() => { }}
           />
         )}
         {view === 'graph' && (

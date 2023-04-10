@@ -9,11 +9,19 @@ import { Editor, Bold, Italic, Underline, HighlightColor, ClearFormatting, Bulle
 interface Props {
   note: NoteModel;
   editor: any;
+  onChange: any;
 }
 
 const ContentEditor = (props: Props) => {
+  const handleChange = (event: any) => {
+    props.onChange({
+      ...props.note,
+      [event.currentTarget.name]: event.currentTarget.value
+    })
+  }
   return (
     <div className='head-editor'>
+      <Textarea value={props.note.summary} name="summary" onInput={handleChange} label="Short summary" maxlength="500" />
       <div>
         <Label>
           Content

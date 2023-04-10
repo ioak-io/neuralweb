@@ -4,7 +4,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import './Header.scss';
 import NoteModel from '../../../model/NoteModel';
-import { Select, SelectPropsConverter } from 'basicui';
+import { Link, Select, SelectPropsConverter } from 'basicui';
 
 interface Props {
   noteList: NoteModel[];

@@ -7,6 +7,11 @@
   margin-top: 24px;
 }
 
+.search-results__main {
+  display: grid;
+  row-gap: 12px;
+}
+
 .search-results-header {
   display: grid;
   grid-template-columns: 1fr auto;

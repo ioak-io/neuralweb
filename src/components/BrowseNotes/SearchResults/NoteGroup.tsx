@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import './Header.scss';
+import './NoteGroup.scss';
 import NoteModel from '../../../model/NoteModel';
 import { Select, SelectPropsConverter } from 'basicui';
 import SearchResultItem from './SearchResultItem';

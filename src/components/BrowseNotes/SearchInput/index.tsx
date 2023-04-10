@@ -4,31 +4,37 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import './style.scss';
-import { Input } from 'basicui';
+import { ButtonVariantType, IconButton, Input, ThemeType } from 'basicui';
 import SearchPref from './SearchPref';
 import { SearchOptionType } from './SearchOptionType';
-import MetadataDefinitionModel from 'src/model/MetadataDefinitionModel';
+import MetadataDefinitionModel from '../../../model/MetadataDefinitionModel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
+import ChooseOptions from './ChooseOptions';
+import { getSessionValueAsJson } from '../../../utils/SessionUtils';
 
 interface Props {
   space: string;
-  text: string;
-  handleChange: any;
   onSearch: any;
 }
 
 const SearchInput = (props: Props) => {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
+  const [textList, setTextList] = useState<string[]>([]);
   const authorization = useSelector((state: any) => state.authorization);
   const metadataDefinitionList = useSelector((state: any) => state.metadataDefinition.items);
   const [searchByOptions, setSearchByOptions] = useState<SearchOptionType[]>([]);
   const [searchPref, setSearchPref] = useState<any>({});
 
   useEffect(() => {
-    setText(props.text);
-  }, [props.text]);
+    const searchConfig = getSessionValueAsJson('neuralweb-searchconfig-browse');
+    setSearchPref(searchConfig.searchPref);
+    setText(searchConfig.text);
+  }, []);
 
   useEffect(() => {
+    const searchConfig = getSessionValueAsJson('neuralweb-searchconfig-browse');
     const _searchByOptions: SearchOptionType[] = [
       {
         name: 'name',
@@ -43,27 +49,28 @@ const SearchInput = (props: Props) => {
         label: 'Label'
       }
     ];
-    const _searchPref: any = {
-      name: false,
-      content: true,
-      labels: false,
-      ...searchPref
-    }
+    const _searchPref: any = _getSearchPrefBase();
 
     metadataDefinitionList.forEach((item: MetadataDefinitionModel) => {
       _searchByOptions.push({
         name: item._id || '',
         label: `${item.group} | ${item.name}`
       })
-      _searchPref[item._id || ''] = false;
     })
 
     setSearchByOptions(_searchByOptions);
-    setSearchPref(_searchPref);
+    setSearchPref({
+      ..._searchPref,
+      ...searchConfig.searchPref
+    });
   }, [metadataDefinitionList]);
 
   const handleTextChange = (event: any) => {
     setText(event.currentTarget.value);
+  }
+
+  const handleTextListChange = (_options: any) => {
+    setTextList(_options);
   }
 
   const handleSearchPrefChange = (_searchPref: any) => {
@@ -74,20 +81,59 @@ const SearchInput = (props: Props) => {
     event.preventDefault();
     props.onSearch({
       text,
-      searchPref
+      searchPref,
+      textList
     })
+  }
+
+  const _getSearchPrefBase = () => {
+
+    const _searchPref: any = {
+      name: false,
+      content: true,
+      labels: false
+    }
+
+    metadataDefinitionList.forEach((item: MetadataDefinitionModel) => {
+      _searchPref[item._id || ''] = false;
+    })
+
+    return _searchPref;
+  }
+
+  const onReset = (event: any) => {
+    const _text = '';
+    const _searchPref: any = _getSearchPrefBase();
+    const _textList: string[] = [];
+    props.onSearch({
+      text: _text,
+      searchPref: _searchPref,
+      textList: _textList
+    });
+    setText(_text);
+    setTextList(_textList);
+    setSearchPref(_searchPref);
   }
 
   return (
     <div className="search-input">
-      <form className="main browse-page-form" onSubmit={onSearch}>
-        <Input name="text"
-          value={text}
-          onInput={handleTextChange}
-          placeholder="Type to search"
-          autoFocus />
-      </form>
       <SearchPref searchPref={searchPref} options={searchByOptions} handleChange={handleSearchPrefChange} />
+      <div className="search-input__input">
+        <form className="main browse-page-form" onSubmit={onSearch}>
+          <Input name="text"
+            value={text}
+            onInput={handleTextChange}
+            placeholder="Type to search"
+            autoFocus />
+          <IconButton onClick={onSearch} circle theme={ThemeType.primary} variant={ButtonVariantType.transparent}>
+            <FontAwesomeIcon icon={faSearch} />
+          </IconButton>
+          <IconButton onClick={onReset} circle theme={ThemeType.default} variant={ButtonVariantType.transparent}>
+            <FontAwesomeIcon icon={faXmark} />
+          </IconButton>
+        </form>
+      </div>
+      <ChooseOptions text={text} searchPref={searchPref} options={searchByOptions} handleChange={handleTextListChange} />
     </div>
   );
 };

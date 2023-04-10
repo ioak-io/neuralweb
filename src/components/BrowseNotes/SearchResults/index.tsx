@@ -59,9 +59,11 @@ const SearchResults = (props: Props) => {
   return (
     <div className="search-results">
       <Header noteList={props.noteList} viewBy={viewBy} onChange={handleViewByChange} />
-      {Object.keys(noteMap).sort().map(group =>
-        <NoteGroup noteList={noteMap[group]} group={group} space={props.space} key={group} />
-      )}
+      <div className="search-results__main">
+        {Object.keys(noteMap).sort().map(group =>
+          <NoteGroup noteList={noteMap[group]} group={group} space={props.space} key={group} />
+        )}
+      </div>
     </div>
   );
 };

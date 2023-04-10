@@ -22,7 +22,6 @@ const NewNotePage = (props: Props) => {
   const [state, setState] = useState<NoteModel>({
     _id: undefined,
     content: '',
-    folderId: '',
     labels: [],
     name: '',
     reference: ''

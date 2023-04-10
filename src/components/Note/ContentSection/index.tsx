@@ -35,7 +35,6 @@ const ContentSection = (props: Props) => {
   const [state, setState] = useState<NoteModel>({
     _id: '',
     content: '',
-    folderId: '',
     name: '',
     reference: '',
     labels: []
@@ -126,7 +125,7 @@ const ContentSection = (props: Props) => {
       <SectionContainer>
         {isEditContent && <EditControls onCancel={onCancelContent} onSave={onSave} saving={saving} />}
         {!isEditContent && <ViewControls onEdit={onEditContent} disable={isEdit} />}
-        {isEditContent && <ContentEditor note={state} editor={editor} />}
+        {isEditContent && <ContentEditor note={state} editor={editor} onChange={handleEditStateChange} />}
         {!isEditContent && <ContentViewer note={props.note} />}
       </SectionContainer>
       {Object.keys(metadataDefinitionMap).map(group =>
