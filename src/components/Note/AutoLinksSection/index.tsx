@@ -73,7 +73,7 @@ const AutoLinksSection = (props: Props) => {
       <SectionContainer>
         {mode === 'edit' && <EditControls onCancel={onCancel} />}
         {mode === 'view' && <ViewControls onEdit={onEdit} disable={mode !== 'view'} />}
-        {mode === 'edit' && <AutoLinksEditor notelinkAutoReferences={notelinkAutoReferences} note={props.note} space={props.space} />}
+        {mode === 'edit' && <AutoLinksEditor notelinkReferences={notelinkAutoReferences} notelinkAutoReferences={notelinkAutoReferences} note={props.note} space={props.space} />}
         {mode === 'view' && <LinksViewer heading="Suggested references" notelinkReferences={notelinkAutoReferences} note={props.note} space={props.space} />}
       </SectionContainer>
     </div>

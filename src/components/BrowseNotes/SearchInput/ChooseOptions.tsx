@@ -27,36 +27,37 @@ const ChooseOptions = (props: Props) => {
   const [options, setOptions] = useState<string[]>([]);
 
   useEffect(() => {
-    const items = Object.keys(props.searchPref);
-    const searchPrefChosen: string[] = [];
-    items.forEach(item => {
-      if (props.searchPref[item]) {
-        searchPrefChosen.push(item);
-      }
-    });
+    if (props.searchPref) {
+      const items = Object.keys(props.searchPref);
+      const searchPrefChosen: string[] = [];
+      items.forEach(item => {
+        if (props.searchPref[item]) {
+          searchPrefChosen.push(item);
+        }
+      });
 
-    let _exclusiveSearch = null;
-    let _options: string[] = [];
-    let _chosenValues: string[] = [];
+      let _exclusiveSearch = null;
+      let _options: string[] = [];
+      let _chosenValues: string[] = [];
 
-    if (searchPrefChosen.length === 1) {
-      if (searchPrefChosen[0] === 'labels') {
-        _exclusiveSearch = 'labels';
-        _options = existingLabels;
-      } else {
-        metadataDefinitionList.forEach((item: MetadataDefinitionModel) => {
-          if (searchPrefChosen.includes(item._id || '')) {
-            _exclusiveSearch = item._id;
-            _options = metadataValueList[item._id || ''] || [];
-          }
-        });
+      if (searchPrefChosen.length === 1) {
+        if (searchPrefChosen[0] === 'labels') {
+          _exclusiveSearch = 'labels';
+          _options = existingLabels;
+        } else {
+          metadataDefinitionList.forEach((item: MetadataDefinitionModel) => {
+            if (searchPrefChosen.includes(item._id || '')) {
+              _exclusiveSearch = item._id;
+              _options = metadataValueList[item._id || ''] || [];
+            }
+          });
+        }
+        _chosenValues = props.searchConfig?.textList?.filter((item: string) => _options.includes(item)) || [];
       }
-      _chosenValues = props.searchConfig?.textList?.filter((item: string) => _options.includes(item)) || [];
+      setExclusiveSearch(_exclusiveSearch);
+      setOptions(_options);
+      setChosenValues(_chosenValues);
     }
-    setExclusiveSearch(_exclusiveSearch);
-    setOptions(_options);
-    setChosenValues(_chosenValues);
-    console.log(_exclusiveSearch, _options);
   }, [props.searchPref, metadataDefinitionList, metadataValueList, existingLabels]);
 
   useEffect(() => {

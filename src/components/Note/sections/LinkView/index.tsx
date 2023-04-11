@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './style.scss';
 import NoteModel from '../../../../model/NoteModel';
-import { ButtonVariantType, IconButton, Input, ThemeType } from 'basicui';
+import { ButtonVariantType, IconButton, Input, Link, ThemeType } from 'basicui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLink, faMinus, faPlus, faSearch, faTrash, faUnlink, faXmark } from '@fortawesome/free-solid-svg-icons';
 
@@ -11,6 +11,7 @@ interface Props {
   notelinkReferences: string[];
   addLink?: any;
   removeLink?: any;
+  space: string;
 }
 
 const LinkView = (props: Props) => {
@@ -25,9 +26,9 @@ const LinkView = (props: Props) => {
         <FontAwesomeIcon icon={faMinus} />
       </IconButton>}
       <div>
-        <div className="link-view__name">
+        <Link href={`/#/${props.space}/note/${props.note.reference}`} className="link-view__name">
           {props.note.name}
-        </div>
+        </Link>
         <div>
           {props.note.summary}
         </div>

@@ -83,7 +83,7 @@ const LinksCreator = (props: Props) => {
       </form>
       <div className="links-creator__links">
         {results.filter(item => !props.notelinkReferences.includes(item.reference)).map((note: NoteModel) =>
-          <LinkView notelinkReferences={props.notelinkReferences} note={note} addLink={() => addLink(note)} removeLink={() => removeLink(note)} />
+          <LinkView space={props.space} notelinkReferences={props.notelinkReferences} note={note} addLink={() => addLink(note)} removeLink={() => removeLink(note)} />
         )}
       </div>
     </div>)

@@ -20,7 +20,7 @@ const SearchByOption = (props: Props) => {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    setActive(props.searchPref[props.option.name]);
+    if (props.searchPref) { setActive(props.searchPref[props.option.name]); }
   }, [props.searchPref, props.option]);
 
   return (

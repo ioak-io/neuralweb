@@ -4,6 +4,7 @@ import './style.scss';
 import NoteModel from '../../../../model/NoteModel';
 import { saveNotelink } from '../LinksCreator/service';
 import AutoLinkView from '../AutoLinkView';
+import { appendNotelinkItem } from '../../../../store/actions/NotelinkActions';
 
 interface Props {
   note: NoteModel;
@@ -20,6 +21,7 @@ const AutoLinksEditor = (props: Props) => {
   const addLink = (reference: string) => {
     saveNotelink(props.space, props.note.reference, reference, authorization).then((response: NoteModel) => {
       console.log(response);
+      dispatch(appendNotelinkItem(response));
     })
   }
 
@@ -27,7 +29,7 @@ const AutoLinksEditor = (props: Props) => {
     <div className="links-editor">
       <h5>Suggested references</h5>
       {props.notelinkAutoReferences.map(item =>
-        <AutoLinkView key={item} notelinkReferences={props.notelinkReferences} note={noteMap[item]} addLink={() => addLink(item)} />
+        <AutoLinkView space={props.space} key={item} notelinkReferences={props.notelinkReferences} note={noteMap[item]} addLink={() => addLink(item)} />
       )}
     </div>
   );

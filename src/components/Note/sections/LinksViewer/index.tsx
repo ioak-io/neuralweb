@@ -20,7 +20,7 @@ const LinksViewer = (props: Props) => {
     <div className="links-viewer">
       <h5>{props.heading}</h5>
       {props.notelinkReferences.map(item =>
-        <LinkView notelinkReferences={props.notelinkReferences} note={noteMap[item]} />
+        <LinkView space={props.space} notelinkReferences={props.notelinkReferences} note={noteMap[item]} />
       )}
     </div>
   );

@@ -10,7 +10,9 @@
     width: 24px;
 }
 
+.basicui-dark .link-view__name,
 .link-view__name {
+    font-size: inherit;
     font-weight: 500;
     color: var(--basicui-formelement-label-color);
 }
