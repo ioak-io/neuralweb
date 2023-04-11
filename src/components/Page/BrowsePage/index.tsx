@@ -85,9 +85,7 @@ const BrowsePage = (props: Props) => {
           />
         )}
         {view === 'graph' && (
-          <div className="browse-page__graph">
-            <GraphSearchResultsView space={props.space} noteNodes={results} />
-          </div>
+          <GraphSearchResultsView space={props.space} noteNodes={results} />
         )}
       </MainSection>
     </div>

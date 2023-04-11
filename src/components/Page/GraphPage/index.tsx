@@ -193,23 +193,16 @@ const GraphPage = (props: Props) => {
   const authorization = useSelector((state: any) => state.authorization);
   const companyList = useSelector((state: any) => state.company.items);
   const notes = useSelector((state: any) => state.note?.items);
+  const notelinkList = useSelector((state: any) => state.notelink.items);
+  const notelinkAutoList = useSelector((state: any) => state.notelinkAuto.items);
   const [noteNodes, setNoteNodes] = useState<NodeModel[]>([]);
   const [tagNodes, setTagNodes] = useState<NodeModel[]>([]);
-  const [noteLinks, setNoteLinks] = useState<LinkModel[]>([]);
   const [tagLinks, setTagLinks] = useState<LinkModel[]>([]);
+  const [noteLinks, setNoteLinks] = useState<LinkModel[]>([]);
+  const [noteLinksAuto, setNoteLinksAuto] = useState<LinkModel[]>([]);
 
   useEffect(() => {
     if (authorization.isAuth) {
-      getNotelinks(props.space, authorization).then((response: any) => {
-        if (response) {
-          setNoteLinks(
-            response.map((item: NotelinkModel) => ({
-              source: item.sourceNoteRef,
-              target: item.linkedNoteRef,
-            }))
-          );
-        }
-      });
       getNotetags(props.space, authorization).then((response: any) => {
         if (response) {
           const _tagLinks: LinkModel[] = [];
@@ -218,6 +211,7 @@ const GraphPage = (props: Props) => {
             _tagLinks.push({
               source: item.noteRef,
               target: item.name,
+              type: 'tag'
             });
             _tagNodes.push({
               name: `#${item.name}`,
@@ -233,7 +227,23 @@ const GraphPage = (props: Props) => {
   }, [authorization]);
 
   useEffect(() => {
-    console.log("----", notes)
+    setNoteLinks(
+      notelinkList.map((item: NotelinkModel) => ({
+        source: item.sourceNoteRef,
+        target: item.linkedNoteRef,
+        type: 'link'
+      }))
+    );
+    setNoteLinksAuto(
+      notelinkAutoList.map((item: NotelinkModel) => ({
+        source: item.sourceNoteRef,
+        target: item.linkedNoteRef,
+        type: 'auto-link'
+      }))
+    );
+  }, [notelinkList, notelinkAutoList]);
+
+  useEffect(() => {
     if (notes) {
       setNoteNodes(
         notes.map((item: NoteModel) => ({
@@ -246,6 +256,8 @@ const GraphPage = (props: Props) => {
     }
   }, [notes]);
 
+  const [showAutolinks, setShowAutolinks] = useState(true);
+
   return (
     <>
       <div>
@@ -253,7 +265,7 @@ const GraphPage = (props: Props) => {
         <NetworkGraph
           data={{
             nodes: [...noteNodes, ...tagNodes],
-            links: [...noteLinks, ...tagLinks],
+            links: showAutolinks ? [...noteLinks, ...noteLinksAuto, ...tagLinks] : [...noteLinks, ...tagLinks],
           }}
           space={props.space}
         />

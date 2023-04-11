@@ -24,27 +24,38 @@ const GraphView = (props: Props) => {
   const authorization = useSelector((state: any) => state.authorization);
   const companyList = useSelector((state: any) => state.company.items);
   const notes = useSelector((state: any) => state.note.items);
+  const notelinkList = useSelector((state: any) => state.notelink.items);
+  const notelinkAutoList = useSelector((state: any) => state.notelinkAuto.items);
   const [noteNodes, setNoteNodes] = useState<NodeModel[]>([]);
   const [tagNodes, setTagNodes] = useState<NodeModel[]>([]);
   const [noteLinks, setNoteLinks] = useState<LinkModel[]>([]);
+  const [noteLinksAuto, setNoteLinksAuto] = useState<LinkModel[]>([]);
   const [tagLinks, setTagLinks] = useState<LinkModel[]>([]);
   const [data, setData] = useState<any>({ nodes: [], links: [] });
   const [depth, setDepth] = useState<number>(2);
 
   useEffect(() => {
-    console.log('**auth');
     if (authorization.isAuth && props.noteref) {
-      getNotelinks(props.space, props.noteref, depth, authorization).then(
-        (response: any) => {
-          if (response) {
-            setNoteLinks(
-              response.map((item: NotelinkModel) => ({
-                source: item.sourceNoteRef,
-                target: item.linkedNoteRef,
-              }))
-            );
-          }
-        }
+      const _noteLinks = notelinkList
+        .filter((item: NotelinkModel) => item.sourceNoteRef === props.noteref || item.linkedNoteRef === props.noteref)
+        .map((item: NotelinkModel) => ({
+          source: item.sourceNoteRef,
+          target: item.linkedNoteRef,
+          type: 'link'
+        }));
+      setNoteLinks(
+        _noteLinks
+      );
+
+      const _noteLinksAuto = notelinkAutoList
+        .filter((item: NotelinkModel) => item.sourceNoteRef === props.noteref || item.linkedNoteRef === props.noteref)
+        .map((item: NotelinkModel) => ({
+          source: item.sourceNoteRef,
+          target: item.linkedNoteRef,
+          type: 'auto-link'
+        }));
+      setNoteLinksAuto(
+        _noteLinksAuto
       );
       getNotetags(props.space, props.noteref, 2, authorization).then(
         (response: any) => {
@@ -55,6 +66,7 @@ const GraphView = (props: Props) => {
               _tagLinks.push({
                 source: item.noteRef,
                 target: item.name,
+                type: 'tag'
               });
               _tagNodes.push({
                 name: `#${item.name}`,
@@ -68,7 +80,7 @@ const GraphView = (props: Props) => {
         }
       );
     }
-  }, [authorization, props.noteref, depth]);
+  }, [authorization, props.noteref, depth, notelinkList, notelinkAutoList]);
 
   useEffect(() => {
     setNoteNodes(
@@ -82,11 +94,11 @@ const GraphView = (props: Props) => {
   }, [notes]);
 
   useEffect(() => {
-    const _links = [...noteLinks, ...tagLinks];
+    const _links = [...noteLinks, ...noteLinksAuto, ...tagLinks];
 
     const _linkedNoteNodes: string[] = [];
     const _linkedTagNodes: string[] = [];
-    noteLinks.forEach((item) => {
+    [...noteLinks, ...noteLinksAuto].forEach((item) => {
       _linkedNoteNodes.push(item.source);
       _linkedNoteNodes.push(item.target);
     });
@@ -111,7 +123,8 @@ const GraphView = (props: Props) => {
       nodes: _nodes,
       links: _links,
     });
-  }, [noteLinks, noteNodes, tagLinks, tagNodes]);
+    console.log(_links);
+  }, [noteLinks, noteLinksAuto, noteNodes, tagLinks, tagNodes]);
 
   const increaseDepth = () => {
     setDepth(depth + 1);

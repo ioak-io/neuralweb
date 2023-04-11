@@ -80,18 +80,17 @@ const NotePage = (props: Props) => {
             </button>
           </div>
         </Topbar>
-        {/* <Topbar title={note?.name || 'Untitled'} /> */}
-        <MainSection>
-          {note && view === 'home' && <div>
-            <ContentSection note={note} space={props.space} onPostNoteSave={onPostNoteSave} />
-          </div>}
-          {/* {note && view === 'graph' && <div>
-            <LinksSection note={note} space={props.space} onPostNoteSave={onPostNoteSave} />
-          </div>} */}
-          {note && view === 'graph' && <div>
-            Graph
-          </div>}
-        </MainSection>
+        {/* <MainSection> */}
+        {note && view === 'home' && <MainSection>
+          <ContentSection note={note} space={props.space} onPostNoteSave={onPostNoteSave} />
+        </MainSection>}
+        {note && view === 'graph' &&
+          <GraphView
+            space={props.space}
+            noteref={note.reference}
+            isContextExpanded={false}
+          />}
+        {/* </MainSection> */}
 
       </div>
     </>
