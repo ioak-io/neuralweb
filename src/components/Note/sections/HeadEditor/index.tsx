@@ -10,6 +10,13 @@ interface Props {
 }
 
 const HeadEditor = (props: Props) => {
+  const handleLabelChange = (data: any) => {
+    props.onChange({
+      ...props.note,
+      labels: data.labels,
+      primaryLabel: data.primaryLabel
+    })
+  }
   const handleChange = (event: any) => {
     props.onChange({
       ...props.note,
@@ -20,7 +27,7 @@ const HeadEditor = (props: Props) => {
   return (
     <div className='head-editor'>
       <Input autoFocus name="name" value={props.note.name} label="Name" onInput={handleChange} />
-      <LabelEditor note={props.note} onChange={handleChange} />
+      <LabelEditor note={props.note} onChange={handleLabelChange} />
     </div>
   );
 };

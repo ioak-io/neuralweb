@@ -18,6 +18,8 @@ import RoleReducer from './reducers/RoleReducer';
 import SpaceReducer from './reducers/SpaceReducer';
 import TagReducer from './reducers/TagReducer';
 import UserReducer from './reducers/UserReducer';
+import NotelinkReducer from './reducers/NotelinkReducer';
+import NotelinkAutoReducer from './reducers/NotelinkAutoReducer';
 
 const initialState = {};
 
@@ -40,6 +42,8 @@ const store = configureStore(
       filterExpense: FilterExpenseReducer,
       incomeCategory: IncomeCategoryReducer,
       note: NoteReducer,
+      notelink: NotelinkReducer,
+      notelinkAuto: NotelinkAutoReducer,
       label: LabelReducer,
       metadataDefinition: MetadataDefinitionReducer,
       metadataValue: MetadataValueReducer

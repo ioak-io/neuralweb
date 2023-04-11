@@ -4,7 +4,7 @@ import './style.scss';
 import NoteModel from '../../../../model/NoteModel';
 import { Input, Label, Textarea } from 'basicui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleXmark, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCircleXmark, faStar, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { isEmptyOrSpaces } from '../../../../components/Utils';
 
 interface Props {
@@ -40,20 +40,33 @@ const LabelEditor = (props: Props) => {
   }
 
   const addLabel = (_label: string) => {
+    let primaryLabel = props.note.primaryLabel;
+    if (props.note.labels.length === 0) {
+      primaryLabel = _label;
+    }
     props.onChange({
-      currentTarget: {
-        name: "labels",
-        value: [...props.note.labels, _label]
-      }
-    })
+      labels: [...props.note.labels, _label],
+      primaryLabel
+    });
   }
 
   const removeLabel = (_label: string) => {
+    let primaryLabel = props.note.primaryLabel;
+    if (props.note.primaryLabel === _label && props.note.labels.length > 1) {
+      primaryLabel = props.note.labels.filter(item => item !== _label)[0];
+    } else if (props.note.primaryLabel === _label) {
+      primaryLabel = undefined;
+    }
     props.onChange({
-      currentTarget: {
-        name: "labels",
-        value: props.note.labels.filter(item => item !== _label)
-      }
+      labels: props.note.labels.filter(item => item !== _label),
+      primaryLabel
+    });
+  }
+
+  const starLabel = (_label: string) => {
+    props.onChange({
+      labels: props.note.labels,
+      primaryLabel: _label
     })
   }
 
@@ -68,6 +81,12 @@ const LabelEditor = (props: Props) => {
             <div>
               {label}
             </div>
+            {props.note.primaryLabel !== label && <button onClick={() => starLabel(label)}>
+              <FontAwesomeIcon icon={faStar} />
+            </button>}
+            {props.note.primaryLabel === label && <button disabled className="label-editor__view__star-active">
+              <FontAwesomeIcon icon={faStar} />
+            </button>}
             <button onClick={() => removeLabel(label)}>
               <FontAwesomeIcon icon={faXmark} />
             </button>

@@ -50,9 +50,9 @@ const Topbar = (props: Props) => {
           <button className="button mobile-only" onClick={toggleMobileSidebar}>
             <FontAwesomeIcon icon={faBars} />
           </button>
-          <button className="button topbar__left__nav" onClick={openNewNotePage}>
+          {/* <button className="button topbar__left__nav" onClick={openNewNotePage}>
             <FontAwesomeIcon icon={faPlus} /> New note
-          </button>
+          </button> */}
           <div>{props.title}</div>
         </div>
         <div className="topbar__right">{props.children}</div>

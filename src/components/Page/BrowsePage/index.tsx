@@ -76,7 +76,7 @@ const BrowsePage = (props: Props) => {
         </div>
       </Topbar>
       <MainSection>
-        <SearchInput space={props.space} onSearch={handleSearch} />
+        <SearchInput space={props.space} onSearch={handleSearch} searchConfig={getSessionValueAsJson('neuralweb-searchconfig-browse')} />
         {view === 'list' && (
           <SearchResults
             space={props.space}

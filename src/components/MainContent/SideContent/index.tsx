@@ -21,6 +21,7 @@ import {
   faMagnifyingGlass,
   faMoneyBillWave,
   faMoneyBillWaveAlt,
+  faPlus,
   faReceipt,
   faShoppingBag,
   faShoppingCart,
@@ -124,6 +125,11 @@ const SideContent = (props: Props) => {
         {props.space && (
           <>
             <SideNavSubHeading short="Notes" long="Notes" />
+            <SideNavLink
+              link={`/${props.space}/new-note`}
+              icon={faPlus}
+              label="New note"
+            />
             <SideNavLink
               link={`/${props.space}/browse`}
               icon={faFolderOpen}

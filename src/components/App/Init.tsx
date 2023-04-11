@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import ExpenseFilterModel from '../../model/ExpenseFilterModel';
-import {
-  ExpenseFilterPaginationState,
-  ExpenseFilterState,
-} from '../../simplestates/ExpenseFilterState';
-import ExpenseListState from '../../simplestates/ExpenseListState';
-import { fetchAllCategories } from '../../store/actions/CategoryActions';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
-import { searchExpense } from '../Page/ExpensePage/service';
-import PaginationModel from '../../model/PaginationModel';
 import ExpenseStateActions from '../../simplestates/ExpenseStateActions';
 import { fetchAndSetCompanyItems } from '../../store/actions/CompanyActions';
 import { fetchAndSetUserItems } from '../../store/actions/UserActions';
@@ -17,10 +8,11 @@ import { setProfile } from '../../store/actions/ProfileActions';
 import ReceiptStateActions from '../../simplestates/ReceiptStateActions';
 import IncomeStateActions from '../../simplestates/IncomeStateActions';
 import { fetchAndSetNoteItems } from '../../store/actions/NoteActions';
-import { useParams } from 'react-router-dom';
 import { fetchAndSetLabelItems } from '../../store/actions/LabelActions';
 import { fetchAndSetMetadataDefinitionItems } from '../../store/actions/MetadataDefinitionActions';
 import { fetchAndSetMetadataValueItems } from '../../store/actions/MetadataValueActions';
+import { fetchAndSetNotelinkItems } from '../../store/actions/NotelinkActions';
+import { fetchAndSetNotelinkAutoItems } from '../../store/actions/NotelinkAutoActions';
 
 const Init = () => {
   const authorization = useSelector((state: any) => state.authorization);
@@ -38,6 +30,8 @@ const Init = () => {
       initializeHttpInterceptor();
       dispatch(fetchAndSetUserItems(space, authorization));
       dispatch(fetchAndSetNoteItems(space, authorization));
+      dispatch(fetchAndSetNotelinkItems(space, authorization));
+      dispatch(fetchAndSetNotelinkAutoItems(space, authorization));
       dispatch(fetchAndSetLabelItems(space, authorization));
       dispatch(fetchAndSetMetadataDefinitionItems(space, authorization));
       dispatch(fetchAndSetMetadataValueItems(space, authorization));

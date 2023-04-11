@@ -4,15 +4,23 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import './Header.scss';
 import NoteModel from '../../../model/NoteModel';
-import { Link, Select, SelectPropsConverter } from 'basicui';
+import { Input, Link, Select, SelectPropsConverter } from 'basicui';
 
 interface Props {
   noteList: NoteModel[];
   viewBy: string;
+  show: string[];
   onChange: any;
 }
 
 const Header = (props: Props) => {
+
+  const handleChange = (event: any, type: 'show' | 'viewBy') => {
+    props.onChange({
+      viewBy: type === 'viewBy' ? event.currentTarget.value : props.viewBy,
+      show: type === 'show' ? event.currentTarget.value : props.show,
+    })
+  }
 
   return (
     <div className="search-results-header">
@@ -20,13 +28,17 @@ const Header = (props: Props) => {
         {props.noteList.length} matching notes
       </div>
       <div className="search-results-header__right">
-        <div className="search-results-header__right__label">
-          View by
-        </div>
         <Select
+          label='Group by'
           value={[props.viewBy]}
-          onInput={props.onChange}
+          onInput={(event: any) => handleChange(event, 'viewBy')}
           options={SelectPropsConverter.optionsFromSimpleList(['Label', 'Created Date'])} />
+        <Select
+          label='View'
+          value={props.show}
+          multiple
+          onInput={(event: any) => handleChange(event, 'show')}
+          options={SelectPropsConverter.optionsFromSimpleList(['Labels', 'Summary', 'Created on'])} />
       </div>
     </div>
   );

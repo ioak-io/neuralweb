@@ -8,7 +8,6 @@ import { SearchOptionType } from './SearchOptionType';
 import MetadataDefinitionModel from 'src/model/MetadataDefinitionModel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { getSessionValueAsJson } from '../../../utils/SessionUtils';
 import { isEmptyOrSpaces } from '../../../components/Utils';
 
 interface Props {
@@ -16,6 +15,7 @@ interface Props {
   options: SearchOptionType[];
   searchPref: any;
   handleChange: any;
+  searchConfig: any;
 }
 
 const ChooseOptions = (props: Props) => {
@@ -35,8 +35,6 @@ const ChooseOptions = (props: Props) => {
       }
     });
 
-    console.log(props.searchPref, searchPrefChosen);
-
     let _exclusiveSearch = null;
     let _options: string[] = [];
     let _chosenValues: string[] = [];
@@ -53,8 +51,7 @@ const ChooseOptions = (props: Props) => {
           }
         });
       }
-      const searchConfig = getSessionValueAsJson('neuralweb-searchconfig-browse');
-      _chosenValues = searchConfig?.textList?.filter((item: string) => _options.includes(item)) || [];
+      _chosenValues = props.searchConfig?.textList?.filter((item: string) => _options.includes(item)) || [];
     }
     setExclusiveSearch(_exclusiveSearch);
     setOptions(_options);

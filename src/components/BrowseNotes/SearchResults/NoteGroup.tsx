@@ -11,6 +11,7 @@ interface Props {
   noteList: NoteModel[];
   group: string;
   space: string;
+  show: string[];
 }
 
 const NoteGroup = (props: Props) => {
@@ -27,6 +28,7 @@ const NoteGroup = (props: Props) => {
             key={item._id}
             note={item}
             space={props.space}
+            show={props.show}
           />
         ))}
       </div>

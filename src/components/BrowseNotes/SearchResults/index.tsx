@@ -21,48 +21,36 @@ interface Props {
 const SearchResults = (props: Props) => {
   const authorization = useSelector((state: any) => state.authorization);
   const [viewBy, setViewBy] = useState('Label');
+  const [show, setShow] = useState<string[]>([]);
   const [noteMap, setNoteMap] = useState<any>({});
 
   useEffect(() => {
     const _noteMap: any = {};
     props.noteList.forEach((note) => {
-      const _notePair = _getNotePairs(note);
-      Object.keys(_notePair).forEach(group => {
-        if (_noteMap[group]) {
-          _noteMap[group].push(_notePair[group]);
-        } else {
-          _noteMap[group] = [_notePair[group]];
-        }
-      })
+      const group = note.primaryLabel || '-';
+      if (_noteMap[group]) {
+        _noteMap[group].push(note);
+      } else {
+        _noteMap[group] = [note];
+      }
     })
     setNoteMap(_noteMap);
+    console.log(_noteMap);
   }, [viewBy, props.noteList]);
 
-  const _getNotePairs = (note: NoteModel) => {
-    const _notePair: any = {};
-    if (viewBy === 'Label') {
-      note.labels.forEach(label => {
-        _notePair[label] = note;
-      });
-
-      if (note.labels.length === 0) {
-        _notePair['-'] = note;
-      }
-    }
-    return _notePair;
-  }
-
-  const handleViewByChange = (event: any) => {
-    setViewBy(event.currentTarget.value);
+  const handleViewChange = (data: any) => {
+    setViewBy(data.viewBy);
+    setShow(data.show);
   }
 
   return (
     <div className="search-results">
-      <Header noteList={props.noteList} viewBy={viewBy} onChange={handleViewByChange} />
+      <Header noteList={props.noteList} show={show} viewBy={viewBy} onChange={handleViewChange} />
       <div className="search-results__main">
-        {Object.keys(noteMap).sort().map(group =>
-          <NoteGroup noteList={noteMap[group]} group={group} space={props.space} key={group} />
+        {Object.keys(noteMap).filter(item => item !== '-').sort().map(group =>
+          <NoteGroup noteList={noteMap[group]} group={group} space={props.space} key={group} show={show} />
         )}
+        {noteMap['-'] && <NoteGroup noteList={noteMap['-']} group='-' space={props.space} show={show} />}
       </div>
     </div>
   );

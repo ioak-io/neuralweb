@@ -15,6 +15,8 @@ import ContentViewer from '../sections/ContentViewer';
 import MetadataEditor from '../sections/MetadataEditor';
 import MetadataDefinitionModel from 'src/model/MetadataDefinitionModel';
 import MetadataViewer from '../sections/MetadataViewer';
+import LinksSection from '../LinksSection';
+import AutoLinksSection from '../AutoLinksSection';
 
 interface Props {
   note: NoteModel;
@@ -136,6 +138,8 @@ const ContentSection = (props: Props) => {
           {!isEditMetadata[group] && <MetadataViewer note={state} group={group} metadataDefinitionList={metadataDefinitionMap[group]} />}
         </SectionContainer>
       )}
+      <LinksSection note={props.note} space={props.space} disable={isEdit} />
+      <AutoLinksSection note={props.note} space={props.space} disable={isEdit} />
     </div>
   );
 };

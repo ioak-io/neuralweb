@@ -5,21 +5,21 @@ import React, { useEffect, useRef, useState } from 'react';
 import './style.scss';
 
 interface Props {
-  onSave: any;
-  onCancel: any;
-  saving: boolean;
+  onSave?: any;
+  onCancel?: any;
+  saving?: boolean;
 }
 
 const EditControls = (props: Props) => {
 
   return (
     <div className='note-section-edit-controls'>
-      <IconButton loading={props.saving} onClick={props.onSave} circle variant={ButtonVariantType.default} theme={ThemeType.primary}>
+      {props.onSave && <IconButton loading={props.saving} onClick={props.onSave} circle variant={ButtonVariantType.default} theme={ThemeType.primary}>
         <FontAwesomeIcon icon={faCheck} />
-      </IconButton>
-      <IconButton onClick={props.onCancel} circle variant={ButtonVariantType.default} theme={ThemeType.default}>
+      </IconButton>}
+      {props.onCancel && <IconButton onClick={props.onCancel} circle variant={ButtonVariantType.default} theme={ThemeType.default}>
         <FontAwesomeIcon icon={faXmark} />
-      </IconButton>
+      </IconButton>}
     </div>
   );
 };

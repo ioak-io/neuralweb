@@ -11,11 +11,12 @@ import MetadataDefinitionModel from '../../../model/MetadataDefinitionModel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import ChooseOptions from './ChooseOptions';
-import { getSessionValueAsJson } from '../../../utils/SessionUtils';
+import { SearchConfigType } from './SearchConfig';
 
 interface Props {
   space: string;
   onSearch: any;
+  searchConfig: SearchConfigType;
 }
 
 const SearchInput = (props: Props) => {
@@ -28,13 +29,11 @@ const SearchInput = (props: Props) => {
   const [searchPref, setSearchPref] = useState<any>({});
 
   useEffect(() => {
-    const searchConfig = getSessionValueAsJson('neuralweb-searchconfig-browse');
-    setSearchPref(searchConfig.searchPref);
-    setText(searchConfig.text);
-  }, []);
+    setSearchPref(props.searchConfig.searchPref);
+    setText(props.searchConfig.text);
+  }, [props.searchConfig]);
 
   useEffect(() => {
-    const searchConfig = getSessionValueAsJson('neuralweb-searchconfig-browse');
     const _searchByOptions: SearchOptionType[] = [
       {
         name: 'name',
@@ -61,7 +60,7 @@ const SearchInput = (props: Props) => {
     setSearchByOptions(_searchByOptions);
     setSearchPref({
       ..._searchPref,
-      ...searchConfig.searchPref
+      ...props.searchConfig.searchPref
     });
   }, [metadataDefinitionList]);
 
@@ -133,7 +132,7 @@ const SearchInput = (props: Props) => {
           </IconButton>
         </form>
       </div>
-      <ChooseOptions text={text} searchPref={searchPref} options={searchByOptions} handleChange={handleTextListChange} />
+      <ChooseOptions searchConfig={props.searchConfig} text={text} searchPref={searchPref} options={searchByOptions} handleChange={handleTextListChange} />
     </div>
   );
 };

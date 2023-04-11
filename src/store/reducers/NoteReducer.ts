@@ -10,6 +10,7 @@ import { mergeItems } from './Utils';
 
 const initialState = {
   items: [],
+  map: {}
 };
 
 export default function (state = initialState, action: any) {
@@ -17,9 +18,15 @@ export default function (state = initialState, action: any) {
     case NOTE_ITEMS_FETCH_AND_SET:
       console.log('NOTE_ITEMS_FETCH_AND_SET reducer');
       console.log(action);
+      const data = [...action.payload];
+      const dataMap: any = {};
+      data.forEach(item => {
+        dataMap[item.reference] = item;
+      });
       return {
         ...state,
-        items: sortBy([...action.payload], (item) => item.name.toLowerCase()),
+        items: sortBy(data, (item) => item.name.toLowerCase()),
+        map: dataMap
       };
     case NOTE_ITEMS_UPDATE:
       console.log('NOTE_ITEMS_UPDATE reducer');
