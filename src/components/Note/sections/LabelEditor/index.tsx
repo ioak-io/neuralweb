@@ -18,6 +18,7 @@ const LabelEditor = (props: Props) => {
   const [searchResults, setSearchResults] = useState<string[]>([]);
 
   const handleSearchTextChange = (event: any) => {
+    event.preventDefault();
     setSearchText(event.currentTarget.value);
   }
 
@@ -39,7 +40,8 @@ const LabelEditor = (props: Props) => {
     })
   }
 
-  const addLabel = (_label: string) => {
+  const addLabel = (event: any, _label: string) => {
+    event.preventDefault();
     let primaryLabel = props.note.primaryLabel;
     if (props.note.labels.length === 0) {
       primaryLabel = _label;
@@ -50,7 +52,8 @@ const LabelEditor = (props: Props) => {
     });
   }
 
-  const removeLabel = (_label: string) => {
+  const removeLabel = (event: any, _label: string) => {
+    event.preventDefault();
     let primaryLabel = props.note.primaryLabel;
     if (props.note.primaryLabel === _label && props.note.labels.length > 1) {
       primaryLabel = props.note.labels.filter(item => item !== _label)[0];
@@ -63,7 +66,8 @@ const LabelEditor = (props: Props) => {
     });
   }
 
-  const starLabel = (_label: string) => {
+  const starLabel = (event: any, _label: string) => {
+    event.preventDefault();
     props.onChange({
       labels: props.note.labels,
       primaryLabel: _label
@@ -81,13 +85,13 @@ const LabelEditor = (props: Props) => {
             <div>
               {label}
             </div>
-            {props.note.primaryLabel !== label && <button onClick={() => starLabel(label)}>
+            {props.note.primaryLabel !== label && <button onClick={(event) => starLabel(event, label)}>
               <FontAwesomeIcon icon={faStar} />
             </button>}
             {props.note.primaryLabel === label && <button disabled className="label-editor__view__star-active">
               <FontAwesomeIcon icon={faStar} />
             </button>}
-            <button onClick={() => removeLabel(label)}>
+            <button onClick={(event) => removeLabel(event, label)}>
               <FontAwesomeIcon icon={faXmark} />
             </button>
           </div>
@@ -109,7 +113,7 @@ const LabelEditor = (props: Props) => {
             </div>}
           {!isEmptyOrSpaces(searchText) && <div className="note-label-list label-editor__results__list">
             {searchResults.map(item =>
-              <button className="note-label" onClick={() => addLabel(item)}>
+              <button className="note-label" onClick={(event) => addLabel(event, item)}>
                 {item}
               </button>
             )}
@@ -125,7 +129,7 @@ const LabelEditor = (props: Props) => {
             </div>
           </div>}
           {!isEmptyOrSpaces(searchText) && !props.note.labels.includes(searchText) && !searchResults.includes(searchText) && <div className="note-label-list label-editor__results__list">
-            <button className="note-label" onClick={() => addLabel(searchText)}>
+            <button className="note-label" onClick={(event) => addLabel(event, searchText)}>
               {searchText}
             </button>
           </div>}

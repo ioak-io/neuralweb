@@ -49,7 +49,8 @@ const DataPicker = (props: Props) => {
     })
   }
 
-  const updateValue = (value: string) => {
+  const updateValue = (event: any, value: string) => {
+    event.preventDefault();
     props.onChange(value);
   }
 
@@ -77,11 +78,11 @@ const DataPicker = (props: Props) => {
             Type to see suggestion
           </div>}
         {!isEmptyOrSpaces(searchText) &&
-          <button className="metadata-picker__item" onClick={() => updateValue(searchText)}>
+          <button className="metadata-picker__item" onClick={(event: any) => updateValue(event, searchText)}>
             <i>{searchText}</i>
           </button>}
         {!isEmptyOrSpaces(searchText) && searchResults.map(item =>
-          <button className="metadata-picker__item" onClick={() => updateValue(item)}>
+          <button className="metadata-picker__item" onClick={(event: any) => updateValue(event, item)}>
             {item}
           </button>
         )}

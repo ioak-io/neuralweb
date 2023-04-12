@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { Input, Button, Select } from 'basicui';
+import { Input, Button, Select, Textarea } from 'basicui';
 import Topbar from '../../../components/Topbar';
 import './style.scss';
 import { newId } from '../../../events/MessageService';
@@ -72,12 +72,11 @@ const EditCompanyPage = (props: Props) => {
                 }
               />
             </div>
-            <Input
+            <Textarea
               name="description"
               value={state.description}
               onInput={handleChange}
               label="Description"
-              type="textarea"
             />
           </div>
         </form>

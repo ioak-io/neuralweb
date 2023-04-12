@@ -17,14 +17,9 @@ const LineItem = (props: Props) => {
   const metadataValueMap = useSelector((state: any) => state.metadataValue?.items);
 
   const handleChange = (event: any) => {
+    event.preventDefault();
     props.onChange({
       ...props.note, [event.currentTarget.name]: event.currentTarget.value
-    })
-  }
-
-  const handleDataPickerChange = (value: string) => {
-    props.onChange({
-      ...props.note, [props.metadataDefinition._id || '']: value
     })
   }
 
@@ -46,7 +41,7 @@ const LineItem = (props: Props) => {
           label={props.metadataDefinition.name} 
           name={props.metadataDefinition._id || ''}
           value={[props.note[props.metadataDefinition._id || '']]}
-          options={SelectPropsConverter.optionsFromSimpleList(metadataValueMap[props.metadataDefinition._id || ''])}
+          options={SelectPropsConverter.optionsFromSimpleList(metadataValueMap[props.metadataDefinition._id || ''] || [])}
           onInput={handleChange} />
       }
     </div>

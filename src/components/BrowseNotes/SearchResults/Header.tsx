@@ -32,7 +32,7 @@ const Header = (props: Props) => {
           label='Group by'
           value={[props.viewBy]}
           onInput={(event: any) => handleChange(event, 'viewBy')}
-          options={SelectPropsConverter.optionsFromSimpleList(['Label', 'Created On'])} />
+          options={SelectPropsConverter.optionsFromSimpleList(['Label', 'Created On', 'Type'])} />
         <Select
           label='View'
           value={props.show}

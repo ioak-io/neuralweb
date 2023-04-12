@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-import {Button, Input} from 'basicui';
+import {Button, Input, Textarea} from 'basicui';
 import './EditCompany.scss';
 import { newId } from '../../../events/MessageService';
 import CompanyModel from '../../../model/CompanyModel';
@@ -78,26 +78,11 @@ const EditCompany = (props: Props) => {
                     }
                   />
                 </div>
-                <Input
+                <Textarea
                   name="description"
                   value={state.description}
                   onInput={handleChange}
                   label="Description"
-                  type="textarea"
-                  required
-                />
-                <Input
-                  name="currency"
-                  value={state.currency}
-                  onInput={handleChange}
-                  label="Currency"
-                  required
-                />
-                <Input
-                  name="numberFormat"
-                  value={state.numberFormat}
-                  onInput={handleChange}
-                  label="Number format"
                   required
                 />
               </div>

@@ -8,8 +8,10 @@ import SectionContainer from '../ui/SectionContainer';
 import EditControls from '../ui/EditControls';
 import ViewControls from '../ui/ViewControls';
 import LinksCreator from '../sections/LinksCreator';
-import NotelinkModel from 'src/model/NotelinkModel';
+import NotelinkModel from '../../../model/NotelinkModel';
 import AutoLinksEditor from '../sections/AutoLinksEditor';
+import AutoLinksViewer from '../sections/AutoLinksViewer';
+import { AutoLinkViewModel } from './AutoLinkViewModel';
 
 interface Props {
   note: NoteModel;
@@ -22,7 +24,7 @@ const AutoLinksSection = (props: Props) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
   const [saving, setSaving] = useState(false);
   const notelinkAutoList = useSelector((state: any) => state.notelinkAuto.items);
-  const [notelinkAutoReferences, setNotelinkAutoReferences] = useState<string[]>([]);
+  const [notelinkAutoReferences, setNotelinkAutoReferences] = useState<AutoLinkViewModel[]>([]);
   const notelinkList = useSelector((state: any) => state.notelink.items);
   const [notelinkReferences, setNotelinkReferences] = useState<string[]>([]);
 
@@ -45,19 +47,19 @@ const AutoLinksSection = (props: Props) => {
 
   useEffect(() => {
 
-    const _notelinkAutoReferences: string[] = [];
+    const _notelinkAutoReferences: AutoLinkViewModel[] = [];
 
     const _notelinks = notelinkAutoList.filter((item: NotelinkModel) =>
       item.sourceNoteRef === props.note.reference || item.linkedNoteRef === props.note.reference
     )
     _notelinks.forEach((item: NotelinkModel) => {
       if (props.note.reference === item.sourceNoteRef) {
-        _notelinkAutoReferences.push(item.linkedNoteRef);
+        _notelinkAutoReferences.push({ref: item.linkedNoteRef, keywords: item.keywords || []});
       } else {
-        _notelinkAutoReferences.push(item.sourceNoteRef);
+        _notelinkAutoReferences.push({ref: item.sourceNoteRef, keywords: item.keywords || []});
       }
     })
-    setNotelinkAutoReferences(_notelinkAutoReferences.filter(item => !notelinkReferences.includes(item)));
+    setNotelinkAutoReferences(_notelinkAutoReferences.filter(item => !notelinkReferences.includes(item.ref)));
   }, [props.note, notelinkAutoList, notelinkReferences]);
 
   const onEdit = () => {
@@ -73,8 +75,8 @@ const AutoLinksSection = (props: Props) => {
       <SectionContainer>
         {mode === 'edit' && <EditControls onCancel={onCancel} />}
         {mode === 'view' && <ViewControls onEdit={onEdit} disable={mode !== 'view'} />}
-        {mode === 'edit' && <AutoLinksEditor notelinkReferences={notelinkAutoReferences} notelinkAutoReferences={notelinkAutoReferences} note={props.note} space={props.space} />}
-        {mode === 'view' && <LinksViewer heading="Suggested references" notelinkReferences={notelinkAutoReferences} note={props.note} space={props.space} />}
+        {mode === 'edit' && <AutoLinksEditor notelinkAutoReferences={notelinkAutoReferences} note={props.note} space={props.space} />}
+        {mode === 'view' && <AutoLinksViewer heading="Suggested references" notelinkAutoReferences={notelinkAutoReferences} note={props.note} space={props.space} />}
       </SectionContainer>
     </div>
   );

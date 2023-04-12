@@ -5,12 +5,12 @@ import NoteModel from '../../../../model/NoteModel';
 import { saveNotelink } from '../LinksCreator/service';
 import AutoLinkView from '../AutoLinkView';
 import { appendNotelinkItem } from '../../../../store/actions/NotelinkActions';
+import { AutoLinkViewModel } from '../../AutoLinksSection/AutoLinkViewModel';
 
 interface Props {
   note: NoteModel;
   space: string;
-  notelinkAutoReferences: string[];
-  notelinkReferences: string[];
+  notelinkAutoReferences: AutoLinkViewModel[];
 }
 
 const AutoLinksEditor = (props: Props) => {
@@ -29,7 +29,7 @@ const AutoLinksEditor = (props: Props) => {
     <div className="links-editor">
       <h5>Suggested references</h5>
       {props.notelinkAutoReferences.map(item =>
-        <AutoLinkView space={props.space} key={item} notelinkReferences={props.notelinkReferences} note={noteMap[item]} addLink={() => addLink(item)} />
+        <AutoLinkView space={props.space} key={item.ref} note={noteMap[item.ref]} addLink={() => addLink(item.ref)} />
       )}
     </div>
   );

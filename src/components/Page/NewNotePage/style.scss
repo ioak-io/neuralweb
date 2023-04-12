@@ -1,8 +1,5 @@
-.browse-page {
-  height: 100%;
+.new-note-form {
+  display: grid;
+  row-gap: 12px;
+  margin-bottom: calc(24px + var(--footer-height));
 }
-
-.browse-page__results {
-  padding: 0;
-}
-

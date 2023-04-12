@@ -9,7 +9,6 @@ import { faLink, faMinus, faPlus, faSearch, faTrash, faUnlink, faXmark } from '@
 interface Props {
   space: string;
   note: NoteModel;
-  notelinkReferences: string[];
   addLink?: any;
   removeLink?: any;
 }
@@ -28,6 +27,9 @@ const AutoLinkView = (props: Props) => {
         </Link>
         <div>
           {props.note.summary}
+        </div>
+        <div className="">
+          Keywords
         </div>
       </div>
     </div>
