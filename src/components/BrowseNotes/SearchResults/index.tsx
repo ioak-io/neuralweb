@@ -21,7 +21,7 @@ interface Props {
 const SearchResults = (props: Props) => {
   const authorization = useSelector((state: any) => state.authorization);
   const [viewBy, setViewBy] = useState('Label');
-  const [show, setShow] = useState<string[]>([]);
+  const [show, setShow] = useState<string[]>(['Type', 'Summary']);
   const [noteMap, setNoteMap] = useState<any>({});
 
   useEffect(() => {

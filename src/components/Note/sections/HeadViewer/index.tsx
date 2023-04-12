@@ -5,6 +5,7 @@ import NoteModel from '../../../../model/NoteModel';
 import { useParams } from 'react-router-dom';
 import LabelViewer from '../../sections/LabelViewer';
 import { Label } from 'basicui';
+import TypeViewer from '../TypeViewer';
 
 interface Props {
   note: NoteModel;
@@ -14,8 +15,11 @@ const HeadViewer = (props: Props) => {
   return (
     <div className='head-viewer'>
       <div>
-        <Label>Name</Label>
-        {props.note.name}
+        {/* <Label>Name</Label> */}
+        <div className="head-viewer__title">
+          <TypeViewer note={props.note} />
+          {props.note.name}
+        </div>
       </div>
       <div>
         <Label>Labels</Label>

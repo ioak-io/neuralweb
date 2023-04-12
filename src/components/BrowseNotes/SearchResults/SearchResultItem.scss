@@ -3,9 +3,17 @@
   grid-auto-flow: row;
   justify-content: flex-start;
   justify-items: flex-start;
-  // row-gap: 5px;
+  row-gap: 4px;
 }
 
 .search-result-item a {
   font-size: inherit;
+}
+
+.search-result-item__title,
+.search-result-item__note-type {
+  display: inline;
+}
+.search-result-item__note-type {
+  margin-right: 4px;
 }

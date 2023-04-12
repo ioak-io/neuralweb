@@ -3,6 +3,7 @@ import './style.scss';
 import NoteModel from '../../../../model/NoteModel';
 import { Input, Label, Textarea } from 'basicui';
 import LabelEditor from '../../sections/LabelEditor';
+import TypeEditor from '../TypeEditor';
 
 interface Props {
   note: NoteModel;
@@ -27,6 +28,7 @@ const HeadEditor = (props: Props) => {
   return (
     <div className='head-editor'>
       <Input autoFocus name="name" value={props.note.name} label="Name" onInput={handleChange} />
+      <TypeEditor note={props.note} onChange={handleChange} />
       <LabelEditor note={props.note} onChange={handleLabelChange} />
     </div>
   );
