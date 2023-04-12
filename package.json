@@ -88,6 +88,7 @@
     "axios": "^1.2.2",
     "basicui": "file:basicui-1.0.0.tgz",
     "d3": "^7.8.4",
+    "moment": "^2.29.4",
     "react-popper": "^2.3.0",
     "writeup": "file:writeup-1.0.0.tgz"
   }

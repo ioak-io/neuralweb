@@ -13,6 +13,7 @@ import NoteModel from '../../../model/NoteModel';
 import NotetagModel from '../../../model/NotetagModel';
 import { Link, ThemeType } from 'basicui';
 import { isEmptyOrSpaces } from '../../../components/Utils';
+import * as DateUtils from '../../Lib/DateUtils';
 
 interface Props {
   space: string;
@@ -24,6 +25,7 @@ interface Props {
 const SearchResultItem = (props: Props) => {
   return (
     <div className="search-result-item">
+      {props.show.includes('Created on') && <div className="search-result-item__date">{DateUtils.formatDateText(props.note.createdAt, DateUtils.FORMAT_FULL_DATE)}</div>}
       <div className="search-result-item__title">
         {props.show.includes('Type') && <div className={`search-result-item__note-type note-type-${props.note.type}`}>{props.note.type}</div>}
         {!props.noHyperLink && <Link href={`/#/${props.space}/note/${props.note.reference}`} theme={ThemeType.primary}>
@@ -47,7 +49,6 @@ const SearchResultItem = (props: Props) => {
           </div>
         ))}
       </div>}
-      {props.show.includes('Created on') && <div>{props.note.createdAt}</div>}
     </div>
   );
 };

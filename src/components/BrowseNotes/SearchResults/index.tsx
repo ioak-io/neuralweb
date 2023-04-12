@@ -11,6 +11,7 @@ import { getNotetags } from '../../Page/GraphPage/service';
 import { Select, SelectPropsConverter } from 'basicui';
 import Header from './Header';
 import NoteGroup from './NoteGroup';
+import * as DateUtils from '../../Lib/DateUtils';
 
 interface Props {
   space: string;
@@ -20,12 +21,26 @@ interface Props {
 
 const SearchResults = (props: Props) => {
   const authorization = useSelector((state: any) => state.authorization);
-  const [viewBy, setViewBy] = useState('Label');
+  const [viewBy, setViewBy] = useState<'Label' | 'Created On'>('Created On');
   const [show, setShow] = useState<string[]>(['Type', 'Summary']);
   const [noteMap, setNoteMap] = useState<any>({});
 
   useEffect(() => {
+    let _noteMap: any = {};
+    switch (viewBy) {
+      case 'Created On':
+        _noteMap = _groupByCreatedOn()
+        break;
+
+      default:
+        _noteMap = _groupByLabel();
+        break;
+    }
+  }, [viewBy, props.noteList]);
+
+  const _groupByLabel = () => {
     const _noteMap: any = {};
+
     props.noteList.forEach((note) => {
       const group = note.primaryLabel || '-';
       if (_noteMap[group]) {
@@ -35,8 +50,21 @@ const SearchResults = (props: Props) => {
       }
     })
     setNoteMap(_noteMap);
-    console.log(_noteMap);
-  }, [viewBy, props.noteList]);
+  }
+
+  const _groupByCreatedOn = () => {
+    const _noteMap: any = {};
+
+    props.noteList.forEach((note) => {
+      const group = DateUtils.formatDateText(note.createdAt, DateUtils.FORMAT_MONTH_AND_YEAR) || '-';
+      if (_noteMap[group]) {
+        _noteMap[group].push(note);
+      } else {
+        _noteMap[group] = [note];
+      }
+    })
+    setNoteMap(_noteMap);
+  }
 
   const handleViewChange = (data: any) => {
     setViewBy(data.viewBy);
@@ -47,7 +75,7 @@ const SearchResults = (props: Props) => {
     <div className="search-results">
       <Header noteList={props.noteList} show={show} viewBy={viewBy} onChange={handleViewChange} />
       <div className="search-results__main">
-        {Object.keys(noteMap).filter(item => item !== '-').sort().map(group =>
+        {Object.keys(noteMap).filter(item => item !== '-').map(group =>
           <NoteGroup noteList={noteMap[group]} group={group} space={props.space} key={group} show={show} />
         )}
         {noteMap['-'] && <NoteGroup noteList={noteMap['-']} group='-' space={props.space} show={show} />}
