@@ -2,7 +2,8 @@
 import {
   NOTELINK_AUTO_ITEMS_APPEND,
   NOTELINK_AUTO_ITEMS_DELETE,
-  NOTELINK_AUTO_ITEMS_FETCH_AND_SET
+  NOTELINK_AUTO_ITEMS_FETCH_AND_SET,
+  NOTELINK_AUTO_ITEMS_REPLACE
 } from './types';
 import { httpGet, httpPost, httpPut } from '../../components/Lib/RestTemplate';
 
@@ -38,3 +39,11 @@ export const fetchAndSetNotelinkAutoItems =
       payload,
     });
   };
+  
+
+export const replaceNotelinkAutoItems = (payload: {noteRef: string, newItems: any[]}) => (dispatch: any) => {
+  dispatch({
+    type: NOTELINK_AUTO_ITEMS_REPLACE,
+    payload,
+  });
+};

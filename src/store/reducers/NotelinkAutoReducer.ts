@@ -3,7 +3,8 @@ import { sortBy } from 'lodash';
 import {
   NOTELINK_AUTO_ITEMS_APPEND,
   NOTELINK_AUTO_ITEMS_DELETE,
-  NOTELINK_AUTO_ITEMS_FETCH_AND_SET
+  NOTELINK_AUTO_ITEMS_FETCH_AND_SET,
+  NOTELINK_AUTO_ITEMS_REPLACE
 } from '../actions/types';
 
 const initialState = {
@@ -36,6 +37,16 @@ export default function (state = initialState, action: any) {
             !((action.payload.sourceNoteRef === item.sourceNoteRef && action.payload.linkedNoteRef === item.linkedNoteRef)
               || action.payload.sourceNoteRef === item.linkedNoteRef && action.payload.linkedNoteRef === item.sourceNoteRef)
           )
+      };
+    case NOTELINK_AUTO_ITEMS_REPLACE:
+      console.log('NOTELINK_AUTO_ITEMS_REPLACE reducer');
+      console.log(action);
+      const _items = state.items.filter((item: any) => !(item.sourceNoteRef === action.payload.noteRef || item.linkedNoteRef === action.payload.noteRef));
+
+      console.log([..._items, ...action.payload.newItems]);
+      return {
+        ...state,
+        items: [..._items, ...action.payload.newItems]
       };
     default:
       return state;

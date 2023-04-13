@@ -10,7 +10,7 @@ import MainSection from '../../../components/MainSection';
 import ContentSection from '../../../components/Note/ContentSection';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleNodes, faFile, faFileAlt, faHome, faLink } from '@fortawesome/free-solid-svg-icons';
-import LinksSection from '../../../components/Note/LinksSection';
+import { replaceNotelinkAutoItems } from '../../../store/actions/NotelinkAutoActions';
 
 interface Props {
   location: any;
@@ -18,6 +18,7 @@ interface Props {
 }
 
 const NotePage = (props: Props) => {
+  const dispatch = useDispatch();
   const authorization = useSelector((state: any) => state.authorization);
   const params = useParams();
   const [note, setNote] = useState<NoteModel | null>(null);
@@ -55,8 +56,12 @@ const NotePage = (props: Props) => {
   //   console.log(state.content);
   // }, [state.content]);
 
-  const onPostNoteSave = (_note: NoteModel) => {
-    setNote(_note);
+  const onPostNoteSave = (data: any) => {
+    setNote(data.note);
+    dispatch(replaceNotelinkAutoItems({
+      newItems: data.notelinks,
+      noteRef: data.note.reference
+    }));
   }
 
   return (
