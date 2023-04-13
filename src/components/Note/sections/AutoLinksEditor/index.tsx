@@ -26,10 +26,10 @@ const AutoLinksEditor = (props: Props) => {
   }
 
   return (
-    <div className="links-editor">
+    <div className="auto-links-editor">
       <h5>Suggested references</h5>
       {props.notelinkAutoReferences.map(item =>
-        <AutoLinkView space={props.space} key={item.ref} note={noteMap[item.ref]} addLink={() => addLink(item.ref)} />
+        <AutoLinkView space={props.space} key={item.ref} note={noteMap[item.ref]} addLink={() => addLink(item.ref)} link={item} />
       )}
     </div>
   );

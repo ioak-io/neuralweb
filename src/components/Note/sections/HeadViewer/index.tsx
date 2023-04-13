@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import LabelViewer from '../../sections/LabelViewer';
 import { Label } from 'basicui';
 import TypeViewer from '../TypeViewer';
+import KeywordViewer from '../KeywordViewer';
 
 interface Props {
   note: NoteModel;
@@ -25,6 +26,10 @@ const HeadViewer = (props: Props) => {
         <Label>Labels</Label>
         {props.note.labels.length > 0 && <LabelViewer note={props.note} />}
         {props.note.labels.length === 0 && '-'}
+      </div>
+      <div>
+        <Label>Keywords</Label>
+        <KeywordViewer keywords={props.note.keywords} />
       </div>
     </div>
   );

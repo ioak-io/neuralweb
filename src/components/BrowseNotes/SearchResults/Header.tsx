@@ -38,7 +38,7 @@ const Header = (props: Props) => {
           value={props.show}
           multiple
           onInput={(event: any) => handleChange(event, 'show')}
-          options={SelectPropsConverter.optionsFromSimpleList(['Type', 'Labels', 'Summary', 'Created on'])} />
+          options={SelectPropsConverter.optionsFromSimpleList(['Type', 'Labels', 'Keywords', 'Summary', 'Created on'])} />
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ import NotetagModel from '../../../model/NotetagModel';
 import { Link, ThemeType } from 'basicui';
 import { isEmptyOrSpaces } from '../../../components/Utils';
 import * as DateUtils from '../../Lib/DateUtils';
+import KeywordViewer from '../../../components/Note/sections/KeywordViewer';
 
 interface Props {
   space: string;
@@ -49,6 +50,7 @@ const SearchResultItem = (props: Props) => {
           </div>
         ))}
       </div>}
+      {props.show.includes('Keywords') && <KeywordViewer keywords={props.note.keywords} />}
     </div>
   );
 };

@@ -5,12 +5,15 @@ import NoteModel from '../../../../model/NoteModel';
 import { ButtonVariantType, IconButton, Input, Link, ThemeType } from 'basicui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLink, faMinus, faPlus, faSearch, faTrash, faUnlink, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { AutoLinkViewModel } from '../../AutoLinksSection/AutoLinkViewModel';
+import KeywordViewer from '../KeywordViewer';
 
 interface Props {
   space: string;
   note: NoteModel;
   addLink?: any;
   removeLink?: any;
+  link?: AutoLinkViewModel;
 }
 
 const AutoLinkView = (props: Props) => {
@@ -28,9 +31,7 @@ const AutoLinkView = (props: Props) => {
         <div>
           {props.note.summary}
         </div>
-        <div className="">
-          Keywords
-        </div>
+        <KeywordViewer keywords={props.link?.keywords} />
       </div>
     </div>
   )

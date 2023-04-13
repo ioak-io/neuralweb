@@ -22,7 +22,7 @@ const AutoLinksViewer = (props: Props) => {
     <div className="auto-links-viewer">
       <h5>{props.heading}</h5>
       {props.notelinkAutoReferences.map(item =>
-        <AutoLinkView space={props.space} note={noteMap[item.ref]} />
+        <AutoLinkView space={props.space} note={noteMap[item.ref]} link={item} />
       )}
     </div>
   );
