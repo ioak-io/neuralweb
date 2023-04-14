@@ -13,6 +13,7 @@ import { fetchAndSetMetadataDefinitionItems } from '../../store/actions/Metadata
 import { fetchAndSetMetadataValueItems } from '../../store/actions/MetadataValueActions';
 import { fetchAndSetNotelinkItems } from '../../store/actions/NotelinkActions';
 import { fetchAndSetNotelinkAutoItems } from '../../store/actions/NotelinkAutoActions';
+import { fetchAndSetColorfilterItems } from '../../store/actions/ColorfilterActions';
 
 const Init = () => {
   const authorization = useSelector((state: any) => state.authorization);
@@ -35,6 +36,7 @@ const Init = () => {
       dispatch(fetchAndSetLabelItems(space, authorization));
       dispatch(fetchAndSetMetadataDefinitionItems(space, authorization));
       dispatch(fetchAndSetMetadataValueItems(space, authorization));
+      dispatch(fetchAndSetColorfilterItems(space, authorization));
     }
   }, [authorization, space]);
 

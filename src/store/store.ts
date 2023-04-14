@@ -20,6 +20,7 @@ import TagReducer from './reducers/TagReducer';
 import UserReducer from './reducers/UserReducer';
 import NotelinkReducer from './reducers/NotelinkReducer';
 import NotelinkAutoReducer from './reducers/NotelinkAutoReducer';
+import ColorfilterReducer from './reducers/ColorfilterReducer';
 
 const initialState = {};
 
@@ -34,19 +35,14 @@ const store = configureStore(
       role: RoleReducer,
       company: CompanyReducer,
       space: SpaceReducer,
-      category: CategoryReducer,
       tag: TagReducer,
-      expense: ExpenseReducer,
-      receipt: ReceiptReducer,
-      income: IncomeReducer,
-      filterExpense: FilterExpenseReducer,
-      incomeCategory: IncomeCategoryReducer,
       note: NoteReducer,
       notelink: NotelinkReducer,
       notelinkAuto: NotelinkAutoReducer,
       label: LabelReducer,
       metadataDefinition: MetadataDefinitionReducer,
-      metadataValue: MetadataValueReducer
+      metadataValue: MetadataValueReducer,
+      colorfilter: ColorfilterReducer
     }
   }
 );

@@ -20,7 +20,8 @@ interface Props {
 const SearchPref = (props: Props) => {
   const authorization = useSelector((state: any) => state.authorization);
 
-  const onClick = (option: SearchOptionType) => {
+  const onClick = (event: any, option: SearchOptionType) => {
+    event.preventDefault();
     props.handleChange({
       ...props.searchPref, [option.name]: !props.searchPref[option.name]
     })
@@ -33,7 +34,7 @@ const SearchPref = (props: Props) => {
       </div>
       <div className='search-pref__options'>
         {props.options.map((option, index) =>
-          <SearchByOption onClick={() => onClick(option)} option={option} key={index} searchPref={props.searchPref} />
+          <SearchByOption onClick={(event: any) => onClick(event, option)} option={option} key={index} searchPref={props.searchPref} />
         )}
       </div>
     </div>

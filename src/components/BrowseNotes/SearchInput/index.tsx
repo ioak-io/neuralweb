@@ -15,7 +15,8 @@ import { SearchConfigType } from './SearchConfig';
 
 interface Props {
   space: string;
-  onSearch: any;
+  onSearch?: any;
+  onChange?: any;
   searchConfig: SearchConfigType;
 }
 
@@ -31,6 +32,7 @@ const SearchInput = (props: Props) => {
   useEffect(() => {
     setSearchPref(props.searchConfig.searchPref);
     setText(props.searchConfig.text);
+    setTextList(props.searchConfig.textList);
   }, [props.searchConfig]);
 
   useEffect(() => {
@@ -65,24 +67,40 @@ const SearchInput = (props: Props) => {
   }, [metadataDefinitionList]);
 
   const handleTextChange = (event: any) => {
-    setText(event.currentTarget.value);
+    event.preventDefault();
+    if (props.onChange) {
+      props.onChange({ text: event.currentTarget.value });
+    } else {
+      setText(event.currentTarget.value);
+    }
   }
 
   const handleTextListChange = (_options: any) => {
-    setTextList(_options);
+    if (props.onChange) {
+      props.onChange({ textList: _options });
+    } else {
+      setTextList(_options);
+    }
   }
 
   const handleSearchPrefChange = (_searchPref: any) => {
-    setSearchPref(_searchPref);
+    if (props.onChange) {
+      props.onChange({ searchPref: _searchPref });
+    } else {
+      setSearchPref(_searchPref);
+    }
   }
 
   const onSearch = (event: any) => {
     event.preventDefault();
-    props.onSearch({
-      text,
-      searchPref,
-      textList
-    })
+    if (props.onSearch) {
+      props.onSearch({
+        text,
+        searchPref,
+        textList
+      })
+    }
+    return false;
   }
 
   const _getSearchPrefBase = () => {
@@ -124,12 +142,12 @@ const SearchInput = (props: Props) => {
             onInput={handleTextChange}
             placeholder="Type to search"
             autoFocus />
-          <IconButton onClick={onSearch} circle theme={ThemeType.primary} variant={ButtonVariantType.transparent}>
+          {props.onSearch && <IconButton onClick={onSearch} circle theme={ThemeType.primary} variant={ButtonVariantType.transparent}>
             <FontAwesomeIcon icon={faSearch} />
-          </IconButton>
-          <IconButton onClick={onReset} circle theme={ThemeType.default} variant={ButtonVariantType.transparent}>
+          </IconButton>}
+          {props.onSearch && <IconButton onClick={onReset} circle theme={ThemeType.default} variant={ButtonVariantType.transparent}>
             <FontAwesomeIcon icon={faXmark} />
-          </IconButton>
+          </IconButton>}
         </form>
       </div>
       <ChooseOptions searchConfig={props.searchConfig} text={text} searchPref={searchPref} options={searchByOptions} handleChange={handleTextListChange} />

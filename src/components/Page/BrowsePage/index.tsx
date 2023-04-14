@@ -38,7 +38,6 @@ const BrowsePage = (props: Props) => {
   }, [authorization]);
 
   const handleSearch = (searchConfig: any) => {
-    console.log(searchConfig);
     setSessionValueAsJson('neuralweb-searchconfig-browse', searchConfig);
     searchNote(props.space, searchConfig, authorization).then(
       (response: NoteModel[]) => {

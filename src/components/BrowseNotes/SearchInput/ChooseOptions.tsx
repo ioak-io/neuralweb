@@ -68,7 +68,8 @@ const ChooseOptions = (props: Props) => {
     props.handleChange(chosenValues);
   }, [chosenValues]);
 
-  const onChoose = (item: string) => {
+  const onChoose = (event: any, item: string) => {
+    event.preventDefault();
     if (chosenValues.includes(item)) {
       setChosenValues(chosenValues.filter((_item: string) => item !== _item));
     } else {
@@ -85,13 +86,13 @@ const ChooseOptions = (props: Props) => {
         {exclusiveSearch &&
           <>
             {!isEmptyOrSpaces(props.text) && <button disabled className={`search-choose-options__options__option note-label`}
-              onClick={() => onChoose(props.text)}>
+              onClick={(event: any) => onChoose(event, props.text)}>
               <FontAwesomeIcon icon={faCheck} />
               {props.text}
             </button>}
             {options.map((item: string) =>
               <button key={item} className={`search-choose-options__options__option note-label`}
-                onClick={() => onChoose(item)}>
+                onClick={(event: any) => onChoose(event, item)}>
                 {chosenValues.includes(item) && <FontAwesomeIcon icon={faCheck} />}
                 {item}
               </button>

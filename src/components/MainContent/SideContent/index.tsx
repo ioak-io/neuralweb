@@ -21,6 +21,7 @@ import {
   faMagnifyingGlass,
   faMoneyBillWave,
   faMoneyBillWaveAlt,
+  faPalette,
   faPlus,
   faReceipt,
   faShoppingBag,
@@ -141,6 +142,11 @@ const SideContent = (props: Props) => {
               label="Graph"
             />
             <SideNavSubHeading short="System" long="System" />
+            <SideNavLink
+              link={`/${props.space}/color-filter`}
+              icon={faPalette}
+              label="Color filter"
+            />
             <SideNavLink
               link={`/${props.space}/metadata-definition`}
               icon={faListUl}

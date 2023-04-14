@@ -18,6 +18,8 @@ import NotePage from '../Page/NotePage';
 import MetadataDefinitionPage from '../Page/MetadataDefinitionPage';
 import BrowsePage from '../Page/BrowsePage';
 import NewNotePage from '../Page/NewNotePage';
+import ColorfilterPage from '../Page/ColorfilterPage';
+import EditColorFilterPage from '../Page/EditColorfilterPage';
 
 interface Props {
 }
@@ -103,6 +105,18 @@ const RouterView = (props: Props) => {
           element={
             <ProtectedRouteApp
               middleware={['readAuthentication']} component={MetadataDefinitionPage} />}
+        />
+        <Route
+          path="/:space/color-filter"
+          element={
+            <ProtectedRouteApp
+              middleware={['readAuthentication']} component={ColorfilterPage} />}
+        />
+        <Route
+          path="/:space/color-filter/:id"
+          element={
+            <ProtectedRouteApp
+              middleware={['readAuthentication']} component={EditColorFilterPage} />}
         />
         <Route
           path="/:space/settings/company"
