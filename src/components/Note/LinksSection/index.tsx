@@ -60,15 +60,13 @@ const LinksSection = (props: Props) => {
     <div className='note-links-section'>
       <SectionContainer>
         {mode === 'edit' && <EditControls onCancel={onCancel} />}
-        {mode === 'add' && <EditControls onCancel={onCancel} />}
-        {mode === 'view' && <ViewControls onEdit={onEdit} disable={mode !== 'view'} />}
+        {mode === 'view' && <ViewControls onEdit={onEdit} disable={mode !== 'view' || !!props.disable} />}
         {mode === 'edit' &&
           <div>
             <LinksEditor notelinkReferences={notelinkReferences} note={props.note} space={props.space} />
             <LinksCreator notelinkReferences={notelinkReferences} note={props.note} space={props.space} />
           </div>
         }
-        {mode === 'add' && <LinksCreator notelinkReferences={notelinkReferences} note={props.note} space={props.space} />}
         {mode === 'view' && <LinksViewer heading="References" notelinkReferences={notelinkReferences} note={props.note} space={props.space} />}
       </SectionContainer>
     </div>

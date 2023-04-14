@@ -2,21 +2,27 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './style.scss';
 import NoteModel from '../../../model/NoteModel';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import SectionContainer from '../ui/SectionContainer';
 import EditControls from '../ui/EditControls';
 import ViewControls from '../ui/ViewControls';
 import { getEditorConfig } from '../../../utils/EditorUtils';
-import { saveNote } from './service';
+import { deleteNote, saveNote } from './service';
 import HeadEditor from '../sections/HeadEditor';
 import HeadViewer from '../sections/HeadViewer';
 import ContentEditor from '../sections/ContentEditor';
 import ContentViewer from '../sections/ContentViewer';
 import MetadataEditor from '../sections/MetadataEditor';
-import MetadataDefinitionModel from 'src/model/MetadataDefinitionModel';
+import MetadataDefinitionModel from '../../../model/MetadataDefinitionModel';
 import MetadataViewer from '../sections/MetadataViewer';
 import LinksSection from '../LinksSection';
 import AutoLinksSection from '../AutoLinksSection';
+import { AlignmentType, Button, Modal, ModalBody, ModalFooter, ModalHeader, ThemeType } from 'basicui';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { deleteNoteItems } from '../../../store/actions/NoteActions';
+import { deleteNotelinkItemsByNoteRef } from '../../../store/actions/NotelinkActions';
+import { deleteNotelinkAutoItemsByNoteRef } from '../../../store/actions/NotelinkAutoActions';
 
 interface Props {
   note: NoteModel;
@@ -25,15 +31,19 @@ interface Props {
 }
 
 const ContentSection = (props: Props) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
   const metadataDefinitionList = useSelector((state: any) => state.metadataDefinition.items);
   const [metadataDefinitionMap, setMetadataDefinitionMap] = useState<any>({});
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const params = useParams();
   const [isEditHead, setIsEditHead] = useState(false);
   const [isEditContent, setIsEditContent] = useState(false);
   const [isEditMetadata, setIsEditMetadata] = useState<any>({});
   const [isEdit, setIsEdit] = useState(false);
+  const [showDeletePrompt, setShowDeletePrompt] = useState(false);
   const [state, setState] = useState<NoteModel>({
     _id: '',
     content: '',
@@ -97,9 +107,9 @@ const ContentSection = (props: Props) => {
     setIsEdit(true);
   }
 
-  const onSave = () => {
+  const onSave = (event: any, reload?: boolean) => {
     setSaving(true);
-    saveNote(props.space, { ...state, content: editor?.getHTML() }, authorization).then((response) => {
+    saveNote(props.space, !!reload, { ...state, content: editor?.getHTML() }, authorization).then((response) => {
       props.onPostNoteSave(response);
       setIsEditContent(false);
       setIsEditHead(false);
@@ -109,6 +119,10 @@ const ContentSection = (props: Props) => {
     }).catch(() => setSaving(false));
   }
 
+  const onSaveContent = (event: any) => {
+    onSave(event, true);
+  }
+
   const handleEditStateChange = (_note: NoteModel) => {
     console.log(_note);
     setState({
@@ -116,31 +130,63 @@ const ContentSection = (props: Props) => {
     });
   }
 
+  const onDelete = () => {
+    setShowDeletePrompt(true);
+  }
+
+  const onConfirmDelete = () => {
+    setDeleting(true);
+    deleteNote(props.space, props.note.reference, authorization).then((response) => {
+      dispatch(deleteNoteItems([response.note]));
+      dispatch(deleteNotelinkItemsByNoteRef(response.note));
+      dispatch(deleteNotelinkAutoItemsByNoteRef(response.note));
+      setDeleting(false);
+      setShowDeletePrompt(false);
+      navigate(-1);
+    })
+  }
+
   return (
-    <div className='note-content-section'>
-      <SectionContainer>
-        {isEditHead && <EditControls onCancel={onCancelHead} onSave={onSave} saving={saving} />}
-        {!isEditHead && <ViewControls onEdit={onEditHead} disable={isEdit} />}
-        {isEditHead && <HeadEditor note={state} onChange={handleEditStateChange} />}
-        {!isEditHead && <HeadViewer note={props.note} />}
-      </SectionContainer>
-      <SectionContainer>
-        {isEditContent && <EditControls onCancel={onCancelContent} onSave={onSave} saving={saving} />}
-        {!isEditContent && <ViewControls onEdit={onEditContent} disable={isEdit} />}
-        {isEditContent && <ContentEditor note={state} editor={editor} onChange={handleEditStateChange} />}
-        {!isEditContent && <ContentViewer note={props.note} />}
-      </SectionContainer>
-      {Object.keys(metadataDefinitionMap).map(group =>
+    <>
+      <div className='note-content-section'>
         <SectionContainer>
-          {isEditMetadata[group] && <EditControls onCancel={() => onCancelMetadata(group)} onSave={onSave} saving={saving} />}
-          {!isEditMetadata[group] && <ViewControls onEdit={() => onEditMetadata(group)} disable={isEdit} />}
-          {isEditMetadata[group] && <MetadataEditor onChange={handleEditStateChange} note={state} group={group} metadataDefinitionList={metadataDefinitionMap[group]} />}
-          {!isEditMetadata[group] && <MetadataViewer note={state} group={group} metadataDefinitionList={metadataDefinitionMap[group]} />}
+          {isEditHead && <EditControls onCancel={onCancelHead} onSave={onSave} saving={saving} />}
+          {!isEditHead && <ViewControls onEdit={onEditHead} onRemove={onDelete} disable={isEdit} />}
+          {isEditHead && <HeadEditor note={state} onChange={handleEditStateChange} />}
+          {!isEditHead && <HeadViewer note={props.note} />}
         </SectionContainer>
-      )}
-      <LinksSection note={props.note} space={props.space} disable={isEdit} />
-      <AutoLinksSection note={props.note} space={props.space} disable={isEdit} />
-    </div>
+        <SectionContainer>
+          {isEditContent && <EditControls onCancel={onCancelContent} onSave={onSaveContent} saving={saving} />}
+          {!isEditContent && <ViewControls onEdit={onEditContent} disable={isEdit} />}
+          {isEditContent && <ContentEditor note={state} editor={editor} onChange={handleEditStateChange} />}
+          {!isEditContent && <ContentViewer note={props.note} />}
+        </SectionContainer>
+        {Object.keys(metadataDefinitionMap).map(group =>
+          <SectionContainer>
+            {isEditMetadata[group] && <EditControls onCancel={() => onCancelMetadata(group)} onSave={onSave} saving={saving} />}
+            {!isEditMetadata[group] && <ViewControls onEdit={() => onEditMetadata(group)} disable={isEdit} />}
+            {isEditMetadata[group] && <MetadataEditor onChange={handleEditStateChange} note={state} group={group} metadataDefinitionList={metadataDefinitionMap[group]} />}
+            {!isEditMetadata[group] && <MetadataViewer note={state} group={group} metadataDefinitionList={metadataDefinitionMap[group]} />}
+          </SectionContainer>
+        )}
+        <LinksSection note={props.note} space={props.space} disable={false} />
+        <AutoLinksSection note={props.note} space={props.space} disable={false} />
+      </div>
+      <Modal isOpen={showDeletePrompt} onClose={() => setShowDeletePrompt(false)}>
+        <ModalBody>
+          Are you sure you want to delete?
+        </ModalBody>
+        <ModalFooter alignment={AlignmentType.default}>
+          <Button loading={deleting} onClick={onConfirmDelete} theme={ThemeType.danger}>
+            <FontAwesomeIcon icon={faCheck} />
+            Yes, delete</Button>
+          <Button onClick={() => setShowDeletePrompt(false)}>
+            <FontAwesomeIcon icon={faXmark} />
+            Cancel</Button>
+        </ModalFooter>
+
+      </Modal>
+    </>
   );
 };
 

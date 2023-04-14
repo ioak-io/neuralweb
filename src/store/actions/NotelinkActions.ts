@@ -2,6 +2,7 @@
 import {
   NOTELINK_ITEMS_APPEND,
   NOTELINK_ITEMS_DELETE,
+  NOTELINK_ITEMS_DELETE_BY_NOTEREF,
   NOTELINK_ITEMS_FETCH_AND_SET
 } from './types';
 import { httpGet, httpPost, httpPut } from '../../components/Lib/RestTemplate';
@@ -35,6 +36,13 @@ export const fetchAndSetNotelinkItems =
   export const deleteNotelinkItems = (payload: any) => (dispatch: any) => {
     dispatch({
       type: NOTELINK_ITEMS_DELETE,
+      payload,
+    });
+  };
+  
+  export const deleteNotelinkItemsByNoteRef = (payload: any) => (dispatch: any) => {
+    dispatch({
+      type: NOTELINK_ITEMS_DELETE_BY_NOTEREF,
       payload,
     });
   };

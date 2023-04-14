@@ -33,6 +33,8 @@ export default function (state = initialState, action: any) {
       console.log(action);
 
       const _items: any = [...state.items];
+      const _mapUpdate: any = { ...state.map };
+      _mapUpdate[action.payload.reference] = action.payload;
       const index = _items.findIndex(
         (item: any) => item._id === action.payload._id
       );
@@ -40,18 +42,28 @@ export default function (state = initialState, action: any) {
         _items[index] = action.payload;
       }
 
+      console.log({
+        ...state,
+        items: sortBy([..._items], (item) => item.name.toLowerCase()),
+        map: _mapUpdate
+      })
+
       return {
         ...state,
         items: sortBy([..._items], (item) => item.name.toLowerCase()),
+        map: _mapUpdate
       };
     case NOTE_ITEMS_APPEND:
       console.log('NOTE_ITEMS_APPEND reducer');
       console.log(action);
+      const _map: any = { ...state.map };
+      _map[action.payload.reference] = action.payload;
       return {
         ...state,
         items: sortBy([...state.items, action.payload], (item) =>
           item.name.toLowerCase()
         ),
+        map: _map
       };
     case NOTE_ITEMS_DELETE:
       console.log('NOTE_ITEMS_DELETE reducer');
@@ -59,7 +71,7 @@ export default function (state = initialState, action: any) {
       return {
         ...state,
         items: sortBy(
-          state.items.filter((item: any) => !action.payload.includes(item._id)),
+          state.items.filter((item: any) => !action.payload.includes(item.reference)),
           (item: any) => item.name.toLowerCase()
         ),
       };

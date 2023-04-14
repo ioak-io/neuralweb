@@ -3,6 +3,7 @@ import { sortBy } from 'lodash';
 import {
   NOTELINK_AUTO_ITEMS_APPEND,
   NOTELINK_AUTO_ITEMS_DELETE,
+  NOTELINK_AUTO_ITEMS_DELETE_BY_NOTEREF,
   NOTELINK_AUTO_ITEMS_FETCH_AND_SET,
   NOTELINK_AUTO_ITEMS_REPLACE
 } from '../actions/types';
@@ -47,6 +48,14 @@ export default function (state = initialState, action: any) {
       return {
         ...state,
         items: [..._items, ...action.payload.newItems]
+      };
+    case NOTELINK_AUTO_ITEMS_DELETE_BY_NOTEREF:
+      console.log('NOTELINK_AUTO_ITEMS_DELETE_BY_NOTEREF reducer');
+      console.log(action);
+      return {
+        ...state,
+        items:
+          state.items.filter((item: any) => !(item.sourceNoteRef === action.payload || item.linkedNoteRef === action.payload))
       };
     default:
       return state;

@@ -18,18 +18,13 @@ const AutoLinksEditor = (props: Props) => {
   const authorization = useSelector((state: any) => state.authorization);
   const noteMap = useSelector((state: any) => state.note.map);
 
-  const addLink = (reference: string) => {
-    saveNotelink(props.space, props.note.reference, reference, authorization).then((response: NoteModel) => {
-      console.log(response);
-      dispatch(appendNotelinkItem(response));
-    })
-  }
-
   return (
-    <div className="auto-links-editor">
+    <div className="links-editor">
       <h5>Suggested references</h5>
       {props.notelinkAutoReferences.map(item =>
-        <AutoLinkView space={props.space} key={item.ref} note={noteMap[item.ref]} addLink={() => addLink(item.ref)} link={item} />
+        <>
+          {noteMap[item.ref] && <AutoLinkView space={props.space} key={item.ref} sourceNoteRef={props.note.reference} note={noteMap[item.ref]} />}
+        </>
       )}
     </div>
   );

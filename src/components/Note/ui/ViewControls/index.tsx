@@ -1,4 +1,4 @@
-import { faMinus, faPenClip, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPenClip, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonVariantType, IconButton, ThemeType } from 'basicui';
 import React, { useEffect, useRef, useState } from 'react';
@@ -22,7 +22,7 @@ const ViewControls = (props: Props) => {
         <FontAwesomeIcon icon={faPlus} />
       </IconButton>}
       {props.onRemove && <IconButton disabled={props.disable} onClick={props.onRemove} circle variant={ButtonVariantType.fill} theme={ThemeType.default}>
-        <FontAwesomeIcon icon={faMinus} />
+        <FontAwesomeIcon icon={faTrashAlt} />
       </IconButton>}
     </div>
   );

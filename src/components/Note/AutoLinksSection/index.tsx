@@ -12,6 +12,8 @@ import NotelinkModel from '../../../model/NotelinkModel';
 import AutoLinksEditor from '../sections/AutoLinksEditor';
 import AutoLinksViewer from '../sections/AutoLinksViewer';
 import { AutoLinkViewModel } from './AutoLinkViewModel';
+import { saveNotelink } from '../sections/LinksCreator/service';
+import { appendNotelinkItem } from '../../../store/actions/NotelinkActions';
 
 interface Props {
   note: NoteModel;
@@ -70,11 +72,17 @@ const AutoLinksSection = (props: Props) => {
     setMode('view');
   }
 
+  const addLink = (reference: string) => {
+    saveNotelink(props.space, props.note.reference, reference, authorization).then((response: NoteModel) => {
+      dispatch(appendNotelinkItem(response));
+    })
+  }
+
   return (
     <div className='auto-note-links-section'>
       <SectionContainer>
-        {mode === 'edit' && <EditControls onCancel={onCancel} />}
-        {mode === 'view' && <ViewControls onEdit={onEdit} disable={mode !== 'view'} />}
+        {mode === 'edit' && <EditControls saving={saving} onCancel={onCancel} />}
+        {mode === 'view' && <ViewControls onEdit={onEdit} disable={mode !== 'view' || !!props.disable} />}
         {mode === 'edit' && <AutoLinksEditor notelinkAutoReferences={notelinkAutoReferences} note={props.note} space={props.space} />}
         {mode === 'view' && <AutoLinksViewer heading="Suggested references" notelinkAutoReferences={notelinkAutoReferences} note={props.note} space={props.space} />}
       </SectionContainer>

@@ -11,6 +11,7 @@ import MainSection from '../../../components/MainSection';
 import { saveNote } from '../NotePage/service';
 import { getRecentlyCreatedNote } from './service';
 import RecentNote from './RecentNote';
+import { appendNoteItem } from '../../../store/actions/NoteActions';
 
 interface Props {
   location: any;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const NewNotePage = (props: Props) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
   const [copy, setCopy] = useState(false);
@@ -62,7 +64,8 @@ const NewNotePage = (props: Props) => {
       _note = { ...state, ...rest };
     }
     saveNote(props.space, _note, authorization).then((response) => {
-      navigate(`/${props.space}/note/${response.reference}`);
+      dispatch(appendNoteItem(response.note));
+      navigate(`/${props.space}/note/${response.note.reference}`);
     })
   }
 

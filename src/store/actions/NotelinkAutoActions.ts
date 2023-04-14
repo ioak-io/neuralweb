@@ -2,6 +2,7 @@
 import {
   NOTELINK_AUTO_ITEMS_APPEND,
   NOTELINK_AUTO_ITEMS_DELETE,
+  NOTELINK_AUTO_ITEMS_DELETE_BY_NOTEREF,
   NOTELINK_AUTO_ITEMS_FETCH_AND_SET,
   NOTELINK_AUTO_ITEMS_REPLACE
 } from './types';
@@ -44,6 +45,13 @@ export const fetchAndSetNotelinkAutoItems =
 export const replaceNotelinkAutoItems = (payload: {noteRef: string, newItems: any[]}) => (dispatch: any) => {
   dispatch({
     type: NOTELINK_AUTO_ITEMS_REPLACE,
+    payload,
+  });
+};
+  
+export const deleteNotelinkAutoItemsByNoteRef = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: NOTELINK_AUTO_ITEMS_DELETE_BY_NOTEREF,
     payload,
   });
 };
