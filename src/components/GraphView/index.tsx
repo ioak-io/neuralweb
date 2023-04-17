@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import './style.scss';
-import { getNotelinks, getNotetags } from './service';
+import { getNearestLinks, getNotelinks, getNotetags } from './service';
 import NetworkGraph from '../../components/NetworkGraph';
 import NotelinkModel from '../../model/NotelinkModel';
 import LinkModel from '../../model/LinkModel';
@@ -29,33 +29,19 @@ const GraphView = (props: Props) => {
   const [noteNodes, setNoteNodes] = useState<NodeModel[]>([]);
   const [tagNodes, setTagNodes] = useState<NodeModel[]>([]);
   const [noteLinks, setNoteLinks] = useState<LinkModel[]>([]);
-  const [noteLinksAuto, setNoteLinksAuto] = useState<LinkModel[]>([]);
   const [tagLinks, setTagLinks] = useState<LinkModel[]>([]);
   const [data, setData] = useState<any>({ nodes: [], links: [] });
-  const [depth, setDepth] = useState<number>(2);
+  const [depth, setDepth] = useState<number>(1);
 
   useEffect(() => {
     if (authorization.isAuth && props.noteref) {
-      const _noteLinks = notelinkList
-        .filter((item: NotelinkModel) => item.sourceNoteRef === props.noteref || item.linkedNoteRef === props.noteref)
-        .map((item: NotelinkModel) => ({
-          source: item.sourceNoteRef,
-          target: item.linkedNoteRef,
-          type: 'link'
-        }));
+      const _noteLinks: any = getNearestLinks([...notelinkAutoList, ...notelinkList], [props.noteref], depth).map((item: NotelinkModel) => ({
+        source: item.sourceNoteRef,
+        target: item.linkedNoteRef,
+        type: (item.keywords && item.keywords.length > 0) ? 'auto-link' : 'link'
+      }));;
       setNoteLinks(
         _noteLinks
-      );
-
-      const _noteLinksAuto = notelinkAutoList
-        .filter((item: NotelinkModel) => item.sourceNoteRef === props.noteref || item.linkedNoteRef === props.noteref)
-        .map((item: NotelinkModel) => ({
-          source: item.sourceNoteRef,
-          target: item.linkedNoteRef,
-          type: 'auto-link'
-        }));
-      setNoteLinksAuto(
-        _noteLinksAuto
       );
       getNotetags(props.space, props.noteref, 2, authorization).then(
         (response: any) => {
@@ -94,11 +80,11 @@ const GraphView = (props: Props) => {
   }, [notes]);
 
   useEffect(() => {
-    const _links = [...noteLinks, ...noteLinksAuto, ...tagLinks];
+    const _links = [...noteLinks, ...tagLinks];
 
     const _linkedNoteNodes: string[] = [];
     const _linkedTagNodes: string[] = [];
-    [...noteLinks, ...noteLinksAuto].forEach((item) => {
+    [...noteLinks].forEach((item) => {
       _linkedNoteNodes.push(item.source);
       _linkedNoteNodes.push(item.target);
     });
@@ -123,14 +109,14 @@ const GraphView = (props: Props) => {
       nodes: _nodes,
       links: _links,
     });
-    console.log(_links);
-  }, [noteLinks, noteLinksAuto, noteNodes, tagLinks, tagNodes]);
+  }, [noteLinks, noteNodes, tagLinks, tagNodes]);
 
   const increaseDepth = () => {
     setDepth(depth + 1);
   };
+
   const decreaseDepth = () => {
-    setDepth(depth - 1);
+    if (depth > 1) { setDepth(depth - 1); }
   };
 
   return (
@@ -145,7 +131,7 @@ const GraphView = (props: Props) => {
           <div className="graph-view__depth-control">
             <div className="graph-view__depth-control__text">Depth</div>
             <div className="graph-view__depth-control__action">
-              {depth > 0 && (
+              {depth > 1 && (
                 <button className="button" onClick={decreaseDepth}>
                   <FontAwesomeIcon icon={faMinus} />
                 </button>

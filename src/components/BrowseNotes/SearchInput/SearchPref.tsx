@@ -4,9 +4,6 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import './SearchPref.scss';
-import NotetagModel from '../../../model/NotetagModel';
-import { getNotetags } from '../../Page/GraphPage/service';
-import { Input } from 'basicui';
 import SearchByOption from './SearchByOption';
 import { SearchOptionType } from './SearchOptionType';
 import MetadataDefinitionModel from 'src/model/MetadataDefinitionModel';

@@ -16,16 +16,7 @@ import { newId } from '../../../events/MessageService';
 import * as service from './service';
 import RunLog from './RunLog';
 import { isEmptyAttributes } from '../../../components/Utils';
-import {
-  fetchAndAppendExpenseItems,
-  fetchAndSetExpenseItems,
-} from '../../../store/actions/ExpenseActions';
-import { fetchAllCategories } from '../../../store/actions/CategoryActions';
-import { fetchAllIncomeCategories } from '../../../store/actions/IncomeCategoryActions';
-import { fetchAllTags } from '../../../store/actions/TagActions';
 import Topbar from '../../../components/Topbar';
-import { fetchAndSetReceiptItems } from '../../../store/actions/ReceiptActions';
-import { fetchAndSetIncomeItems } from '../../../store/actions/IncomeActions';
 
 interface Props {
   space: string;
@@ -40,16 +31,6 @@ const BackupAndRestore = (props: Props) => {
     state.company.items.find(
       (item: any) => item.reference === parseInt(props.space, 10)
     )
-  );
-  const expenseFilter = useSelector((state: any) => state.expense.filter);
-  const expensePagination = useSelector(
-    (state: any) => state.expense.pagination
-  );
-  const incomeFilter = useSelector((state: any) => state.income.filter);
-  const incomePagination = useSelector((state: any) => state.income.pagination);
-  const receiptFilter = useSelector((state: any) => state.receipt.filter);
-  const receiptPagination = useSelector(
-    (state: any) => state.receipt.pagination
   );
   const [queryParam, setQueryParam] = useState<any>({});
   const [formId, setFormId] = useState(newId());
@@ -74,42 +55,7 @@ const BackupAndRestore = (props: Props) => {
   };
 
   const refreshStore = () => {
-    dispatch(
-      fetchAndSetExpenseItems(props.space, authorization, {
-        ...expenseFilter,
-        pagination: {
-          ...expensePagination,
-          pageSize: 20,
-          pageNo: 0,
-          hasMore: true,
-        },
-      })
-    );
-    dispatch(
-      fetchAndSetReceiptItems(props.space, authorization, {
-        ...receiptFilter,
-        pagination: {
-          ...receiptPagination,
-          pageSize: 20,
-          pageNo: 0,
-          hasMore: true,
-        },
-      })
-    );
-    dispatch(
-      fetchAndSetIncomeItems(props.space, authorization, {
-        ...incomeFilter,
-        pagination: {
-          ...incomePagination,
-          pageSize: 20,
-          pageNo: 0,
-          hasMore: true,
-        },
-      })
-    );
-    dispatch(fetchAllCategories(props.space, authorization));
-    dispatch(fetchAllIncomeCategories(props.space, authorization));
-    dispatch(fetchAllTags(props.space, authorization));
+
   };
 
   const importExpenseFile = () => {
@@ -137,14 +83,14 @@ const BackupAndRestore = (props: Props) => {
         const element = document.createElement('a');
         element.setAttribute(
           'href',
-          `data:text/plain;charset=utf-8,${encodeURIComponent(response)}`
+          `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(response))}`
         );
         element.setAttribute(
           'download',
           `export_${company.name.toLowerCase().replaceAll(' ', '_')}_${format(
             new Date(),
             'yyyyMMdd_HHmmss'
-          )}.csv`
+          )}.json`
         );
 
         element.style.display = 'none';
