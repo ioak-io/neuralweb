@@ -2,7 +2,6 @@ import React from 'react';
 
 import './DropLinks.scss';
 import { NavLink } from 'react-router-dom';
-import OakButton from '../../oakui/wc/OakButton';
 
 interface Props {
   space: string;
@@ -15,7 +14,6 @@ const DropLinks = (props: Props) => {
       <NavLink
         to={`/${props.space}/home`}
         className="navitem"
-        activeClassName="active"
         onClick={props.handleClose}
       >
         Home
@@ -23,7 +21,6 @@ const DropLinks = (props: Props) => {
       <NavLink
         to={`/${props.space}/project`}
         className="navitem"
-        activeClassName="active"
         onClick={props.handleClose}
       >
         Projects
@@ -31,7 +28,6 @@ const DropLinks = (props: Props) => {
       <NavLink
         to={`/${props.space}/template`}
         className="navitem"
-        activeClassName="active"
         onClick={props.handleClose}
       >
         Templates

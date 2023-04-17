@@ -32,7 +32,6 @@ const NavItem = (props: Props) => {
       <NavLink
         to={props.to}
         className="navitem"
-        activeClassName="active"
         onClick={routeChanged}
       >
         {props.label}

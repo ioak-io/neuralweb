@@ -60,35 +60,30 @@ const Navbar = (props: Props) => {
               <NavLink
                 to={`/${props.space}/home`}
                 className="navlink"
-                activeClassName="navlink--active"
               >
                 Home
               </NavLink>
               <NavLink
                 to={`/${props.space}/expense`}
                 className="navlink"
-                activeClassName="navlink--active"
               >
                 Expense
               </NavLink>
               <NavLink
                 to={`/${props.space}/category`}
                 className="navlink"
-                activeClassName="navlink--active"
               >
                 Category
               </NavLink>
               <NavLink
                 to={`/${props.space}/report`}
                 className="navlink"
-                activeClassName="navlink--active"
               >
                 Report
               </NavLink>
               <NavLink
                 to={`/${props.space}/settings?link=general`}
                 className="navlink"
-                activeClassName="navlink--active"
               >
                 Settings
               </NavLink>

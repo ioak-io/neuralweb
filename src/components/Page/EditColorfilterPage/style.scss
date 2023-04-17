@@ -6,11 +6,11 @@
 
 .edit-colorfilter-page-form input[type=color] {
   height: var(--basicui-formelement-height);
-  width: var(--basicui-formelement-height);
+  width: calc(var(--basicui-formelement-height) + 36px);
   box-shadow: none;
   border: none;
   outline: none;
-  border-radius: 100px;
+  // border-radius: 100px;
 }
 
 .edit-colorfilter-page-form__header {

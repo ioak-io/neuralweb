@@ -48,3 +48,28 @@ export const saveColorfilter = (
       return Promise.resolve({});
     });
 };
+
+export const moveColorfilter = (
+  space: string,
+  id: string,
+  mode: 'up' | 'down',
+  authorization: any
+) => {
+  const taskId = newId();
+  AddSpinnerCommand.next(taskId);
+  return httpPost(`/color-filter/${space}/${mode}/${id}`, {}, {
+    headers: {
+      Authorization: authorization.access_token,
+    },
+  })
+    .then((response) => {
+      RemoveSpinnerCommand.next(taskId);
+      if (response.status === 200) {
+        return Promise.resolve(response.data);
+      }
+    })
+    .catch((error) => {
+      RemoveSpinnerCommand.next(taskId);
+      return Promise.resolve({});
+    });
+};

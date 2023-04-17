@@ -8,6 +8,7 @@ import {
   faGear,
   faPlus,
   faTimes,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as d3 from 'd3';
@@ -22,7 +23,7 @@ import FilterGroup from './FilterGroup';
 import { getFilterGroup, updateFilterGroup } from './service';
 import BinaryChoiceInput from './BinaryChoiceInput';
 import { useNavigate } from 'react-router-dom';
-import { Modal, ModalBody, ModalHeader } from 'basicui';
+import { AlignmentType, Button, Checkbox, Modal, ModalBody, ModalFooter, ModalHeader } from 'basicui';
 
 interface Props {
   offsetX?: number;
@@ -51,6 +52,7 @@ const NetworkGraph = (props: Props) => {
   const [data, setData] = useState<any>();
   const [references, setReferences] = useState<any>({});
   const [filterGroup, setFilterGroup] = useState<any[]>([]);
+  const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
 
   const [hideOrphanNodes, setHideOrphanNodes] = useState(false);
   const [disableNodeColors, setDisableNodeColors] = useState(false);
@@ -553,47 +555,23 @@ const NetworkGraph = (props: Props) => {
         </div>
       </div>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader onClose={() => setIsOpen(false)} />
+        <ModalHeader onClose={() => setIsOpen(false)} heading='Graph parameters' />
         <ModalBody>
           <div className="network-graph-controls__content">
             <div className="network-graph-controls__content__related-group">
-              <BinaryChoiceInput
-                label="Hide orphan nodes"
-                value={hideOrphanNodes}
-                handleUpdate={(value: boolean) => setHideOrphanNodes(value)}
-              />
-              <BinaryChoiceInput
-                label="Dynamic node size"
-                value={dynamicNodeSize}
-                handleUpdate={(value: boolean) => setDynamicNodeSize(value)}
-              />
-              <BinaryChoiceInput
-                label="Disable node colors"
-                value={disableNodeColors}
-                handleUpdate={(value: boolean) => setDisableNodeColors(value)}
-              />
+              <Checkbox defaultChecked={hideOrphanNodes} label='Hide orphan nodes'
+                onInput={(event: any) => setHideOrphanNodes(event.currentTarget.checked)} />
+              <Checkbox defaultChecked={dynamicNodeSize} label='Dynamic node size'
+                onInput={(event: any) => setDynamicNodeSize(event.currentTarget.checked)} />
+              <Checkbox defaultChecked={disableNodeColors} label='Disable node colors'
+                onInput={(event: any) => setDisableNodeColors(event.currentTarget.checked)} />
+              <Checkbox defaultChecked={showAdvancedSettings} label='Advanced settings'
+                onInput={(event: any) => setShowAdvancedSettings(event.currentTarget.checked)} />
               {props.children && <>{props.children}</>}
             </div>
 
-            {!disableNodeColors && (
-              <div className="network-graph-controls__content__container">
-                <div className="network-graph-controls__content__title">
-                  Groups
-                </div>
-                <div className="network-graph-controls__content__body">
-                  <FilterGroup
-                    space={props.space}
-                    data={filterGroup}
-                    handleUpdate={handleUpdateFilterGroup}
-                  />
-                </div>
-              </div>
-            )}
-
-            <div className="network-graph-controls__content__container">
-              <div className="network-graph-controls__content__title">
-                Forces
-              </div>
+            {showAdvancedSettings && <div className="network-graph-controls__content__container">
+              {/* <h5>Forces</h5> */}
               <div className="network-graph-controls__content__body">
                 <div className="network-graph-controls__content__body__item">
                   <label>Repel force-{state.charge}</label>
@@ -704,9 +682,15 @@ const NetworkGraph = (props: Props) => {
                   />
                 </div>
               </div>
-            </div>
+            </div>}
           </div>
         </ModalBody>
+        <ModalFooter>
+          <Button onClick={() => setIsOpen(false)}>
+            <FontAwesomeIcon icon={faXmark} />
+            Close
+          </Button>
+        </ModalFooter>
       </Modal>
     </>
   );

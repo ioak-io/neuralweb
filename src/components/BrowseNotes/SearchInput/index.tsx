@@ -17,23 +17,15 @@ interface Props {
   space: string;
   onSearch?: any;
   onChange?: any;
+  onReset?: any;
   searchConfig: SearchConfigType;
 }
 
 const SearchInput = (props: Props) => {
   const dispatch = useDispatch();
-  const [text, setText] = useState('');
-  const [textList, setTextList] = useState<string[]>([]);
   const authorization = useSelector((state: any) => state.authorization);
   const metadataDefinitionList = useSelector((state: any) => state.metadataDefinition.items);
   const [searchByOptions, setSearchByOptions] = useState<SearchOptionType[]>([]);
-  const [searchPref, setSearchPref] = useState<any>({});
-
-  useEffect(() => {
-    setSearchPref(props.searchConfig.searchPref);
-    setText(props.searchConfig.text);
-    setTextList(props.searchConfig.textList);
-  }, [props.searchConfig]);
 
   useEffect(() => {
     const _searchByOptions: SearchOptionType[] = [
@@ -60,47 +52,27 @@ const SearchInput = (props: Props) => {
     })
 
     setSearchByOptions(_searchByOptions);
-    setSearchPref({
-      ..._searchPref,
-      ...props.searchConfig.searchPref
-    });
+    handleSearchPrefChange({ ..._searchPref, ...props.searchConfig.searchPref });
   }, [metadataDefinitionList]);
 
   const handleTextChange = (event: any) => {
     event.preventDefault();
-    if (props.onChange) {
-      props.onChange({ text: event.currentTarget.value });
-    } else {
-      setText(event.currentTarget.value);
-    }
+    props.onChange({ text: event.currentTarget.value });
   }
 
   const handleTextListChange = (_options: any) => {
-    if (props.onChange) {
-      props.onChange({ textList: _options });
-    } else {
-      setTextList(_options);
-    }
+    props.onChange({ textList: _options });
   }
 
   const handleSearchPrefChange = (_searchPref: any) => {
-    if (props.onChange) {
-      props.onChange({ searchPref: _searchPref });
-    } else {
-      setSearchPref(_searchPref);
-    }
+    props.onChange({ searchPref: _searchPref });
   }
 
   const onSearch = (event: any) => {
     event.preventDefault();
     if (props.onSearch) {
-      props.onSearch({
-        text,
-        searchPref,
-        textList
-      })
+      props.onSearch();
     }
-    return false;
   }
 
   const _getSearchPrefBase = () => {
@@ -119,26 +91,17 @@ const SearchInput = (props: Props) => {
   }
 
   const onReset = (event: any) => {
-    const _text = '';
-    const _searchPref: any = _getSearchPrefBase();
-    const _textList: string[] = [];
-    props.onSearch({
-      text: _text,
-      searchPref: _searchPref,
-      textList: _textList
-    });
-    setText(_text);
-    setTextList(_textList);
-    setSearchPref(_searchPref);
+    event.preventDefault();
+    if (props.onReset) { props.onReset(); }
   }
 
   return (
     <div className="search-input">
-      <SearchPref searchPref={searchPref} options={searchByOptions} handleChange={handleSearchPrefChange} />
+      <SearchPref searchPref={props.searchConfig.searchPref} options={searchByOptions} handleChange={handleSearchPrefChange} />
       <div className="search-input__input">
         <form className="main browse-page-form" onSubmit={onSearch}>
           <Input name="text"
-            value={text}
+            value={props.searchConfig.text}
             onInput={handleTextChange}
             placeholder="Type to search"
             autoFocus />
@@ -150,7 +113,7 @@ const SearchInput = (props: Props) => {
           </IconButton>}
         </form>
       </div>
-      <ChooseOptions searchConfig={props.searchConfig} text={text} searchPref={searchPref} options={searchByOptions} handleChange={handleTextListChange} />
+      <ChooseOptions searchConfig={props.searchConfig} text={props.searchConfig.text} searchPref={props.searchConfig.searchPref} options={searchByOptions} handleChange={handleTextListChange} />
     </div>
   );
 };

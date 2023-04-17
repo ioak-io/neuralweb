@@ -173,9 +173,6 @@ const Init = () => {
 
   return (
     <>
-      <ExpenseStateActions space={space} />
-      <ReceiptStateActions space={space} />
-      <IncomeStateActions space={space} />
     </>
   );
 };

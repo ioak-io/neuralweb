@@ -15,6 +15,7 @@ import { Input } from 'basicui';
 import MainSection from '../../../components/MainSection';
 import SearchInput from '../../../components/BrowseNotes/SearchInput';
 import { getSessionValue, getSessionValueAsJson, setSessionValue, setSessionValueAsJson } from '../../../utils/SessionUtils';
+import { SearchConfigType } from 'src/components/BrowseNotes/SearchInput/SearchConfig';
 
 interface Props {
   location: any;
@@ -29,17 +30,35 @@ const BrowsePage = (props: Props) => {
   const [view, setView] = useState('list');
 
   const [results, setResults] = useState<NoteModel[]>([]);
+  const [searchConfig, setSearchConfig] = useState<SearchConfigType>({
+    searchPref: {}, text: '', textList: []
+  });
 
   useEffect(() => {
-    const searchConfig = getSessionValueAsJson('neuralweb-searchconfig-browse');
+    const _searchConfig = getSessionValueAsJson('neuralweb-searchconfig-browse');
     if (authorization.isAuth) {
-      handleSearch(searchConfig);
+      handleSearch(_searchConfig);
     }
   }, [authorization]);
 
-  const handleSearch = (searchConfig: any) => {
-    setSessionValueAsJson('neuralweb-searchconfig-browse', searchConfig);
-    searchNote(props.space, searchConfig, authorization).then(
+  const handleChange = (deltaSearchConfig: any) => {
+    setSearchConfig({ ...searchConfig, ...deltaSearchConfig });
+  }
+
+  const handleReset = () => {
+    handleSearch({
+      searchPref: {}, text: '', textList: []
+    })
+  }
+
+  const handleSearch = (_searchConfig?: SearchConfigType) => {
+    let _searchConfigCurrent: SearchConfigType = searchConfig;
+    if (_searchConfig) {
+      _searchConfigCurrent = _searchConfig;
+      setSearchConfig(_searchConfig);
+    }
+    setSessionValueAsJson('neuralweb-searchconfig-browse', _searchConfigCurrent);
+    searchNote(props.space, _searchConfigCurrent, authorization).then(
       (response: NoteModel[]) => {
         setResults(response);
       }
@@ -75,7 +94,7 @@ const BrowsePage = (props: Props) => {
         </div>
       </Topbar>
       <MainSection>
-        <SearchInput space={props.space} onSearch={handleSearch} searchConfig={getSessionValueAsJson('neuralweb-searchconfig-browse')} />
+        <SearchInput space={props.space} onSearch={handleSearch} onReset={handleReset} searchConfig={searchConfig} onChange={handleChange} />
         {view === 'list' && (
           <SearchResults
             space={props.space}

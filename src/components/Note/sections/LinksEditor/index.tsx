@@ -37,9 +37,12 @@ const LinksEditor = (props: Props) => {
 
   return (
     <div className="links-editor">
-    <h5>References</h5>
+      <h5>References</h5>
       {props.notelinkReferences.map(item =>
-        <LinkView key={item} space={props.space} notelinkReferences={props.notelinkReferences} note={noteMap[item]} addLink={() => addLink(item)} removeLink={() => removeLink(item)} />
+        <>
+          {noteMap[item] &&
+            <LinkView key={item} space={props.space} notelinkReferences={props.notelinkReferences} note={noteMap[item]} addLink={() => addLink(item)} removeLink={() => removeLink(item)} />}
+        </>
       )}
     </div>
   );

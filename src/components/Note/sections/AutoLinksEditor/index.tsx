@@ -19,7 +19,7 @@ const AutoLinksEditor = (props: Props) => {
   const noteMap = useSelector((state: any) => state.note.map);
 
   return (
-    <div className="links-editor">
+    <div className="auto-links-editor">
       <h5>Suggested references</h5>
       {props.notelinkAutoReferences.map(item =>
         <>

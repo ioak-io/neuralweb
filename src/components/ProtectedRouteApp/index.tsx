@@ -34,7 +34,6 @@ const ProtectedRouteApp = (props: Props) => {
     };
 
     const applyMidleware = (middlewareName: string) => {
-        console.log(process.env.REACT_APP_ONEAUTH_APPSPACE_ID, "---", appRealm)
         sendMessage('spaceChange', true, '');
         // sendMessage('realmChange', true, '');
         switch (middlewareName) {
@@ -61,23 +60,17 @@ const ProtectedRouteApp = (props: Props) => {
 
     const authenticate = async (type: string, redirect = true) => {
         sendMessage('spaceChange', true, params.space);
-        console.log("====", authorization, params.space);
         if (authorization.isAuth) {
             if (
                 params.space &&
                 !authorization.space.includes(parseInt(params.space, 10))
             ) {
-                console.log(
-                    '**redirect to unauthorized page',
-                    params.space
-                );
                 redirectToUnauthorized();
             }
             return true;
         }
         const accessToken = getSessionValue(`neuralweb-access_token`);
         const refreshToken = getSessionValue(`neuralweb-refresh_token`);
-        console.log("===", accessToken, refreshToken);
         if (accessToken && refreshToken) {
             httpPost(
                 `/user/${appRealm}/authorize_user`,
@@ -91,7 +84,6 @@ const ProtectedRouteApp = (props: Props) => {
                             newAccessToken = response.data.accessToken;
                             setSessionValue(`neuralweb-access_token`, newAccessToken);
                         }
-                        console.log(response.data);
                         dispatch(
                             addAuth({
                                 isAuth: true,

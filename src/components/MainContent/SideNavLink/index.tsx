@@ -77,7 +77,6 @@ const SideNavLink = (props: Props) => {
         <NavLink
           to={props.link}
           className="side-navbar-link__action"
-          activeClassName="side-navbar-link__action--active"
         >
           <div className="side-navbar-link__action__icon">
             <FontAwesomeIcon icon={props.icon} />
