@@ -27,6 +27,7 @@ import {
   faShoppingBag,
   faShoppingCart,
   faSignOutAlt,
+  faStrikethrough,
   faTable,
   faTag,
   faTags,
@@ -151,6 +152,11 @@ const SideContent = (props: Props) => {
               link={`/${props.space}/metadata-definition`}
               icon={faListUl}
               label="Metadata"
+            />
+            <SideNavLink
+              link={`/${props.space}/stopwords`}
+              icon={faStrikethrough}
+              label="Stopwords"
             />
             <SideNavLink
               link={`/${props.space}/settings/company`}

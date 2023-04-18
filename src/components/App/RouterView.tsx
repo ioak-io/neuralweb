@@ -20,6 +20,7 @@ import BrowsePage from '../Page/BrowsePage';
 import NewNotePage from '../Page/NewNotePage';
 import ColorfilterPage from '../Page/ColorfilterPage';
 import EditColorFilterPage from '../Page/EditColorfilterPage';
+import StopwordsPage from '../Page/StopwordsPage';
 
 interface Props {
 }
@@ -117,6 +118,12 @@ const RouterView = (props: Props) => {
           element={
             <ProtectedRouteApp
               middleware={['readAuthentication']} component={EditColorFilterPage} />}
+        />
+        <Route
+          path="/:space/stopwords"
+          element={
+            <ProtectedRouteApp
+              middleware={['readAuthentication']} component={StopwordsPage} />}
         />
         <Route
           path="/:space/settings/company"
