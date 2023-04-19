@@ -33,22 +33,6 @@ export const getNotelinksAuto = (space: string, authorization: any) => {
     });
 };
 
-export const getNotetags = (space: string, authorization: any) => {
-  return httpGet(`/note/tag/${space}`, {
-    headers: {
-      Authorization: authorization.access_token,
-    },
-  })
-    .then((response) => {
-      if (response.status === 200) {
-        return Promise.resolve(response.data);
-      }
-    })
-    .catch((error) => {
-      return Promise.resolve([]);
-    });
-};
-
 export const GRAPH_DATA = {
   nodes: [
     { id: 'Myriel', group: 1 },

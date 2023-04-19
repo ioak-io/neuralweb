@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import './style.scss';
-import { getNearestLinks, getNotelinks, getNotetags } from './service';
+import { getNearestLinks, getNotelinks } from './service';
 import NetworkGraph from '../../components/NetworkGraph';
 import NotelinkModel from '../../model/NotelinkModel';
 import LinkModel from '../../model/LinkModel';
@@ -24,6 +24,7 @@ const GraphView = (props: Props) => {
   const authorization = useSelector((state: any) => state.authorization);
   const companyList = useSelector((state: any) => state.company.items);
   const notes = useSelector((state: any) => state.note.items);
+  const labelLinks = useSelector((state: any) => state.note.labelLinks);
   const notelinkList = useSelector((state: any) => state.notelink.items);
   const notelinkAutoList = useSelector((state: any) => state.notelinkAuto.items);
   const [noteNodes, setNoteNodes] = useState<NodeModel[]>([]);
@@ -43,30 +44,24 @@ const GraphView = (props: Props) => {
       setNoteLinks(
         _noteLinks
       );
-      getNotetags(props.space, props.noteref, 2, authorization).then(
-        (response: any) => {
-          if (response) {
-            const _tagLinks: LinkModel[] = [];
-            const _tagNodes: NodeModel[] = [];
-            response.forEach((item: NotetagModel) => {
-              _tagLinks.push({
-                source: item.noteRef,
-                target: item.name,
-                type: 'tag'
-              });
-              _tagNodes.push({
-                name: `#${item.name}`,
-                reference: item.name,
-                group: 'tag',
-              });
-            });
-            setTagLinks(_tagLinks);
-            setTagNodes(uniqBy(_tagNodes, 'reference'));
-          }
-        }
-      );
+      const _tagLinks: LinkModel[] = [];
+      const _tagNodes: NodeModel[] = [];
+      labelLinks.forEach((item: NotetagModel) => {
+        _tagLinks.push({
+          source: item.noteRef,
+          target: item.name,
+          type: 'tag'
+        });
+        _tagNodes.push({
+          name: `#${item.name}`,
+          reference: item.name,
+          group: 'tag',
+        });
+      });
+      setTagLinks(_tagLinks);
+      setTagNodes(uniqBy(_tagNodes, 'reference'));
     }
-  }, [authorization, props.noteref, depth, notelinkList, notelinkAutoList]);
+  }, [authorization, props.noteref, depth, notelinkList, notelinkAutoList, labelLinks]);
 
   useEffect(() => {
     setNoteNodes(

@@ -24,29 +24,6 @@ export const getNotelinks = (
     });
 };
 
-export const getNotetags = (
-  space: string,
-  id: string,
-  level: number,
-  authorization: any
-) => {
-  return httpGet(`/note/tag/${space}`, {
-    headers: {
-      Authorization: authorization.access_token,
-    },
-  })
-    .then((response) => {
-      if (response.status === 200) {
-        return Promise.resolve(response.data);
-      }
-    })
-    .catch((error) => {
-      return Promise.resolve([]);
-    });
-};
-
-
-
 export const getNearestLinks = (
   data: NotelinkModel[],
   noteref: string[],
