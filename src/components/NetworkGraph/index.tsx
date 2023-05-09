@@ -39,6 +39,14 @@ const THEME = {
   LIGHT_BG: '#fafafa',
   DARK_TEXT: '#fcfcfc',
   LIGHT_TEXT: '#0a0a0a',
+  DARK_LINK: '#FFFFFF',
+  LIGHT_LINK: '#141414',
+  DARK_LINK_AUTO_LINK: '#FFFFFF',
+  LIGHT_LINK_AUTO_LINK: '#141414',
+  DARK_LINK_AUTO_LINK_COLOR: '#FF91E4',
+  LIGHT_LINK_AUTO_LINK_COLOR: '#E922B7',
+  DARK_LINK_TAG: '#5C5C5C',
+  LIGHT_LINK_TAG: '#C2C2C2',
 };
 
 const NetworkGraph = (props: Props) => {
@@ -55,7 +63,10 @@ const NetworkGraph = (props: Props) => {
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
 
   const [hideOrphanNodes, setHideOrphanNodes] = useState(false);
-  const [disableNodeColors, setDisableNodeColors] = useState(false);
+  const [hideTagNodes, setHideTagNodes] = useState(false);
+  const [hideAutoLinks, setHideAutoLinks] = useState(false);
+  const [highlightAutoLinks, setHighlightAutoLinks] = useState(false);
+  const [enableColorfilters, setEnableColorfilters] = useState(false);
   const [dynamicNodeSize, setDynamicNodeSize] = useState(true);
 
   const [svg, setSvg] = useState<any>();
@@ -102,7 +113,6 @@ const NetworkGraph = (props: Props) => {
   };
 
   useEffect(() => {
-    console.log("---", props.data);
     const dataCopy = cloneDeep(props.data);
     const _data: any = {};
     const validNoteRefList: string[] = [];
@@ -152,16 +162,33 @@ const NetworkGraph = (props: Props) => {
       );
     }
 
+    if (hideTagNodes) {
+      _data.nodes = _data.nodes.filter(
+        (item: any) => item.group !== 'tag')
+
+      _data.links = _data.links.filter(
+        (item: any) => item.type !== 'tag'
+      )
+    }
+
+    if (hideAutoLinks) {
+      _data.links = _data.links.filter(
+        (item: any) => item.type !== 'auto-link'
+      )
+    }
+
+    console.log(_data);
+
     setData(_data);
     setReferences(_references);
-  }, [props.data, state.nodeSize, hideOrphanNodes]);
+  }, [props.data, state.nodeSize, hideOrphanNodes, hideTagNodes, hideAutoLinks, highlightAutoLinks]);
 
   useEffect(() => {
     simulateNetwork();
   }, [
     profile,
     data,
-    disableNodeColors,
+    enableColorfilters,
     dynamicNodeSize,
     props.offsetX,
     props.offsetY,
@@ -317,14 +344,18 @@ const NetworkGraph = (props: Props) => {
     const svgEl: any = d3.select(svgRef.current);
     svgEl.selectAll('*').remove(); // Clear svg content before adding new elementsvar g = svg.append("g")
     const g = svgEl.append('g').attr('class', 'everything');
+    const linkColorRange: any[] = [];
+    linkColorRange.push(profile.theme === 'basicui-dark' ? THEME.DARK_LINK_TAG : THEME.LIGHT_LINK_TAG);
+    if (highlightAutoLinks) {
+      linkColorRange.push(profile.theme === 'basicui-dark' ? THEME.DARK_LINK_AUTO_LINK_COLOR : THEME.LIGHT_LINK_AUTO_LINK_COLOR);
+    } else {
+      linkColorRange.push(profile.theme === 'basicui-dark' ? THEME.DARK_LINK_AUTO_LINK : THEME.LIGHT_LINK_AUTO_LINK);
+    }
+    linkColorRange.push(profile.theme === 'basicui-dark' ? THEME.DARK_LINK : THEME.LIGHT_LINK);
     const linkColor = d3
       .scaleOrdinal()
-      .domain(['', 'ai', 'link'])
-      .range([
-        profile.theme === 'basicui-dark' ? THEME.DARK_TEXT : THEME.LIGHT_TEXT,
-        '#A500B1',
-        '#DD3D1C',
-      ]);
+      .domain(['', 'auto-link', 'link'])
+      .range(linkColorRange);
     const r = 20;
     const _nodes = data?.nodes;
     const _links = data?.links;
@@ -390,7 +421,7 @@ const NetworkGraph = (props: Props) => {
         .data(_links)
         .join('line')
         .attr('stroke', function (d: any) {
-          return linkColor(d.group);
+          return linkColor(d.type);
         })
         .attr('stroke-width', state.linkThickness);
       // .attr('marker-end', 'url(#end)');
@@ -407,7 +438,7 @@ const NetworkGraph = (props: Props) => {
               ? THEME.DARK_BG
               : THEME.LIGHT_BG;
           }
-          if (d.color && !disableNodeColors) {
+          if (d.color && enableColorfilters) {
             return d.color;
           }
           return profile.theme === 'basicui-dark'
@@ -561,10 +592,16 @@ const NetworkGraph = (props: Props) => {
             <div className="network-graph-controls__content__related-group">
               <Checkbox defaultChecked={hideOrphanNodes} label='Hide orphan nodes'
                 onInput={(event: any) => setHideOrphanNodes(event.currentTarget.checked)} />
+              <Checkbox defaultChecked={hideTagNodes} label='Hide tags'
+                onInput={(event: any) => setHideTagNodes(event.currentTarget.checked)} />
+              <Checkbox defaultChecked={hideAutoLinks} label='Hide auto generated links'
+                onInput={(event: any) => setHideAutoLinks(event.currentTarget.checked)} />
+              {!hideAutoLinks && <Checkbox defaultChecked={highlightAutoLinks} label='Highlight auto generated links'
+                onInput={(event: any) => setHighlightAutoLinks(event.currentTarget.checked)} />}
               <Checkbox defaultChecked={dynamicNodeSize} label='Dynamic node size'
                 onInput={(event: any) => setDynamicNodeSize(event.currentTarget.checked)} />
-              <Checkbox defaultChecked={disableNodeColors} label='Disable node colors'
-                onInput={(event: any) => setDisableNodeColors(event.currentTarget.checked)} />
+              <Checkbox defaultChecked={enableColorfilters} label='Enable color filters'
+                onInput={(event: any) => setEnableColorfilters(event.currentTarget.checked)} />
               <Checkbox defaultChecked={showAdvancedSettings} label='Advanced settings'
                 onInput={(event: any) => setShowAdvancedSettings(event.currentTarget.checked)} />
               {props.children && <>{props.children}</>}

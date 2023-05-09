@@ -14,6 +14,9 @@ import { fetchAndSetMetadataValueItems } from '../../store/actions/MetadataValue
 import { fetchAndSetNotelinkItems } from '../../store/actions/NotelinkActions';
 import { fetchAndSetNotelinkAutoItems } from '../../store/actions/NotelinkAutoActions';
 import { fetchAndSetColorfilterItems } from '../../store/actions/ColorfilterActions';
+import { axiosInstance, httpPost } from '../Lib/RestTemplate';
+import { getSessionValue, setSessionValue } from '../../utils/SessionUtils';
+import { addAuth } from '../../store/actions/AuthActions';
 
 const Init = () => {
   const authorization = useSelector((state: any) => state.authorization);
@@ -121,54 +124,55 @@ const Init = () => {
   const initializeHttpInterceptor = () => {
     console.log('HTTP Interceptor initialization');
     // TODO
-    // axiosInstance.defaults.headers.authorization = authorization.access_token;
-    // axiosInstance.interceptors.response.use(
-    //   (response) => {
-    //     return response;
-    //   },
-    //   (error) => {
-    //     if (error.response.status !== 401) {
-    //       return new Promise((resolve, reject) => {
-    //         reject(error);
-    //       });
-    //     }
-    //     httpPost(
-    //       '/auth/token',
-    //       {
-    //         refresh_token: authorization.refresh_token,
-    //         grant_type: 'refresh_token',
-    //         realm: realm || 100,
-    //       },
-    //       null
-    //     )
-    //       .then((response) => {
-    //         if (response.status === 200) {
-    //           axiosInstance.defaults.headers.authorization =
-    //             response.data.access_token;
-    //           setSessionValue(
-    //             `neuralweb-access_token`,
-    //             response.data.access_token
-    //           );
-    //           dispatch(
-    //             addAuth({
-    //               ...authorization,
-    //               access_token: response.data.access_token,
-    //             })
-    //           );
-    //           if (!error.config._retry) {
-    //             error.config._retry = true;
-    //             error.config.headers.authorization = response.data.access_token;
-    //             return axiosInstance(error.config);
-    //           }
-    //         } else {
-    //           console.log('********redirect to login');
-    //         }
-    //       })
-    //       .catch((error) => {
-    //         Promise.reject(error);
-    //       });
-    //   }
-    // );
+    axiosInstance.defaults.headers.authorization = authorization.access_token;
+    axiosInstance.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        if (error.response.status !== 401) {
+          return new Promise((resolve, reject) => {
+            reject(error);
+          });
+        }
+        console.log(authorization, getSessionValue(`neuralweb-refresh_token`))
+        httpPost(
+          '/auth/token',
+          {
+            refreshToken: authorization.refresh_token,
+            grant_type: 'refresh_token',
+            realm: space || 100,
+          },
+          null
+        )
+          .then((response) => {
+            if (response.status === 200) {
+              axiosInstance.defaults.headers.authorization =
+                response.data.access_token;
+              setSessionValue(
+                `neuralweb-access_token`,
+                response.data.access_token
+              );
+              dispatch(
+                addAuth({
+                  ...authorization,
+                  access_token: response.data.access_token,
+                })
+              );
+              if (!error.config._retry) {
+                error.config._retry = true;
+                error.config.headers.authorization = response.data.access_token;
+                return axiosInstance(error.config);
+              }
+            } else {
+              console.log('********redirect to login');
+            }
+          })
+          .catch((error) => {
+            Promise.reject(error);
+          });
+      }
+    );
   };
 
   return (

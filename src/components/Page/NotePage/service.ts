@@ -36,3 +36,24 @@ export const getNoteByReference = (
       return Promise.resolve({});
     });
 };
+
+
+export const generateReport = (
+  space: string,
+  reference: string,
+  authorization: any
+) => {
+  return httpGet(`/report/${space}/${reference}/test`, {
+    headers: {
+      Authorization: authorization.access_token,
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return Promise.resolve(response.data);
+      }
+    })
+    .catch((error) => {
+      return Promise.resolve({});
+    });
+};

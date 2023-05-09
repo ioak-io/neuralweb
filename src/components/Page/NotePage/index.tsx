@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import './style.scss';
 import Topbar from '../../../components/Topbar';
 import NoteModel from '../../../model/NoteModel';
-import { getNoteByReference, saveNote } from './service';
+import { generateReport, getNoteByReference, saveNote } from './service';
 import GraphView from '../../../components/GraphView';
 import { useParams } from 'react-router-dom';
 import MainSection from '../../../components/MainSection';
 import ContentSection from '../../../components/Note/ContentSection';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleNodes, faFile, faFileAlt, faHome, faLink } from '@fortawesome/free-solid-svg-icons';
+import { faCircleNodes, faDownload, faFile, faFileAlt, faHome, faLink } from '@fortawesome/free-solid-svg-icons';
 import { replaceNotelinkAutoItems } from '../../../store/actions/NotelinkAutoActions';
 import { updateNoteItem } from '../../../store/actions/NoteActions';
 import { isEmptyOrSpaces } from '../../../components/Utils';
@@ -46,13 +46,21 @@ const NotePage = (props: Props) => {
   //   });
   // };
 
-  const handleSave = (_note: NoteModel) => {
-    saveNote(props.space, _note, authorization).then((response: any) => {
-      if (response && params.id === response.reference) {
-        setNote(response);
-      }
-    });
-  };
+  const onGenerateReport = () => {
+    generateReport(props.space, params.id || '', authorization).then((response => {
+      let elm = document.createElement('a');  // CREATE A LINK ELEMENT IN DOM
+        elm.href = URL.createObjectURL(new Blob([response], {type: "application/zip"}));  // SET LINK ELEMENTS CONTENTS
+        elm.setAttribute('download', "filename.zip"); // SET ELEMENT CREATED 'ATTRIBUTE' TO DOWNLOAD, FILENAME PARAM AUTOMATICALLY
+        elm.click()     
+      // const element = document.createElement("a");
+      //   element.setAttribute("href", window.URL.createObjectURL(response));
+      //   element.setAttribute("download", "report.zip");
+      //   element.style.display = "none";
+      //   document.body.appendChild(element);
+      //   element.click();
+      //   document.body.removeChild(element);
+    }))
+  }
 
   // useEffect(() => {
   //   console.log(state.content);
@@ -75,6 +83,13 @@ const NotePage = (props: Props) => {
       <div className='note-page page-animate'>
         <Topbar title="Note" space={props.space}>
           <div className="topbar-actions">
+            <button
+              className={`button ${view === 'home' ? 'active' : ''}`}
+              onClick={onGenerateReport}
+            >
+              <FontAwesomeIcon icon={faDownload} />
+              <span className="menu-highlight-line" />
+            </button>
             <button
               className={`button ${view === 'home' ? 'active' : ''}`}
               onClick={() => setView('home')}
