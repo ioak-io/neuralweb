@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { getSessionValue, removeSessionValue, setSessionValue } from '../../utils/SessionUtils';
-import { currentRealmEventSubject } from '../../events/CurrentRealmEvent';
 import { sendMessage } from '../../events/MessageService';
 import { addAuth } from '../../store/actions/AuthActions';
 import { httpGet, httpPost } from '../Lib/RestTemplate';
@@ -34,6 +33,7 @@ const ProtectedRouteApp = (props: Props) => {
     };
 
     const applyMidleware = (middlewareName: string) => {
+        console.log(process.env.REACT_APP_ONEAUTH_APPSPACE_ID, "---", appRealm)
         sendMessage('spaceChange', true, '');
         // sendMessage('realmChange', true, '');
         switch (middlewareName) {
@@ -65,6 +65,10 @@ const ProtectedRouteApp = (props: Props) => {
                 params.space &&
                 !authorization.space.includes(parseInt(params.space, 10))
             ) {
+                console.log(
+                    '**redirect to unauthorized page',
+                    params.space
+                );
                 redirectToUnauthorized();
             }
             return true;
@@ -73,15 +77,16 @@ const ProtectedRouteApp = (props: Props) => {
         const refreshToken = getSessionValue(`neuralweb-refresh_token`);
         if (accessToken && refreshToken) {
             httpPost(
-                `/user/${appRealm}/authorize_user`,
-                { accessToken, refreshToken },
-                null
+                `/${appRealm}/user/auth/token`,
+                { grant_type: 'refresh_token', refresh_token: refreshToken },
+                null,
+                process.env.REACT_APP_ONEAUTH_API_URL
             )
-                .then((response) => {
+                .then((response: any) => {
                     if (response.status === 200) {
                         let newAccessToken = accessToken;
-                        if (response.data.accessToken) {
-                            newAccessToken = response.data.accessToken;
+                        if (response.access_token) {
+                            newAccessToken = response.access_token;
                             setSessionValue(`neuralweb-access_token`, newAccessToken);
                         }
                         dispatch(
@@ -89,6 +94,7 @@ const ProtectedRouteApp = (props: Props) => {
                                 isAuth: true,
                                 ...response.data.claims,
                                 access_token: newAccessToken,
+                                refresh_token: refreshToken,
                                 space: response.data.space,
                             })
                         );
@@ -97,21 +103,7 @@ const ProtectedRouteApp = (props: Props) => {
                 .catch((error: any) => {
                     removeSessionValue(`neuralweb-access_token`);
                     removeSessionValue(`neuralweb-refresh_token`);
-                    if (redirect && error.response.status === 404) {
-                        sendMessage('notification', true, {
-                            type: 'failure',
-                            message: 'Invalid session token',
-                            duration: 3000,
-                        });
-                        redirectToLogin(appRealm);
-                    } else if (redirect && error.response.status === 401) {
-                        sendMessage('notification', true, {
-                            type: 'failure',
-                            message: 'Session expired',
-                            duration: 3000,
-                        });
-                        redirectToLogin(appRealm);
-                    }
+                    redirectToLogin(appRealm);
                 });
         } else if (redirect) {
             redirectToLogin(appRealm);
@@ -126,8 +118,8 @@ const ProtectedRouteApp = (props: Props) => {
     };
 
     const redirectToLogin = (space: string) => {
-        window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/realm/${appRealm}/login/${process.env.REACT_APP_ONEAUTH_APP_ID}`;
-        // navigate(`/${space}/login/home`);
+        // window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/realm/${appRealm}/login/${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+        navigate(`/login`);
     };
 
     const redirectToUnauthorized = () => {

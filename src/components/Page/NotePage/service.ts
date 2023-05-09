@@ -43,7 +43,7 @@ export const generateReport = (
   reference: string,
   authorization: any
 ) => {
-  return httpGet(`/report/${space}/${reference}/test`, {
+  return httpGet(`/report/${space}/${reference}`, {
     headers: {
       Authorization: authorization.access_token,
     },

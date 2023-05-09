@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { saveAs } from 'file-saver';
 import './style.scss';
 import NoteModel from '../../../model/NoteModel';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -23,6 +24,8 @@ import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { deleteNoteItems } from '../../../store/actions/NoteActions';
 import { deleteNotelinkItemsByNoteRef } from '../../../store/actions/NotelinkActions';
 import { deleteNotelinkAutoItemsByNoteRef } from '../../../store/actions/NotelinkAutoActions';
+import { generateReport } from '../../../components/Page/NotePage/service';
+import { formatDate } from '../../../components/Lib/DateUtils';
 
 interface Props {
   note: NoteModel;
@@ -146,12 +149,22 @@ const ContentSection = (props: Props) => {
     })
   }
 
+  const onPrint = () => {
+    generateReport(props.space, props.note.reference, authorization).then((response => {
+      var blob = new Blob([response], { type: "application/zip" });
+      saveAs(`data:application/zip;base64,${response}`, `report_${formatDate(
+        new Date(),
+        'YYYYMMDD_HHmmss'
+      )}.zip`);
+    }))
+  }
+
   return (
     <>
       <div className='note-content-section'>
         <SectionContainer>
           {isEditHead && <EditControls onCancel={onCancelHead} onSave={onSave} saving={saving} />}
-          {!isEditHead && <ViewControls onEdit={onEditHead} onRemove={onDelete} disable={isEdit} />}
+          {!isEditHead && <ViewControls onEdit={onEditHead} onRemove={onDelete} disable={isEdit} onPrint={onPrint} />}
           {isEditHead && <HeadEditor note={state} onChange={handleEditStateChange} />}
           {!isEditHead && <HeadViewer note={props.note} />}
         </SectionContainer>

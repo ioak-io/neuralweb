@@ -13,6 +13,7 @@ import { faCircleNodes, faDownload, faFile, faFileAlt, faHome, faLink } from '@f
 import { replaceNotelinkAutoItems } from '../../../store/actions/NotelinkAutoActions';
 import { updateNoteItem } from '../../../store/actions/NoteActions';
 import { isEmptyOrSpaces } from '../../../components/Utils';
+import { formatDate, formatDateText } from '../../../components/Lib/DateUtils';
 
 interface Props {
   location: any;
@@ -46,26 +47,6 @@ const NotePage = (props: Props) => {
   //   });
   // };
 
-  const onGenerateReport = () => {
-    generateReport(props.space, params.id || '', authorization).then((response => {
-      let elm = document.createElement('a');  // CREATE A LINK ELEMENT IN DOM
-        elm.href = URL.createObjectURL(new Blob([response], {type: "application/zip"}));  // SET LINK ELEMENTS CONTENTS
-        elm.setAttribute('download', "filename.zip"); // SET ELEMENT CREATED 'ATTRIBUTE' TO DOWNLOAD, FILENAME PARAM AUTOMATICALLY
-        elm.click()     
-      // const element = document.createElement("a");
-      //   element.setAttribute("href", window.URL.createObjectURL(response));
-      //   element.setAttribute("download", "report.zip");
-      //   element.style.display = "none";
-      //   document.body.appendChild(element);
-      //   element.click();
-      //   document.body.removeChild(element);
-    }))
-  }
-
-  // useEffect(() => {
-  //   console.log(state.content);
-  // }, [state.content]);
-
   const onPostNoteSave = (data: any) => {
     setNote(data.note);
     dispatch(updateNoteItem({
@@ -83,13 +64,6 @@ const NotePage = (props: Props) => {
       <div className='note-page page-animate'>
         <Topbar title="Note" space={props.space}>
           <div className="topbar-actions">
-            <button
-              className={`button ${view === 'home' ? 'active' : ''}`}
-              onClick={onGenerateReport}
-            >
-              <FontAwesomeIcon icon={faDownload} />
-              <span className="menu-highlight-line" />
-            </button>
             <button
               className={`button ${view === 'home' ? 'active' : ''}`}
               onClick={() => setView('home')}

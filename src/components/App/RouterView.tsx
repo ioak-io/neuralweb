@@ -21,6 +21,7 @@ import NewNotePage from '../Page/NewNotePage';
 import ColorfilterPage from '../Page/ColorfilterPage';
 import EditColorFilterPage from '../Page/EditColorfilterPage';
 import StopwordsPage from '../Page/StopwordsPage';
+import LoginPage from '../Page/LoginPage';
 
 interface Props {
 }
@@ -36,7 +37,7 @@ const RouterView = (props: Props) => {
 
   return (
     <div
-      className={`router-view ${loginPage ? 'login-page' : 'not-login-page'}`}
+      className={`router-view ${loginPage ? 'on-login-page' : 'not-on-login-page'}`}
     >
       <Routes>
         <Route
@@ -57,7 +58,7 @@ const RouterView = (props: Props) => {
           path="/login"
           element={
             <ProtectedRouteApp
-              middleware={[]} component={OaLogin} />}
+              middleware={[]} component={LoginPage} />}
         />
         <Route
           path="/company/edit"
