@@ -16,7 +16,7 @@ const MetadataViewer = (props: Props) => {
     <h5>{props.group}</h5>
     <div className='metadata-viewer__main'>
       {props.metadataDefinitionList.map(item =>
-        <LineItem note={props.note} metadataDefinition={item} />
+        <LineItem note={props.note} metadataDefinition={item} key={item._id} />
       )}
     </div>
     </div>

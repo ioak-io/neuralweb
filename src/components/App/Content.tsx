@@ -90,7 +90,7 @@ const Content = (props: Props) => {
       }
     });
 
-    dispatch(fetchAllSpaces());
+    // dispatch(fetchAllSpaces());
   }, []);
 
   // useEffect(() => {

@@ -175,7 +175,7 @@ const ContentSection = (props: Props) => {
           {!isEditContent && <ContentViewer note={props.note} />}
         </SectionContainer>
         {Object.keys(metadataDefinitionMap).map(group =>
-          <SectionContainer>
+          <SectionContainer key={group}>
             {isEditMetadata[group] && <EditControls onCancel={() => onCancelMetadata(group)} onSave={onSave} saving={saving} />}
             {!isEditMetadata[group] && <ViewControls onEdit={() => onEditMetadata(group)} disable={isEdit} />}
             {isEditMetadata[group] && <MetadataEditor onChange={handleEditStateChange} note={state} group={group} metadataDefinitionList={metadataDefinitionMap[group]} />}

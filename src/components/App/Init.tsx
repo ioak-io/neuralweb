@@ -15,10 +15,12 @@ import { fetchAndSetNotelinkItems } from '../../store/actions/NotelinkActions';
 import { fetchAndSetNotelinkAutoItems } from '../../store/actions/NotelinkAutoActions';
 import { fetchAndSetColorfilterItems } from '../../store/actions/ColorfilterActions';
 import { axiosInstance, httpPost } from '../Lib/RestTemplate';
-import { getSessionValue, setSessionValue } from '../../utils/SessionUtils';
-import { addAuth } from '../../store/actions/AuthActions';
+import { getSessionValue, removeSessionValue, setSessionValue } from '../../utils/SessionUtils';
+import { addAuth, removeAuth } from '../../store/actions/AuthActions';
+import { useNavigate } from 'react-router-dom';
 
 const Init = () => {
+  const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
   const profile = useSelector((state: any) => state.profile);
   const [previousAuthorizationState, setPreviousAuthorizationState] =
@@ -121,6 +123,8 @@ const Init = () => {
     }
   };
 
+
+
   const initializeHttpInterceptor = () => {
     console.log('HTTP Interceptor initialization');
     // TODO
@@ -135,15 +139,11 @@ const Init = () => {
             reject(error);
           });
         }
-        console.log(authorization, getSessionValue(`neuralweb-refresh_token`))
         httpPost(
-          '/auth/token',
-          {
-            refreshToken: authorization.refresh_token,
-            grant_type: 'refresh_token',
-            realm: space || 100,
-          },
-          null
+          `/${space}/user/auth/token`,
+          { grant_type: 'refresh_token', refresh_token: authorization.refresh_token },
+          null,
+          process.env.REACT_APP_ONEAUTH_API_URL
         )
           .then((response) => {
             if (response.status === 200) {
@@ -166,9 +166,26 @@ const Init = () => {
               }
             } else {
               console.log('********redirect to login');
+              dispatch(removeAuth());
+              removeSessionValue(
+                `neuralweb-access_token`
+              );
+              removeSessionValue(
+                `neuralweb-refresh_token`
+              );
+              navigate('/login');
             }
           })
           .catch((error) => {
+            console.log('********redirect to login error');
+            dispatch(removeAuth());
+            removeSessionValue(
+              `neuralweb-access_token`
+            );
+            removeSessionValue(
+              `neuralweb-refresh_token`
+            );
+            navigate('/login');
             Promise.reject(error);
           });
       }

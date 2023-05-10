@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleNodes, faDownload, faFile, faFileAlt, faHome, faLink } from '@fortawesome/free-solid-svg-icons';
 import { replaceNotelinkAutoItems } from '../../../store/actions/NotelinkAutoActions';
 import { updateNoteItem } from '../../../store/actions/NoteActions';
-import { isEmptyOrSpaces } from '../../../components/Utils';
+import { isEmptyAttributes, isEmptyOrSpaces } from '../../../components/Utils';
 import { formatDate, formatDateText } from '../../../components/Lib/DateUtils';
 
 interface Props {
@@ -31,7 +31,9 @@ const NotePage = (props: Props) => {
     if (params.id && authorization.isAuth) {
       getNoteByReference(props.space, params.id, authorization).then(
         (response: any) => {
-          setNote(response);
+          if (!isEmptyAttributes(response)) {
+            setNote(response);
+          }
         }
       );
     }

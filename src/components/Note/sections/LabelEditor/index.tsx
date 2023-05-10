@@ -81,7 +81,7 @@ const LabelEditor = (props: Props) => {
       </Label>
       <div className='note-label-list label-editor__view'>
         {props.note.labels?.map((label) =>
-          <div className='note-label'>
+          <div className='note-label' key={label}>
             <div>
               {label}
             </div>

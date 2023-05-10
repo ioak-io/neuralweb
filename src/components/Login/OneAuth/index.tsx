@@ -28,13 +28,13 @@ const OneAuth = (props: Props) => {
     setQueryParam(queryParam);
   }, []);
 
-  useEffect(() => {
-    setLoading(true);
-    fetchSpace().then((response) => {
-      setView(search(response, searchCriteria.text));
-      setLoading(false);
-    });
-  }, [searchCriteria]);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   fetchSpace().then((response) => {
+  //     setView(search(response, searchCriteria.text));
+  //     setLoading(false);
+  //   });
+  // }, [searchCriteria]);
 
   const search = (existingSpace: any, criteria: string) => {
     if (isEmptyOrSpaces(criteria)) {

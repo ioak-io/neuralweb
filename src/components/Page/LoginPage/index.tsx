@@ -43,7 +43,7 @@ const LoginPage = (props: Props) => {
         <div className="login-page__right__overlay__content">
           <Logo variant='short' />
           <form onSubmit={onSignin} className="login-page__right__overlay__content__form">
-            <Input name="email" value={state.email} onInput={onInput} label='Username or Email Address' />
+            <Input autoFocus name="email" value={state.email} onInput={onInput} label='Username or Email Address' />
             <Input name="password" value={state.password} onInput={onInput} type="password" label='Password' />
             <Button type="submit" theme={ThemeType.primary}>Sign in</Button>
           </form>
