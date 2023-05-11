@@ -18,6 +18,7 @@ import { axiosInstance, httpPost } from '../Lib/RestTemplate';
 import { getSessionValue, removeSessionValue, setSessionValue } from '../../utils/SessionUtils';
 import { addAuth, removeAuth } from '../../store/actions/AuthActions';
 import { useNavigate } from 'react-router-dom';
+import { rotateToken } from './service';
 
 const Init = () => {
   const navigate = useNavigate();
@@ -33,7 +34,8 @@ const Init = () => {
     if (authorization?.isAuth && space) {
       //  && !previousAuthorizationState?.isAuth) {
       initialize();
-      initializeHttpInterceptor();
+      initializeHttpRequestInterceptor();
+      initializeHttpResponseInterceptor();
       dispatch(fetchAndSetUserItems(space, authorization));
       dispatch(fetchAndSetNoteItems(space, authorization));
       dispatch(fetchAndSetNotelinkItems(space, authorization));
@@ -68,7 +70,8 @@ const Init = () => {
       if (event.name === 'spaceChange' && authorization.isAuth) {
         setSpace(event.data);
         initialize();
-        initializeHttpInterceptor();
+        initializeHttpRequestInterceptor();
+        initializeHttpResponseInterceptor();
       }
     });
   }, []);
@@ -125,72 +128,58 @@ const Init = () => {
 
 
 
-  const initializeHttpInterceptor = () => {
-    console.log('HTTP Interceptor initialization');
-    // TODO
-    axiosInstance.defaults.headers.authorization = authorization.access_token;
-    axiosInstance.interceptors.response.use(
-      (response) => {
-        return response;
+  const initializeHttpRequestInterceptor = () => {
+    axiosInstance.interceptors.request.use(
+      config => {
+        // (config.headers as RawAxiosRequestHeaders)['Authorization'] = authorization.access_token;
+        return config;
       },
-      (error) => {
-        if (error.response.status !== 401) {
-          return new Promise((resolve, reject) => {
-            reject(error);
-          });
-        }
-        httpPost(
-          `/${space}/user/auth/token`,
-          { grant_type: 'refresh_token', refresh_token: authorization.refresh_token },
-          null,
-          process.env.REACT_APP_ONEAUTH_API_URL
-        )
-          .then((response) => {
-            if (response.status === 200) {
-              axiosInstance.defaults.headers.authorization =
-                response.data.access_token;
-              setSessionValue(
-                `neuralweb-access_token`,
-                response.data.access_token
-              );
-              dispatch(
-                addAuth({
-                  ...authorization,
-                  access_token: response.data.access_token,
-                })
-              );
-              if (!error.config._retry) {
-                error.config._retry = true;
-                error.config.headers.authorization = response.data.access_token;
-                return axiosInstance(error.config);
-              }
-            } else {
-              console.log('********redirect to login');
-              dispatch(removeAuth());
-              removeSessionValue(
-                `neuralweb-access_token`
-              );
-              removeSessionValue(
-                `neuralweb-refresh_token`
-              );
-              navigate('/login');
-            }
-          })
-          .catch((error) => {
-            console.log('********redirect to login error');
-            dispatch(removeAuth());
-            removeSessionValue(
-              `neuralweb-access_token`
-            );
-            removeSessionValue(
-              `neuralweb-refresh_token`
-            );
-            navigate('/login');
-            Promise.reject(error);
-          });
+      error => {
+        return Promise.reject(error);
       }
     );
-  };
+  }
+
+  const initializeHttpResponseInterceptor = () => {
+    axiosInstance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        const config = error?.config;
+        if (error?.response?.status === 401 && !config?._retry) {
+          config._retry = true;
+          return rotateToken(space || '', authorization)
+            .then((response: any) => {
+              if (response) {
+                config.headers = {
+                  ...config.headers,
+                  authorization: response?.access_token,
+                };
+                dispatch(
+                  addAuth({
+                    ...authorization,
+                    access_token: response?.access_token,
+                  })
+                );
+                return axiosInstance(error.config);
+              }
+              else {
+                console.log('********redirect to login');
+                dispatch(removeAuth());
+                removeSessionValue(
+                  `neuralweb-access_token`
+                );
+                removeSessionValue(
+                  `neuralweb-refresh_token`
+                );
+                navigate('/login');
+                Promise.reject(error);
+              }
+            })
+        }
+        Promise.reject(error);
+      }
+    )
+  }
 
   return (
     <>
