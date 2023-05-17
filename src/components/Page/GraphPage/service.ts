@@ -1,5 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-import * as d3 from 'd3';
 import { httpGet } from '../../../components/Lib/RestTemplate';
 
 export const getNotelinks = (space: string, authorization: any) => {
@@ -18,8 +17,8 @@ export const getNotelinks = (space: string, authorization: any) => {
     });
 };
 
-export const getNotetags = (space: string, authorization: any) => {
-  return httpGet(`/note/tag/${space}`, {
+export const getNotelinksAuto = (space: string, authorization: any) => {
+  return httpGet(`/notelink-auto/${space}`, {
     headers: {
       Authorization: authorization.access_token,
     },

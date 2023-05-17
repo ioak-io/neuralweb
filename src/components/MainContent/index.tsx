@@ -7,12 +7,9 @@ import Notification from '../Notification';
 import NavigationContainer from '../App/NavigationContainer';
 import BodyContainer from '../App/BodyContainer';
 import SideContent from './SideContent';
-import FileExplorer from '../FileExplorer';
-import SideContentMini from './SideContentMini';
-import DisableContextBarCommand from '../../events/DisableContextBarCommand';
+import { useLocation } from 'react-router-dom';
 
 interface Props {
-  cookies: any;
   space: string;
 }
 
@@ -20,31 +17,27 @@ const MainContent = (props: Props) => {
   const profile = useSelector((state: any) => state.profile);
   const authorization = useSelector((state: any) => state.authorization);
   const dispatch = useDispatch();
-
-  const [disableContextBar, setDisableContextBar] = useState(false);
-
-  useEffect(() => {
-    DisableContextBarCommand.asObservable().subscribe((message) => {
-      setDisableContextBar(message);
-    });
-  }, []);
+  const location = useLocation();
 
   return (
     <>
-      <SideContentMini cookies={props.cookies} space={props.space} />
-      <SideContent cookies={props.cookies} space={props.space} />
-      {/* <FileExplorer space={props.space} /> */}
+    {location.pathname !== '/login' && <div className="desktop-only">
+      <SideContent space={props.space} />
+    </div>}
       {/* <NavigationContainer
         cookies={props.cookies}
         space={props.space}
         transparent={false}
       /> */}
       <div
-        className={`main-content ${
-          profile.sidebar
-            ? 'main-content__sidebar-active'
-            : 'main-content__sidebar-inactive'
-        }`}
+        className={`main-content ${profile.sidebar
+          ? 'main-content__sidebar-active'
+          : 'main-content__sidebar-inactive'
+          }
+          ${location.pathname === '/login'
+            ? 'main-content--login-page'
+            : ''
+          }`}
       >
         <BodyContainer {...props} />
       </div>

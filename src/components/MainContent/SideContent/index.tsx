@@ -3,7 +3,9 @@ import {
   faCalendarAlt,
   faChartArea,
   faChartBar,
-  faCircleDot,
+  faChevronLeft,
+  faChevronRight,
+  faCircleNodes,
   faClone,
   faCog,
   faCogs,
@@ -14,21 +16,23 @@ import {
   faFileImport,
   faFingerprint,
   faFolderOpen,
-  faFolderPlus,
   faHome,
+  faListUl,
   faMagnifyingGlass,
   faMoneyBillWave,
   faMoneyBillWaveAlt,
+  faPalette,
+  faPlus,
   faReceipt,
   faShoppingBag,
   faShoppingCart,
   faSignOutAlt,
+  faStrikethrough,
   faTable,
   faTag,
   faTags,
   faTh,
   faThLarge,
-  faThumbTack,
   faUniversity,
   faUserShield,
   faWallet,
@@ -36,65 +40,28 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useLocation } from 'react-router';
-import { Subject } from 'rxjs';
 import DarkModeIcon from '../../../components/Navigation/DarkModeIcon';
 import NavAccountIcon from '../../../components/Navigation/NavAccountIcon';
 import Logo from '../../../components/Logo';
 import SideNavLink from '../SideNavLink';
 
 import './style.scss';
-import { removeAuth } from '../../../actions/AuthActions';
+import { removeAuth } from '../../../store/actions/AuthActions';
 import { sendMessage } from '../../../events/MessageService';
 import SideNavSubHeading from '../SideNavSubHeading';
-import FileExplorer from '../../../components/FileExplorer';
-import FilterExplorer from '../../../components/FilterExplorer';
-import { filterNote } from '../../../components/FilterExplorer/service';
-
-const queryString = require('query-string');
+import { removeSessionValue } from '../../../utils/SessionUtils';
+import { useNavigate } from 'react-router-dom';
+import { setProfile } from '../../../store/actions/ProfileActions';
 
 interface Props {
-  cookies: any;
   space: string;
 }
 
 const SideContent = (props: Props) => {
-  const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const profile = useSelector((state: any) => state.profile);
   const authorization = useSelector((state: any) => state.authorization);
   const dispatch = useDispatch();
-  const [queryParam, setQueryParam] = useState({
-    id: '',
-  });
-  const [view, setView] = useState<'file' | 'search' | 'pin'>('file');
-  const [addFolderCommand, setAddFolderCommand] = useState(0);
-  const [locateFolderCommand, setLocateFolderCommand] = useState(0);
-
-  const [searchText, setSearchText] = useState<string>('');
-
-  const [searchResults, setSearchResults] = useState<any>({
-    results: [],
-    words: [
-      {
-        name: [],
-        path: [],
-        content: [],
-      },
-    ],
-  });
-
-  const handleSearch = (text: string) => {
-    setSearchText(text);
-    filterNote(props.space, text, authorization).then((response) => {
-      setSearchResults(response);
-    });
-  };
-
-  useEffect(() => {
-    const queryParam = queryString.parse(location.search);
-    setQueryParam(queryParam);
-  }, [location]);
 
   const logout = (
     event: any,
@@ -102,93 +69,138 @@ const SideContent = (props: Props) => {
     message = 'You have been logged out'
   ) => {
     dispatch(removeAuth());
-    props.cookies.remove(
-      `neuralweb_${process.env.REACT_APP_ONEAUTH_APPSPACE_ID}`
+    removeSessionValue(
+      `neuralweb-access_token`
     );
-    history.push(`/`);
-    sendMessage('notification', true, {
-      type,
-      message,
-      duration: 3000,
-    });
+    removeSessionValue(
+      `neuralweb-refresh_token`
+    );
+    navigate(`/`);
   };
 
   const login = (type: string) => {
-    window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/realm/${process.env.REACT_APP_ONEAUTH_APPSPACE_ID}/login/${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+    navigate('/login');
   };
 
-  const handleAddFolder = () => {
-    setAddFolderCommand(addFolderCommand + 1);
+  const chooseCompany = () => {
+    navigate('/home');
   };
 
-  const handleLocateFolder = () => {
-    setLocateFolderCommand(locateFolderCommand + 1);
-  };
+  const toggleSidebar = () => {
+    sessionStorage.setItem(
+      'neuralweb_pref_sidebar_status',
+      profile.sidebar ? 'collapsed' : 'expanded'
+    );
 
-  const changeToFileView = () => {
-    setAddFolderCommand(0);
-    setLocateFolderCommand(0);
-    setView('file');
+    dispatch(setProfile({ ...profile, sidebar: !profile.sidebar }));
   };
 
   return (
     <div
-      className={`side-content ${
-        profile.sidebar
+      className={`side-content ${profile.sidebar
           ? 'side-content__sidebar-active'
           : 'side-content__sidebar-inactive'
-      } bg-light-300 dark:bg-dark-400`}
+        } ${profile.theme === 'basicui-dark'
+          ? 'side-content__theme-dark'
+          : 'side-content__theme-light'
+        }`}
     >
       <div className="side-content__header">
-        <div className="side-content__header__left">
-          <button
-            className={`button ${view === 'file' ? 'active' : ''}`}
-            onClick={changeToFileView}
-          >
-            <FontAwesomeIcon icon={faFolderOpen} />
-          </button>
-          <button
-            className={`button ${view === 'search' ? 'active' : ''}`}
-            onClick={() => setView('search')}
-          >
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </button>
-          <button
-            className={`button ${view === 'pin' ? 'active' : ''}`}
-            onClick={() => setView('pin')}
-          >
-            <FontAwesomeIcon icon={faThumbTack} />
-          </button>
+        <div className="side-content__header__logo">
+          <Logo variant={profile.sidebar ? 'full' : 'short'} />
         </div>
-        {view === 'file' && (
-          <div className="side-content__header__right">
-            <button className="button" onClick={handleLocateFolder}>
-              <FontAwesomeIcon icon={faCircleDot} />
-            </button>
-            <button className="button" onClick={handleAddFolder}>
-              <FontAwesomeIcon icon={faFolderPlus} />
+        {profile.sidebar && (
+          <div className="side-content__header__button">
+            <button className="button" onClick={chooseCompany}>
+              <FontAwesomeIcon icon={faTh} />
             </button>
           </div>
         )}
       </div>
-      <div className="side-content__body">
-        {view === 'search' && (
-          <FilterExplorer
-            space={props.space}
-            selectedNoteId={queryParam?.id}
-            searchText={searchText}
-            results={searchResults}
-            handleSearch={handleSearch}
-          />
+      <div className="side-content__menu">
+        <button className='side-content__menu__toggle' onClick={toggleSidebar}>
+          {profile.sidebar && <FontAwesomeIcon icon={faChevronLeft} />}
+          {!profile.sidebar && <FontAwesomeIcon icon={faChevronRight} />}
+        </button>
+        {props.space && (
+          <>
+            <SideNavSubHeading short="Notes" long="Notes" />
+            <SideNavLink
+              link={`/${props.space}/new-note`}
+              icon={faPlus}
+              label="New note"
+            />
+            <SideNavLink
+              link={`/${props.space}/browse`}
+              icon={faFolderOpen}
+              label="Browse"
+            />
+            <SideNavLink
+              link={`/${props.space}/graph`}
+              icon={faCircleNodes}
+              label="Graph"
+            />
+            <SideNavSubHeading short="System" long="System" />
+            <SideNavLink
+              link={`/${props.space}/color-filter`}
+              icon={faPalette}
+              label="Color filter"
+            />
+            <SideNavLink
+              link={`/${props.space}/metadata-definition`}
+              icon={faListUl}
+              label="Metadata"
+            />
+            <SideNavLink
+              link={`/${props.space}/stopwords`}
+              icon={faStrikethrough}
+              label="Stopwords"
+            />
+            <SideNavLink
+              link={`/${props.space}/settings/company`}
+              icon={faCogs}
+              label="Company setting"
+            />
+            <SideNavLink
+              link={`/${props.space}/settings/user`}
+              icon={faUserShield}
+              label="User"
+            />
+            <SideNavLink
+              link={`/${props.space}/settings/backup`}
+              icon={faDatabase}
+              label="Backup and restore"
+            />
+            {/* <SideNavLink
+              link={`/${props.space}/settings?link=backup`}
+              icon={faFileImport}
+              label="Export and import"
+            /> */}
+          </>
         )}
-        {view === 'file' && (
-          <FileExplorer
-            space={props.space}
-            selectedNoteId={queryParam?.id}
-            addFolderCommand={addFolderCommand}
-            locateFolderCommand={locateFolderCommand}
-          />
+      </div>
+      <div className="side-content__footer">
+        <div className="side-content__footer__left">
+          {authorization.isAuth && (
+            <button className="button" onClick={logout}>
+              <FontAwesomeIcon icon={faSignOutAlt} />
+            </button>
+          )}
+          {!authorization.isAuth && (
+            <button className="button" onClick={() => login('signin')}>
+              <FontAwesomeIcon icon={faFingerprint} />
+            </button>
+          )}
+          {profile.sidebar && (
+            <div>{`${authorization.given_name} ${authorization.family_name}`}</div>
+          )}
+        </div>
+        {profile.sidebar && (
+          <div className="side-content__footer__right">
+            <DarkModeIcon />
+          </div>
         )}
+        {/* <NavAccountIcon logout={logout} login={login} /> */}
       </div>
     </div>
   );

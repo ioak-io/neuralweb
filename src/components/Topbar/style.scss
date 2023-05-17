@@ -1,32 +1,17 @@
 .topbar {
-  height: var(--oak-app-layout-topbar-height);
+  // background-color: var(--theme-white-50);
+  height: var(--app-layout-topbar-height);
   display: grid;
   grid-template-columns: 1fr auto;
   column-gap: 10px;
+  // align-content: center;
   align-items: center;
   padding: 0 20px;
-  transition: background-color 250ms ease-in-out, color 250ms ease-in-out,
-    left 250ms ease-in-out, right 250ms ease-in-out;
+  border-bottom: 1px solid var(--theme-white-600);
 }
-.topbar--not-fixed {
-}
-.topbar--fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-}
-.topbar--fixed.topbar--sidebar-active {
-  left: calc(
-    var(--oak-app-layout-sidebar-width-shrinked) +
-      var(--oak-app-layout-sidebar-width)
-  );
-}
-.topbar--fixed.topbar--sidebar-inactive {
-  left: var(--oak-app-layout-sidebar-width-shrinked);
-}
-.topbar--fixed.topbar--context-active {
-  right: var(--oak-app-layout-contextbar-width);
+
+.basicui-dark .topbar {
+  border-color: var(--theme-black-extended-800);
 }
 
 .topbar__left {
@@ -36,16 +21,35 @@
   justify-content: flex-start;
   column-gap: 20px;
   align-items: center;
-  font-size: 24px;
+  font-size: 16px;
   height: 100%;
 
   button {
-    font-size: 24px;
+    font-size: 20px;
   }
 }
+
 .topbar__right {
   display: grid;
   grid-auto-flow: column;
   column-gap: 20px;
+}
+
+.topbar__left button.topbar__left__nav {
+  font-size: 14px;
   height: 100%;
+  padding: 0 12px;
+}
+
+.topbar__left button.topbar__left__nav:hover,
+.topbar__left button.topbar__left__nav:focus,
+.topbar__left button.topbar__left__nav:active {
+  background-color: var(--theme-white-400);
+}
+.basicui-dark {
+.topbar__left button.topbar__left__nav:hover,
+.topbar__left button.topbar__left__nav:focus,
+.topbar__left button.topbar__left__nav:active {
+  background-color: var(--theme-black-50);
+}
 }

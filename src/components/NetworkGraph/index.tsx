@@ -1,7 +1,6 @@
 /* eslint-disable no-plusplus */
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
 import { usePopper } from 'react-popper';
 import { addDays, format } from 'date-fns';
 import {
@@ -9,6 +8,7 @@ import {
   faGear,
   faPlus,
   faTimes,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as d3 from 'd3';
@@ -22,8 +22,8 @@ import NodeModel from '../../model/NodeModel';
 import FilterGroup from './FilterGroup';
 import { getFilterGroup, updateFilterGroup } from './service';
 import BinaryChoiceInput from './BinaryChoiceInput';
-
-const queryString = require('query-string');
+import { useNavigate } from 'react-router-dom';
+import { AlignmentType, Button, Checkbox, Modal, ModalBody, ModalFooter, ModalHeader } from 'basicui';
 
 interface Props {
   offsetX?: number;
@@ -39,12 +39,20 @@ const THEME = {
   LIGHT_BG: '#fafafa',
   DARK_TEXT: '#fcfcfc',
   LIGHT_TEXT: '#0a0a0a',
+  DARK_LINK: '#FFFFFF',
+  LIGHT_LINK: '#141414',
+  DARK_LINK_AUTO_LINK: '#FFFFFF',
+  LIGHT_LINK_AUTO_LINK: '#141414',
+  DARK_LINK_AUTO_LINK_COLOR: '#FF91E4',
+  LIGHT_LINK_AUTO_LINK_COLOR: '#E922B7',
+  DARK_LINK_TAG: '#5C5C5C',
+  LIGHT_LINK_TAG: '#C2C2C2',
 };
 
 const NetworkGraph = (props: Props) => {
   const svgRef = React.useRef<any>(null);
   const divRef = React.useRef(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const authorization = useSelector((state: any) => state.authorization);
   const profile = useSelector((state: any) => state.profile);
@@ -52,14 +60,16 @@ const NetworkGraph = (props: Props) => {
   const [data, setData] = useState<any>();
   const [references, setReferences] = useState<any>({});
   const [filterGroup, setFilterGroup] = useState<any[]>([]);
+  const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
 
   const [hideOrphanNodes, setHideOrphanNodes] = useState(false);
-  const [disableNodeColors, setDisableNodeColors] = useState(false);
+  const [hideTagNodes, setHideTagNodes] = useState(false);
+  const [hideAutoLinks, setHideAutoLinks] = useState(false);
+  const [highlightAutoLinks, setHighlightAutoLinks] = useState(false);
+  const [enableColorfilters, setEnableColorfilters] = useState(false);
   const [dynamicNodeSize, setDynamicNodeSize] = useState(true);
 
   const [svg, setSvg] = useState<any>();
-  const referenceElement = useRef<any>(null);
-  const popperElement = useRef<any>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [state, setState] = useState({
     charge: -300,
@@ -97,45 +107,8 @@ const NetworkGraph = (props: Props) => {
     .domain(['note', 'tag'])
     .range(['#c1c1c1', '#ab7948']);
 
-  const { styles, attributes, update, forceUpdate } = usePopper(
-    referenceElement.current,
-    popperElement.current,
-    {
-      placement: 'top-end',
-      modifiers: [
-        {
-          name: 'flip',
-          enabled: true,
-          options: {
-            fallbackPlacements: [
-              'bottom-end',
-              'right-end',
-              'right-start',
-              'right',
-              'auto',
-            ],
-          },
-        },
-        {
-          name: 'offset',
-          enabled: true,
-          options: {
-            offset: [0, 6],
-          },
-        },
-        {
-          name: 'eventListeners',
-          options: { scroll: false },
-        },
-      ],
-    }
-  );
-
   const togglePopup = (event: any) => {
     event.preventDefault();
-    if (update) {
-      update().then(() => {});
-    }
     setIsOpen(!isOpen);
   };
 
@@ -172,7 +145,7 @@ const NetworkGraph = (props: Props) => {
           ...item,
           weight:
             nodeCountMap[item.reference] + state.nodeSize - 1 <=
-            state.nodeSize * 5
+              state.nodeSize * 5
               ? nodeCountMap[item.reference] + state.nodeSize - 1
               : state.nodeSize * 5,
         };
@@ -189,16 +162,33 @@ const NetworkGraph = (props: Props) => {
       );
     }
 
+    if (hideTagNodes) {
+      _data.nodes = _data.nodes.filter(
+        (item: any) => item.group !== 'tag')
+
+      _data.links = _data.links.filter(
+        (item: any) => item.type !== 'tag'
+      )
+    }
+
+    if (hideAutoLinks) {
+      _data.links = _data.links.filter(
+        (item: any) => item.type !== 'auto-link'
+      )
+    }
+
+    console.log(_data);
+
     setData(_data);
     setReferences(_references);
-  }, [props.data, state.nodeSize, hideOrphanNodes]);
+  }, [props.data, state.nodeSize, hideOrphanNodes, hideTagNodes, hideAutoLinks, highlightAutoLinks]);
 
   useEffect(() => {
     simulateNetwork();
   }, [
     profile,
     data,
-    disableNodeColors,
+    enableColorfilters,
     dynamicNodeSize,
     props.offsetX,
     props.offsetY,
@@ -226,9 +216,9 @@ const NetworkGraph = (props: Props) => {
       eventNode
         .on('click', function (e: any, d: any) {
           if (d.group === 'note') {
-            history.push(`/${props.space}/note?id=${d.reference}`);
+            navigate(`/${props.space}/note/${d.reference}`);
           } else {
-            history.push(`/${props.space}/search?text=tag:${d.reference}`);
+            navigate(`/${props.space}/browse?text=tag:${d.reference}`);
           }
         })
         .on('mouseenter', (evt: any, d: any) => {
@@ -339,9 +329,11 @@ const NetworkGraph = (props: Props) => {
 
   const simulateNetwork = () => {
     const height = window.innerHeight - 50 - (props.offsetY || 0);
-    let width = window.innerWidth - 80 - (props.offsetX || 0);
+    let width = window.innerWidth - (props.offsetX || 0);
     if (profile.sidebar) {
-      width -= 350;
+      width -= 300;
+    } else {
+      width -= 75;
     }
     // if (profile.contextbar) {
     //   width -= 350;
@@ -352,14 +344,18 @@ const NetworkGraph = (props: Props) => {
     const svgEl: any = d3.select(svgRef.current);
     svgEl.selectAll('*').remove(); // Clear svg content before adding new elementsvar g = svg.append("g")
     const g = svgEl.append('g').attr('class', 'everything');
+    const linkColorRange: any[] = [];
+    linkColorRange.push(profile.theme === 'basicui-dark' ? THEME.DARK_LINK_TAG : THEME.LIGHT_LINK_TAG);
+    if (highlightAutoLinks) {
+      linkColorRange.push(profile.theme === 'basicui-dark' ? THEME.DARK_LINK_AUTO_LINK_COLOR : THEME.LIGHT_LINK_AUTO_LINK_COLOR);
+    } else {
+      linkColorRange.push(profile.theme === 'basicui-dark' ? THEME.DARK_LINK_AUTO_LINK : THEME.LIGHT_LINK_AUTO_LINK);
+    }
+    linkColorRange.push(profile.theme === 'basicui-dark' ? THEME.DARK_LINK : THEME.LIGHT_LINK);
     const linkColor = d3
       .scaleOrdinal()
-      .domain(['', 'ai', 'link'])
-      .range([
-        profile.theme === 'theme_dark' ? THEME.DARK_TEXT : THEME.LIGHT_TEXT,
-        '#A500B1',
-        '#DD3D1C',
-      ]);
+      .domain(['', 'auto-link', 'link'])
+      .range(linkColorRange);
     const r = 20;
     const _nodes = data?.nodes;
     const _links = data?.links;
@@ -418,14 +414,14 @@ const NetworkGraph = (props: Props) => {
         .append('g')
         .attr(
           'stroke',
-          profile.theme === 'theme_dark' ? THEME.DARK_TEXT : THEME.LIGHT_TEXT
+          profile.theme === 'basicui-dark' ? THEME.DARK_TEXT : THEME.LIGHT_TEXT
         )
         .attr('stroke-opacity', state.linkOpacity / 10)
         .selectAll('line')
         .data(_links)
         .join('line')
         .attr('stroke', function (d: any) {
-          return linkColor(d.group);
+          return linkColor(d.type);
         })
         .attr('stroke-width', state.linkThickness);
       // .attr('marker-end', 'url(#end)');
@@ -438,14 +434,14 @@ const NetworkGraph = (props: Props) => {
         .attr('class', 'node')
         .style('fill', function (d: any) {
           if (props.focusNodeRef && d.reference === props.focusNodeRef) {
-            return profile.theme === 'theme_dark'
+            return profile.theme === 'basicui-dark'
               ? THEME.DARK_BG
               : THEME.LIGHT_BG;
           }
-          if (d.color && !disableNodeColors) {
+          if (d.color && enableColorfilters) {
             return d.color;
           }
-          return profile.theme === 'theme_dark'
+          return profile.theme === 'basicui-dark'
             ? nodeColorDark(d.group)
             : nodeColor(d.group);
         })
@@ -458,7 +454,7 @@ const NetworkGraph = (props: Props) => {
         })
         .style(
           'fill',
-          profile.theme === 'theme_dark' ? THEME.DARK_TEXT : THEME.LIGHT_TEXT
+          profile.theme === 'basicui-dark' ? THEME.DARK_TEXT : THEME.LIGHT_TEXT
         )
         .style('opacity', state.fontOpacity / 10)
         .style('font-size', `${state.fontSize}px`)
@@ -483,11 +479,11 @@ const NetworkGraph = (props: Props) => {
         .attr('stroke-width', 1)
         .attr('stroke', function (d: any) {
           if (props.focusNodeRef && d.reference === props.focusNodeRef) {
-            return profile.theme === 'theme_dark'
+            return profile.theme === 'basicui-dark'
               ? THEME.DARK_TEXT
               : THEME.LIGHT_TEXT;
           }
-          return profile.theme === 'theme_dark'
+          return profile.theme === 'basicui-dark'
             ? THEME.DARK_BG
             : THEME.LIGHT_BG;
         });
@@ -509,7 +505,7 @@ const NetworkGraph = (props: Props) => {
       zoomHandler(svgEl);
 
       // node.on('click', function (d: any, e: any) {
-      //   history.push(`/${props.space}/note?id=${e._id}`);
+      //   history.push(`/${props.space}/note/${e._id}`);
       // });
 
       setSvg(svgEl);
@@ -569,187 +565,171 @@ const NetworkGraph = (props: Props) => {
 
   const handleUpdateFilterGroup = (payload: any) => {
     updateFilterGroup(props.space, payload, authorization).then(
-      (response: any) => {}
+      (response: any) => { }
     );
   };
 
   return (
-    <div className="network-graph" ref={divRef}>
-      <svg ref={svgRef} />
-      <div className="network-graph__control">
-        <button
-          className={`button network-graph__control__button ${
-            isOpen
-              ? 'network-graph__control__button--active'
-              : 'network-graph__control__button--inactive'
-          }`}
-          onClick={togglePopup}
-          ref={referenceElement}
-        >
-          <FontAwesomeIcon icon={faGear} />
-        </button>
-        <div
-          className="bg-light-300 dark:bg-dark-400"
-          ref={popperElement}
-          style={styles.popper}
-          {...attributes.popper}
-        >
-          {isOpen && (
-            <div className="network-graph__control__content">
-              <div className="network-graph__control__content__related-group">
-                <BinaryChoiceInput
-                  label="Hide orphan nodes"
-                  value={hideOrphanNodes}
-                  handleUpdate={(value: boolean) => setHideOrphanNodes(value)}
-                />
-                <BinaryChoiceInput
-                  label="Dynamic node size"
-                  value={dynamicNodeSize}
-                  handleUpdate={(value: boolean) => setDynamicNodeSize(value)}
-                />
-                <BinaryChoiceInput
-                  label="Disable node colors"
-                  value={disableNodeColors}
-                  handleUpdate={(value: boolean) => setDisableNodeColors(value)}
-                />
-                {props.children && <>{props.children}</>}
-              </div>
-
-              {!disableNodeColors && (
-                <div className="network-graph__control__content__container">
-                  <div className="network-graph__control__content__title">
-                    Groups
-                  </div>
-                  <div className="network-graph__control__content__body">
-                    <FilterGroup
-                      space={props.space}
-                      data={filterGroup}
-                      handleUpdate={handleUpdateFilterGroup}
-                    />
-                  </div>
-                </div>
-              )}
-
-              <div className="network-graph__control__content__container">
-                <div className="network-graph__control__content__title">
-                  Forces
-                </div>
-                <div className="network-graph__control__content__body">
-                  <div className="network-graph__control__content__body__item">
-                    <label>Repel force-{state.charge}</label>
-                    <input
-                      type="range"
-                      min="-10"
-                      max="10000"
-                      onChange={handleSliderReverseChange}
-                      name="charge"
-                      value={0 - state.charge}
-                      className="ui-slider"
-                    />
-                  </div>
-                  <div className="network-graph__control__content__body__item">
-                    <label>Collide force</label>
-                    <input
-                      type="range"
-                      min="-100"
-                      max="10"
-                      onChange={handleSliderReverseChange}
-                      name="collision"
-                      value={0 - state.collision}
-                      className="ui-slider"
-                    />
-                  </div>
-                  <div className="network-graph__control__content__body__item">
-                    <label>Link distance (experimental)</label>
-                    <input
-                      type="range"
-                      min="1"
-                      max="100"
-                      onChange={handleSliderChange}
-                      name="distance"
-                      value={state.distance}
-                      className="ui-slider"
-                    />
-                  </div>
-                  <div className="network-graph__control__content__body__item">
-                    <label>Font size</label>
-                    <input
-                      type="range"
-                      min="8"
-                      max="30"
-                      onChange={handleSliderChange}
-                      name="fontSize"
-                      value={state.fontSize}
-                      className="ui-slider"
-                    />
-                  </div>
-                  <div className="network-graph__control__content__body__item">
-                    <label>Text opacity</label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="10"
-                      onChange={handleSliderChange}
-                      name="fontOpacity"
-                      value={state.fontOpacity}
-                      className="ui-slider"
-                    />
-                  </div>
-                  <div className="network-graph__control__content__body__item">
-                    <label>Text fade threshold</label>
-                    <input
-                      type="range"
-                      min="-10"
-                      max="10000"
-                      onChange={handleSliderReverseChange}
-                      name="textFade"
-                      value={0 - state.textFade}
-                      className="ui-slider"
-                    />
-                  </div>
-                  <div className="network-graph__control__content__body__item">
-                    <label>Link opacity</label>
-                    <input
-                      type="range"
-                      min="1"
-                      max="10"
-                      onChange={handleSliderChange}
-                      name="linkOpacity"
-                      value={state.linkOpacity}
-                      className="ui-slider"
-                    />
-                  </div>
-                  <div className="network-graph__control__content__body__item">
-                    <label>Link thickness</label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="10"
-                      onChange={handleSliderChange}
-                      name="linkThickness"
-                      value={state.linkThickness}
-                      className="ui-slider"
-                    />
-                  </div>
-                  <div className="network-graph__control__content__body__item">
-                    <label>Node size</label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="500"
-                      onChange={handleSliderChange}
-                      name="nodeSize"
-                      value={state.nodeSize}
-                      className="ui-slider"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+    <>
+      <div className="network-graph" ref={divRef}>
+        <svg ref={svgRef} />
+        <div className="network-graph-controls">
+          <button
+            className={`button network-graph-controls__button ${isOpen
+              ? 'network-graph-controls__button--active'
+              : 'network-graph-controls__button--inactive'
+              }`}
+            onClick={togglePopup}
+          >
+            <FontAwesomeIcon icon={faGear} />
+          </button>
         </div>
       </div>
-    </div>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <ModalHeader onClose={() => setIsOpen(false)} heading='Graph parameters' />
+        <ModalBody>
+          <div className="network-graph-controls__content">
+            <div className="network-graph-controls__content__related-group">
+              <Checkbox defaultChecked={hideOrphanNodes} label='Hide orphan nodes'
+                onInput={(event: any) => setHideOrphanNodes(event.currentTarget.checked)} />
+              <Checkbox defaultChecked={hideTagNodes} label='Hide tags'
+                onInput={(event: any) => setHideTagNodes(event.currentTarget.checked)} />
+              <Checkbox defaultChecked={hideAutoLinks} label='Hide auto generated links'
+                onInput={(event: any) => setHideAutoLinks(event.currentTarget.checked)} />
+              {!hideAutoLinks && <Checkbox defaultChecked={highlightAutoLinks} label='Highlight auto generated links'
+                onInput={(event: any) => setHighlightAutoLinks(event.currentTarget.checked)} />}
+              <Checkbox defaultChecked={dynamicNodeSize} label='Dynamic node size'
+                onInput={(event: any) => setDynamicNodeSize(event.currentTarget.checked)} />
+              <Checkbox defaultChecked={enableColorfilters} label='Enable color filters'
+                onInput={(event: any) => setEnableColorfilters(event.currentTarget.checked)} />
+              <Checkbox defaultChecked={showAdvancedSettings} label='Advanced settings'
+                onInput={(event: any) => setShowAdvancedSettings(event.currentTarget.checked)} />
+              {props.children && <>{props.children}</>}
+            </div>
+
+            {showAdvancedSettings && <div className="network-graph-controls__content__container">
+              {/* <h5>Forces</h5> */}
+              <div className="network-graph-controls__content__body">
+                <div className="network-graph-controls__content__body__item">
+                  <label>Repel force-{state.charge}</label>
+                  <input
+                    type="range"
+                    min="-10"
+                    max="10000"
+                    onChange={handleSliderReverseChange}
+                    name="charge"
+                    value={0 - state.charge}
+                    className="ui-slider"
+                  />
+                </div>
+                <div className="network-graph-controls__content__body__item">
+                  <label>Collide force</label>
+                  <input
+                    type="range"
+                    min="-100"
+                    max="10"
+                    onChange={handleSliderReverseChange}
+                    name="collision"
+                    value={0 - state.collision}
+                    className="ui-slider"
+                  />
+                </div>
+                <div className="network-graph-controls__content__body__item">
+                  <label>Link distance (experimental)</label>
+                  <input
+                    type="range"
+                    min="1"
+                    max="100"
+                    onChange={handleSliderChange}
+                    name="distance"
+                    value={state.distance}
+                    className="ui-slider"
+                  />
+                </div>
+                <div className="network-graph-controls__content__body__item">
+                  <label>Font size</label>
+                  <input
+                    type="range"
+                    min="8"
+                    max="30"
+                    onChange={handleSliderChange}
+                    name="fontSize"
+                    value={state.fontSize}
+                    className="ui-slider"
+                  />
+                </div>
+                <div className="network-graph-controls__content__body__item">
+                  <label>Text opacity</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="10"
+                    onChange={handleSliderChange}
+                    name="fontOpacity"
+                    value={state.fontOpacity}
+                    className="ui-slider"
+                  />
+                </div>
+                <div className="network-graph-controls__content__body__item">
+                  <label>Text fade threshold</label>
+                  <input
+                    type="range"
+                    min="-10"
+                    max="10000"
+                    onChange={handleSliderReverseChange}
+                    name="textFade"
+                    value={0 - state.textFade}
+                    className="ui-slider"
+                  />
+                </div>
+                <div className="network-graph-controls__content__body__item">
+                  <label>Link opacity</label>
+                  <input
+                    type="range"
+                    min="1"
+                    max="10"
+                    onChange={handleSliderChange}
+                    name="linkOpacity"
+                    value={state.linkOpacity}
+                    className="ui-slider"
+                  />
+                </div>
+                <div className="network-graph-controls__content__body__item">
+                  <label>Link thickness</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="10"
+                    onChange={handleSliderChange}
+                    name="linkThickness"
+                    value={state.linkThickness}
+                    className="ui-slider"
+                  />
+                </div>
+                <div className="network-graph-controls__content__body__item">
+                  <label>Node size</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="500"
+                    onChange={handleSliderChange}
+                    name="nodeSize"
+                    value={state.nodeSize}
+                    className="ui-slider"
+                  />
+                </div>
+              </div>
+            </div>}
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={() => setIsOpen(false)}>
+            <FontAwesomeIcon icon={faXmark} />
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </>
   );
 };
 

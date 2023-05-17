@@ -3,4 +3,6 @@ export default interface CompanyModel {
   reference?: number | null;
   name: string;
   description: string;
+  numberFormat: string;
+  currency: string;
 }

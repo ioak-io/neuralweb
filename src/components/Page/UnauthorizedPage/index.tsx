@@ -1,11 +1,8 @@
-/* eslint-disable react/no-unescaped-entities */
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import './style.scss';
 import Topbar from '../../../components/Topbar';
-
-const queryString = require('query-string');
 
 interface Props {
   space: string;
@@ -13,7 +10,7 @@ interface Props {
 }
 
 const UnauthorizedPage = (props: Props) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
 
   return (

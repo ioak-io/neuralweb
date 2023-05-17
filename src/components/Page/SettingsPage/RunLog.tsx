@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCompressAlt,
@@ -10,8 +10,10 @@ import {
   faFileExport,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
+import {Button} from 'basicui';
 
 import './RunLog.scss';
+
 import { deleteTransactions, getLog } from './service';
 import { formatCurrencyByCompanyDetail } from '../../../components/CurrencyUtils';
 
@@ -23,7 +25,7 @@ interface Props {
 }
 
 const RunLog = (props: Props) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
   const company = useSelector((state: any) =>
     state.company.items.find(
@@ -52,17 +54,18 @@ const RunLog = (props: Props) => {
       <div className="page-title">
         <div>Import log</div>
         <div className="desktop-only">
-          <button
-            onClick={() => {
+          <Button
+           onClick={() => {
               setDenseView(!denseView);
             }}
+            size="small"
           >
             <FontAwesomeIcon icon={denseView ? faExpandAlt : faCompressAlt} />
-          </button>
+          </Button>
         </div>
       </div>
       <div className="backup-runlog__main">
-        <table>
+        <table className="basicui-table">
           <thead>
             <tr>
               <th>Date</th>

@@ -21,16 +21,21 @@ const Logo = (props: Props) => {
   return (
     <div className="logo">
       <div className="logo--image">
-        {profile.theme === 'theme_light' && (
+        {profile.theme === 'basicui-light' && (
           <img src={neuralwebBlackSmall} alt="Neuralweb logo" />
         )}
-        {profile.theme !== 'theme_light' && (
+        {profile.theme === 'basicui-dark' && (
           <img src={neuralwebWhiteSmall} alt="Neuralweb logo" />
         )}
       </div>
       {props.variant === 'full' && (
         <div className="logo--text">
-          <img src={neuralwebWhiteText} alt="Neuralweb logo" />
+          {profile.theme === 'basicui-light' && (
+            <img src={neuralwebBlackText} alt="Neuralweb logo" />
+          )}
+          {profile.theme === 'basicui-dark' && (
+            <img src={neuralwebWhiteText} alt="Neuralweb logo" />
+          )}
         </div>
       )}
     </div>

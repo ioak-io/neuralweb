@@ -14,7 +14,6 @@ const DropLinks = (props: Props) => {
       <NavLink
         to={`/${props.space}/home`}
         className="navitem"
-        activeClassName="active"
         onClick={props.handleClose}
       >
         Home
@@ -22,7 +21,6 @@ const DropLinks = (props: Props) => {
       <NavLink
         to={`/${props.space}/project`}
         className="navitem"
-        activeClassName="active"
         onClick={props.handleClose}
       >
         Projects
@@ -30,7 +28,6 @@ const DropLinks = (props: Props) => {
       <NavLink
         to={`/${props.space}/template`}
         className="navitem"
-        activeClassName="active"
         onClick={props.handleClose}
       >
         Templates

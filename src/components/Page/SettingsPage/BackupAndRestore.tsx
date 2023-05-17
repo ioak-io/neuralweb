@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { format } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -10,15 +10,13 @@ import {
   faFileImport,
   faSkullCrossbones,
 } from '@fortawesome/free-solid-svg-icons';
+import { Input, Button, Checkbox } from 'basicui';
 import './BackupAndRestore.scss';
 import { newId } from '../../../events/MessageService';
 import * as service from './service';
 import RunLog from './RunLog';
 import { isEmptyAttributes } from '../../../components/Utils';
 import Topbar from '../../../components/Topbar';
-import { fetchAndSetIncomeItems } from '../../../actions/IncomeActions';
-
-const queryString = require('query-string');
 
 interface Props {
   space: string;
@@ -27,22 +25,12 @@ interface Props {
 
 const BackupAndRestore = (props: Props) => {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
   const company = useSelector((state: any) =>
     state.company.items.find(
       (item: any) => item.reference === parseInt(props.space, 10)
     )
-  );
-  const expenseFilter = useSelector((state: any) => state.expense.filter);
-  const expensePagination = useSelector(
-    (state: any) => state.expense.pagination
-  );
-  const incomeFilter = useSelector((state: any) => state.income.filter);
-  const incomePagination = useSelector((state: any) => state.income.pagination);
-  const receiptFilter = useSelector((state: any) => state.receipt.filter);
-  const receiptPagination = useSelector(
-    (state: any) => state.receipt.pagination
   );
   const [queryParam, setQueryParam] = useState<any>({});
   const [formId, setFormId] = useState(newId());
@@ -57,8 +45,8 @@ const BackupAndRestore = (props: Props) => {
     }
   }, [authorization]);
 
-  const handleChange = (detail: any) => {
-    setState({ ...state, [detail.name]: detail.value });
+  const handleFileChange = (event: any) => {
+    setState({ ...state, [event.target.name]: event.target.files });
   };
 
   const handleRunLogChange = (_data: any) => {
@@ -67,17 +55,7 @@ const BackupAndRestore = (props: Props) => {
   };
 
   const refreshStore = () => {
-    dispatch(
-      fetchAndSetIncomeItems(props.space, authorization, {
-        ...incomeFilter,
-        pagination: {
-          ...incomePagination,
-          pageSize: 20,
-          pageNo: 0,
-          hasMore: true,
-        },
-      })
-    );
+
   };
 
   const importExpenseFile = () => {
@@ -105,14 +83,14 @@ const BackupAndRestore = (props: Props) => {
         const element = document.createElement('a');
         element.setAttribute(
           'href',
-          `data:text/plain;charset=utf-8,${encodeURIComponent(response)}`
+          `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(response))}`
         );
         element.setAttribute(
           'download',
           `export_${company.name.toLowerCase().replaceAll(' ', '_')}_${format(
             new Date(),
             'yyyyMMdd_HHmmss'
-          )}.csv`
+          )}.json`
         );
 
         element.style.display = 'none';
@@ -133,27 +111,27 @@ const BackupAndRestore = (props: Props) => {
             <div className="page-title">Data export</div>
             <div>Export all expense data available in the system so far</div>
             <div className="backup-and-restore__section__action">
-              <button onClick={exportExpenseFile}>
+              <Button onClick={exportExpenseFile}>
                 <FontAwesomeIcon icon={faFileExport} />
                 Export
-              </button>
+              </Button>
             </div>
           </div>
           <div className="content-section">
             <div className="page-title">Data import</div>
             <div>
-              <input
+              <Input
                 name="expenseImportFile"
                 type="file"
                 value={state.file}
-                onChange={handleChange}
+                onInput={handleFileChange}
               />
               {state.expenseImportFile?.length > 0 && (
                 <div className="backup-and-restore__section__action">
-                  <button onClick={importExpenseFile}>
+                  <Button onClick={importExpenseFile}>
                     <FontAwesomeIcon icon={faFileImport} />
                     Import
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>
@@ -174,10 +152,10 @@ const BackupAndRestore = (props: Props) => {
               of the data before performing this action.
             </div>
             <div className="backup-and-restore__section__action">
-              <button onClick={() => {}}>
+              <Button onClick={() => { }}>
                 <FontAwesomeIcon icon={faSkullCrossbones} />
                 Delete all data
-              </button>
+              </Button>
             </div>
           </div>
         </div>

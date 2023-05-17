@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
 import { uniqBy } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import './style.scss';
-import { getNotelinks, getNotetags } from './service';
+import { getNearestLinks, getNotelinks } from './service';
 import NetworkGraph from '../../components/NetworkGraph';
 import NotelinkModel from '../../model/NotelinkModel';
 import LinkModel from '../../model/LinkModel';
 import NodeModel from '../../model/NodeModel';
 import NotetagModel from '../../model/NotetagModel';
 import NoteModel from '../../model/NoteModel';
-
-const queryString = require('query-string');
 
 interface Props {
   space: string;
@@ -23,56 +20,48 @@ interface Props {
 }
 
 const GraphView = (props: Props) => {
-  const history = useHistory();
 
   const authorization = useSelector((state: any) => state.authorization);
   const companyList = useSelector((state: any) => state.company.items);
   const notes = useSelector((state: any) => state.note.items);
+  const labelLinks = useSelector((state: any) => state.note.labelLinks);
+  const notelinkList = useSelector((state: any) => state.notelink.items);
+  const notelinkAutoList = useSelector((state: any) => state.notelinkAuto.items);
   const [noteNodes, setNoteNodes] = useState<NodeModel[]>([]);
   const [tagNodes, setTagNodes] = useState<NodeModel[]>([]);
   const [noteLinks, setNoteLinks] = useState<LinkModel[]>([]);
   const [tagLinks, setTagLinks] = useState<LinkModel[]>([]);
   const [data, setData] = useState<any>({ nodes: [], links: [] });
-  const [depth, setDepth] = useState<number>(2);
+  const [depth, setDepth] = useState<number>(1);
 
   useEffect(() => {
-    console.log('**auth');
     if (authorization.isAuth && props.noteref) {
-      getNotelinks(props.space, props.noteref, depth, authorization).then(
-        (response: any) => {
-          if (response) {
-            setNoteLinks(
-              response.map((item: NotelinkModel) => ({
-                source: item.sourceNoteRef,
-                target: item.linkedNoteRef,
-              }))
-            );
-          }
-        }
+      const _noteLinks: any = getNearestLinks([...notelinkAutoList, ...notelinkList], [props.noteref], depth).map((item: NotelinkModel) => ({
+        source: item.sourceNoteRef,
+        target: item.linkedNoteRef,
+        type: (item.keywords && item.keywords.length > 0) ? 'auto-link' : 'link'
+      }));;
+      setNoteLinks(
+        _noteLinks
       );
-      getNotetags(props.space, props.noteref, 2, authorization).then(
-        (response: any) => {
-          if (response) {
-            const _tagLinks: LinkModel[] = [];
-            const _tagNodes: NodeModel[] = [];
-            response.forEach((item: NotetagModel) => {
-              _tagLinks.push({
-                source: item.noteRef,
-                target: item.name,
-              });
-              _tagNodes.push({
-                name: `#${item.name}`,
-                reference: item.name,
-                group: 'tag',
-              });
-            });
-            setTagLinks(_tagLinks);
-            setTagNodes(uniqBy(_tagNodes, 'reference'));
-          }
-        }
-      );
+      const _tagLinks: LinkModel[] = [];
+      const _tagNodes: NodeModel[] = [];
+      labelLinks.forEach((item: NotetagModel) => {
+        _tagLinks.push({
+          source: item.noteRef,
+          target: item.name,
+          type: 'tag'
+        });
+        _tagNodes.push({
+          name: `#${item.name}`,
+          reference: item.name,
+          group: 'tag',
+        });
+      });
+      setTagLinks(_tagLinks);
+      setTagNodes(uniqBy(_tagNodes, 'reference'));
     }
-  }, [authorization, props.noteref, depth]);
+  }, [authorization, props.noteref, depth, notelinkList, notelinkAutoList, labelLinks]);
 
   useEffect(() => {
     setNoteNodes(
@@ -90,7 +79,7 @@ const GraphView = (props: Props) => {
 
     const _linkedNoteNodes: string[] = [];
     const _linkedTagNodes: string[] = [];
-    noteLinks.forEach((item) => {
+    [...noteLinks].forEach((item) => {
       _linkedNoteNodes.push(item.source);
       _linkedNoteNodes.push(item.target);
     });
@@ -120,8 +109,9 @@ const GraphView = (props: Props) => {
   const increaseDepth = () => {
     setDepth(depth + 1);
   };
+
   const decreaseDepth = () => {
-    setDepth(depth - 1);
+    if (depth > 1) { setDepth(depth - 1); }
   };
 
   return (
@@ -136,7 +126,7 @@ const GraphView = (props: Props) => {
           <div className="graph-view__depth-control">
             <div className="graph-view__depth-control__text">Depth</div>
             <div className="graph-view__depth-control__action">
-              {depth > 0 && (
+              {depth > 1 && (
                 <button className="button" onClick={decreaseDepth}>
                   <FontAwesomeIcon icon={faMinus} />
                 </button>

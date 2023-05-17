@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, connect, useDispatch } from 'react-redux';
 
-import { useHistory, withRouter } from 'react-router';
-
 import './RightNav.scss';
 
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 import DarkModeIcon from '../Navigation/DarkModeIcon';
 import NavAccountIcon from '../Navigation/NavAccountIcon';
-import { removeAuth } from '../../actions/AuthActions';
+import { removeAuth } from '../../store/actions/AuthActions';
 
 interface Props {
   cookies: any;
@@ -19,7 +17,7 @@ interface Props {
 const RightNav = (props: Props) => {
   const authorization = useSelector((state: any) => state.authorization);
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const logout = (
     event: any,
@@ -27,10 +25,10 @@ const RightNav = (props: Props) => {
     message = 'You have been logged out'
   ) => {
     dispatch(removeAuth());
-    props.cookies.remove(
+    removeSessionValue(
       `neuralweb_${process.env.REACT_APP_ONEAUTH_APPSPACE_ID}`
     );
-    history.push(`/`);
+    navigate(`/`);
     sendMessage('notification', true, {
       type,
       message,

@@ -2,21 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import './TopbarContainer.scss';
+import Topbar from '../Topbar';
 import { receiveMessage } from '../../events/MessageService';
 
 interface Props {
-  cookies: any;
-  transparent?: boolean;
 }
 
 const TopbarContainer = (props: Props) => {
   const profile = useSelector((state: any) => state.profile);
-  const [space, setSpace] = useState('');
+  const [realm, setRealm] = useState('');
 
   useEffect(() => {
     receiveMessage().subscribe((event: any) => {
-      if (event.name === 'spaceChange') {
-        setSpace(event.data);
+      if (event.name === 'realmChange') {
+        setRealm(event.data);
       }
     });
   }, []);
@@ -24,14 +23,13 @@ const TopbarContainer = (props: Props) => {
   return (
     <div
       className={`topbar-container ${
-        props.transparent ? 'topbar-container--transparent' : ''
-      } ${profile.sidebar ? 'sidebar-shown' : 'sidebar-hidden'}`}
+        profile.sidebar ? 'sidebar-shown' : 'sidebar-hidden'
+      }`}
     >
-      {/* <Topbar
-        space={space}
-        cookies={props.cookies}
+      <Topbar
+        realm={realm}
         hideSidebarOnDesktop={profile.hideSidebarOnDesktop}
-      /> */}
+      />
     </div>
   );
 };

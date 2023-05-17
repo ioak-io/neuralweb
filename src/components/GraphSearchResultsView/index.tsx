@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
 import { uniqBy } from 'lodash';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import './style.scss';
-import { getNotelinks, getNotetags } from './service';
+import { getNotelinks } from './service';
 import NetworkGraph from '../../components/NetworkGraph';
 import NotelinkModel from '../../model/NotelinkModel';
 import LinkModel from '../../model/LinkModel';
@@ -15,60 +12,68 @@ import NotetagModel from '../../model/NotetagModel';
 import NoteModel from '../../model/NoteModel';
 import BinaryChoiceInput from '../NetworkGraph/BinaryChoiceInput';
 
-const queryString = require('query-string');
-
 interface Props {
   space: string;
   noteNodes: NoteModel[];
 }
 
 const GraphSearchResultsView = (props: Props) => {
-  const history = useHistory();
 
   const authorization = useSelector((state: any) => state.authorization);
   const companyList = useSelector((state: any) => state.company.items);
   const notes = useSelector((state: any) => state.note.items);
+  const labelLinks = useSelector((state: any) => state.note.labelLinks);
+  const notelinkList = useSelector((state: any) => state.notelink.items);
+  const notelinkAutoList = useSelector((state: any) => state.notelinkAuto.items);
   const [noteNodes, setNoteNodes] = useState<NodeModel[]>([]);
   const [tagNodes, setTagNodes] = useState<NodeModel[]>([]);
   const [tagNodesFiltered, setTagNodesFiltered] = useState<NodeModel[]>([]);
   const [noteLinks, setNoteLinks] = useState<LinkModel[]>([]);
+  const [noteLinksAuto, setNoteLinksAuto] = useState<LinkModel[]>([]);
   const [tagLinks, setTagLinks] = useState<LinkModel[]>([]);
   const [showAllNodes, setShowAllNodes] = useState(false);
   const [data, setData] = useState<any>({ nodes: [], links: [] });
 
   useEffect(() => {
     if (authorization.isAuth) {
-      getNotelinks(props.space, authorization).then((response: any) => {
-        if (response) {
-          setNoteLinks(
-            response.map((item: NotelinkModel) => ({
-              source: item.sourceNoteRef,
-              target: item.linkedNoteRef,
-            }))
-          );
-        }
+
+      const _noteLinks = notelinkList
+        .map((item: NotelinkModel) => ({
+          source: item.sourceNoteRef,
+          target: item.linkedNoteRef,
+          type: 'link'
+        }));
+      setNoteLinks(
+        _noteLinks
+      );
+
+      const _noteLinksAuto = notelinkAutoList
+        .map((item: NotelinkModel) => ({
+          source: item.sourceNoteRef,
+          target: item.linkedNoteRef,
+          type: 'auto-link'
+        }));
+      setNoteLinksAuto(
+        _noteLinksAuto
+      );
+      const _tagLinks: LinkModel[] = [];
+      const _tagNodes: NodeModel[] = [];
+      labelLinks.forEach((item: NotetagModel) => {
+        _tagLinks.push({
+          source: item.noteRef,
+          target: item.name,
+          type: 'tag'
+        });
+        _tagNodes.push({
+          name: `#${item.name}`,
+          reference: item.name,
+          group: 'tag',
+        });
       });
-      getNotetags(props.space, authorization).then((response: any) => {
-        if (response) {
-          const _tagLinks: LinkModel[] = [];
-          const _tagNodes: NodeModel[] = [];
-          response.forEach((item: NotetagModel) => {
-            _tagLinks.push({
-              source: item.noteRef,
-              target: item.name,
-            });
-            _tagNodes.push({
-              name: `#${item.name}`,
-              reference: item.name,
-              group: 'tag',
-            });
-          });
-          setTagLinks(_tagLinks);
-          setTagNodes(uniqBy(_tagNodes, 'reference'));
-        }
-      });
+      setTagLinks(_tagLinks);
+      setTagNodes(uniqBy(_tagNodes, 'reference'));
     }
-  }, [authorization]);
+  }, [authorization, notelinkAutoList, notelinkList, labelLinks]);
 
   useEffect(() => {
     if (showAllNodes) {
@@ -121,9 +126,9 @@ const GraphSearchResultsView = (props: Props) => {
   useEffect(() => {
     setData({
       nodes: [...noteNodes, ...tagNodesFiltered],
-      links: [...noteLinks, ...tagLinks],
+      links: [...noteLinks, ...noteLinksAuto, ...tagLinks],
     });
-  }, [noteNodes, tagNodesFiltered, noteLinks, tagLinks]);
+  }, [noteNodes, tagNodesFiltered, noteLinks, noteLinksAuto, tagLinks]);
 
   return (
     <NetworkGraph data={data} space={props.space} offsetY={136}>

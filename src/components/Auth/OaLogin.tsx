@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { setSessionValue } from '../../utils/SessionUtils';
 import { httpGet, httpPost } from '../Lib/RestTemplate';
 import './Login.scss';
-
-const queryString = require('query-string');
 
 interface Props {
   cookies: any;
@@ -13,20 +13,21 @@ interface Props {
 const appRealm = process.env.REACT_APP_ONEAUTH_APPSPACE_ID || '';
 
 const OaLogin = (props: Props) => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   useEffect(() => {
-    if (props.location.search) {
-      const query = queryString.parse(props.location.search);
+    if (searchParams) {
       httpGet('/user/token/local', {
         headers: {
-          Authorization: query.access_token,
+          Authorization: searchParams.get("access_token"),
         },
       })
         .then((response) => {
           if (response.status === 200) {
             console.log('**', response.data.token);
-            props.cookies.set(`neuralweb-access_token`, response.data.token);
-            props.cookies.set(`neuralweb-refresh_token`, query.refresh_token);
-            props.history.push(query.from ? query.from : '/home');
+            setSessionValue(`neuralweb-access_token`, response.data.token);
+            setSessionValue(`neuralweb-refresh_token`, searchParams.get("refresh_token") || '');
+            navigate(searchParams.get("from") || '/home');
           }
           return Promise.resolve({});
         })
@@ -34,7 +35,7 @@ const OaLogin = (props: Props) => {
           return Promise.resolve({});
         });
     }
-  }, []);
+  }, [searchParams]);
 
   return <></>;
 };
