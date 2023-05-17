@@ -85,6 +85,7 @@
     "@tiptap/pm": "^2.0.0-beta.220",
     "@tiptap/react": "^2.0.0-beta.220",
     "@tiptap/starter-kit": "^2.0.0-beta.220",
+    "authlite": "file:authlite-1.0.0.tgz",
     "axios": "^1.2.2",
     "basicui": "file:basicui-1.0.0.tgz",
     "d3": "^7.8.4",

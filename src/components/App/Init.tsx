@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 import ExpenseStateActions from '../../simplestates/ExpenseStateActions';
@@ -23,12 +23,17 @@ import { rotateToken } from './service';
 const Init = () => {
   const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
+  const authorizationRef = useRef<any>({});
   const profile = useSelector((state: any) => state.profile);
   const [previousAuthorizationState, setPreviousAuthorizationState] =
     useState<any>();
   const [space, setSpace] = useState<string>();
   const [previousSpace, setPreviousSpace] = useState<string>();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    authorizationRef.current = authorization;
+  }, [authorization]);
 
   useEffect(() => {
     if (authorization?.isAuth && space) {
@@ -147,7 +152,8 @@ const Init = () => {
         const config = error?.config;
         if (error?.response?.status === 401 && !config?._retry) {
           config._retry = true;
-          return rotateToken(space || '', authorization)
+          console.log(authorizationRef.current);
+          return rotateToken(space || '', authorizationRef.current)
             .then((response: any) => {
               if (response) {
                 config.headers = {
@@ -156,7 +162,7 @@ const Init = () => {
                 };
                 dispatch(
                   addAuth({
-                    ...authorization,
+                    ...authorizationRef.current,
                     access_token: response?.access_token,
                   })
                 );
@@ -166,10 +172,10 @@ const Init = () => {
                 console.log('********redirect to login');
                 dispatch(removeAuth());
                 removeSessionValue(
-                  `neuralweb-access_token`
+                  `fortuna-access_token`
                 );
                 removeSessionValue(
-                  `neuralweb-refresh_token`
+                  `fortuna-refresh_token`
                 );
                 navigate('/login');
                 Promise.reject(error);

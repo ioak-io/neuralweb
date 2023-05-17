@@ -62,14 +62,14 @@ const ProtectedRouteApp = (props: Props) => {
         if (authorization.isAuth) {
             if (
                 params.space &&
-                authorization.space &&
-                !authorization.space.includes(parseInt(params.space, 10))
+                (!authorization.permissions || !authorization.permissions['COMPANY_ADMIN'] || !authorization.permissions['COMPANY_ADMIN'].includes(params.space))
             ) {
                 console.log(
                     '**redirect to unauthorized page',
                     params.space
                 );
                 redirectToUnauthorized();
+                return false;
             }
             return true;
         }
