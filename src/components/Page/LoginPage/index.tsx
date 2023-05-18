@@ -15,6 +15,7 @@ interface Props {
 }
 
 const appRealm = process.env.REACT_APP_ONEAUTH_APPSPACE_ID || '';
+const environment: any = process.env.REACT_APP_ENVIRONMENT || 'local';
 
 const LoginPage = (props: Props) => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const LoginPage = (props: Props) => {
   const [signupFormErrorMessages, setSignupFormErrorMessages] = useState<AuthliteTypes.SignupFormErrorMessages>({});
 
   const onSignin = (payload: AuthliteTypes.SigninRequest) => {
-    AuthliteAuthenticationService.signin("local", appRealm, payload).then((response: AuthliteTypes.SigninResponse) => {
+    AuthliteAuthenticationService.signin(environment, appRealm, payload).then((response: AuthliteTypes.SigninResponse) => {
       console.log(response);
       setSigninFormErrorMessages(response.errorMessages);
       if (response.outcome === 'SUCCESS') {
@@ -40,7 +41,7 @@ const LoginPage = (props: Props) => {
   }
 
   const onSignup = (data: AuthliteTypes.SignupRequest) => {
-    AuthliteAuthenticationService.signup("local", 212, data, "1d9524a6-30df-4b3c-9402-503f4011896c").then((response: AuthliteTypes.SignupResponse) => {
+    AuthliteAuthenticationService.signup(environment, 212, data, "1d9524a6-30df-4b3c-9402-503f4011896c").then((response: AuthliteTypes.SignupResponse) => {
       console.log(response);
       if (response.outcome === "SUCCESS") {
         setView(AuthliteTypes.PageView.placeholder);
@@ -51,7 +52,7 @@ const LoginPage = (props: Props) => {
   }
 
   const onForgotPassword = (data: AuthliteTypes.SignupRequest) => {
-    AuthliteAuthenticationService.resetPasswordLink("local", 212, data).then((response: AuthliteTypes.ForgotPasswordResponse) => {
+    AuthliteAuthenticationService.resetPasswordLink(environment, 212, data).then((response: AuthliteTypes.ForgotPasswordResponse) => {
       console.log(response);
       if (response.outcome === "SUCCESS") {
         setView(AuthliteTypes.PageView.placeholder);
@@ -62,7 +63,7 @@ const LoginPage = (props: Props) => {
   }
 
   const onResendVerifyLink = (data: AuthliteTypes.ResendVerifyLinkRequest) => {
-    AuthliteAuthenticationService.resendVerifyLink("local", 212, data).then((response: AuthliteTypes.ResendVerifyLinkResponse) => {
+    AuthliteAuthenticationService.resendVerifyLink(environment, 212, data).then((response: AuthliteTypes.ResendVerifyLinkResponse) => {
       console.log(response);
       if (response.outcome === "SUCCESS") {
         setView(AuthliteTypes.PageView.placeholder);
