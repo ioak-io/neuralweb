@@ -64,7 +64,7 @@ const BrowsePage = (props: Props) => {
                 label
               </div>
               <div className="browse-page__item__right__bottom">
-                Organized by explicitly named labels
+              Descriptive labels that help categorize and index the content, making it easier to find relevant articles on specific topics
               </div>
             </div>
           </button>
