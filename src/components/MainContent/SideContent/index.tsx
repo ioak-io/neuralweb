@@ -24,6 +24,7 @@ import {
   faPalette,
   faPlus,
   faReceipt,
+  faSearch,
   faShoppingBag,
   faShoppingCart,
   faSignOutAlt,
@@ -134,6 +135,11 @@ const SideContent = (props: Props) => {
               link={`/${props.space}/browse`}
               icon={faFolderOpen}
               label="Browse"
+            />
+            <SideNavLink
+              link={`/${props.space}/search`}
+              icon={faSearch}
+              label="Search"
             />
             <SideNavLink
               link={`/${props.space}/graph`}

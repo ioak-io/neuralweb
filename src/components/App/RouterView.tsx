@@ -22,6 +22,7 @@ import ColorfilterPage from '../Page/ColorfilterPage';
 import EditColorFilterPage from '../Page/EditColorfilterPage';
 import StopwordsPage from '../Page/StopwordsPage';
 import LoginPage from '../Page/LoginPage';
+import SearchPage from '../Page/SearchPage';
 
 interface Props {
 }
@@ -95,6 +96,12 @@ const RouterView = (props: Props) => {
           element={
             <ProtectedRouteApp
               middleware={['readAuthentication']} component={BrowsePage} />}
+        />
+        <Route
+          path="/:space/search"
+          element={
+            <ProtectedRouteApp
+              middleware={['readAuthentication']} component={SearchPage} />}
         />
         <Route
           path="/:space/graph"
