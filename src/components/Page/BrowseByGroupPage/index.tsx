@@ -24,7 +24,7 @@ const BrowseByGroupPage = (props: Props) => {
   const metadataDefinitionList = useSelector((state: any) => state.metadataDefinition.items);
   const metadataValueList = useSelector((state: any) => state.metadataValue.items);
   const labelList = useSelector((state: any) => state.label.items);
-  const [categories, setCategories] = useState<{ name: string, label: string }[]>();
+  const [categories, setCategories] = useState<string[]>();
 
   useEffect(() => {
     if (params.group !== 'label') {
@@ -40,15 +40,15 @@ const BrowseByGroupPage = (props: Props) => {
   }, [params, metadataDefinitionList]);
 
   useEffect(() => {
-    let _categories: { name: string, label: string }[] = [];
+    let _categories: string[] = [];
     if (params.group === 'label') {
-      _categories = labelList.map((item: string) => ({ name: item, value: item }))
-    } else if (params.group) {
-
+      _categories = labelList;
+    } else if (params.group && metadataValueList) {
+      _categories = metadataValueList[params.group];
     } else {
-
+      _categories = [];
     }
-    console.log(_categories, labelList);
+    console.log(_categories);
     setCategories(_categories);
   }, [labelList, metadataValueList, params.group]);
 
@@ -57,7 +57,7 @@ const BrowseByGroupPage = (props: Props) => {
       <Topbar title={`Browse by ${groupName}`} space={props.space} />
       <MainSection>
         <div className="browse-by-group-page">
-          {categories?.map(item => <CategoryView space={props.space} location={props.location} category={item.name} />)}
+          {categories?.map(item => <CategoryView space={props.space} location={props.location} category={item} group={params.group || ''} />)}
         </div>
       </MainSection>
     </div>
