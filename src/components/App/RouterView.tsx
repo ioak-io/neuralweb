@@ -23,6 +23,7 @@ import EditColorFilterPage from '../Page/EditColorfilterPage';
 import StopwordsPage from '../Page/StopwordsPage';
 import LoginPage from '../Page/LoginPage';
 import SearchPage from '../Page/SearchPage';
+import BrowseByGroupPage from '../Page/BrowseByGroupPage';
 
 interface Props {
 }
@@ -96,6 +97,12 @@ const RouterView = (props: Props) => {
           element={
             <ProtectedRouteApp
               middleware={['readAuthentication']} component={BrowsePage} />}
+        />
+        <Route
+          path="/:space/browse/:group"
+          element={
+            <ProtectedRouteApp
+              middleware={['readAuthentication']} component={BrowseByGroupPage} />}
         />
         <Route
           path="/:space/search"
