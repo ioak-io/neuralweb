@@ -25,20 +25,13 @@ import {
 
 import './style.scss';
 
-import Notification from '../Notification';
 import Init from './Init';
-import TopbarContainer from './TopbarContainer';
-import SidebarContainer from './SidebarContainer';
-import BodyContainer from './BodyContainer';
 import { receiveMessage } from '../../events/MessageService';
-import OakNotification from '../../oakui/wc/OakNotification';
-import OakAppLayout from '../../oakui/wc/OakAppLayout';
 import MakeNavBarTransparentCommand from '../../events/MakeNavBarTransparentCommand';
 import HideNavBarCommand from '../../events/HideNavBarCommand';
 import MainContent from '../MainContent';
 import Spinner from '../Spinner';
 import { setProfile } from '../../store/actions/ProfileActions';
-import { fetchAllSpaces } from '../../store/actions/SpaceActions';
 
 Chart.register(
   DoughnutController,

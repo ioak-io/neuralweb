@@ -6,12 +6,10 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import OakButton from '../../../oakui/wc/OakButton';
 import ListExpense from './ListExpense';
 import './style.scss';
 import Summary from './Summary';
 import AddExpense from '../../AddExpense';
-import { ExpenseFilterState } from '../../../simplestates/ExpenseFilterState';
 import { fetchAndSetExpenseItems } from '../../../store/actions/ExpenseActions';
 import Topbar from '../../../components/Topbar';
 import AddFilterExpense from '../../../components/AddFilterExpense';

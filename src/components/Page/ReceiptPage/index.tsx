@@ -6,18 +6,12 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import OakButton from '../../../oakui/wc/OakButton';
 import ListReceipt from './ListReceipt';
 import './style.scss';
 import { fetchAndSetReceiptItems } from '../../../store/actions/ReceiptActions';
 import Topbar from '../../../components/Topbar';
-// import AddFilterReceipt from '../../../components/AddFilterReceipt';
-// import ManageFilterReceipt from '../../../components/ManageFilterReceipt';
-import EditCategory from '../../../components/EditCategory';
 import ReceiptFilterModel from '../../../model/ReceiptFilterModel';
 import GridFilter from '../../../components/GridFilter';
-// import AddFilterReceiptCommand from '../../../events/AddFilterReceiptCommand';
-// import ManageFilterReceiptCommand from '../../../events/ManageFilterReceiptCommand';
 
 interface Props {
   history: any;

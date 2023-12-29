@@ -6,19 +6,13 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import OakButton from '../../../oakui/wc/OakButton';
 import ListIncome from './ListIncome';
 import './style.scss';
 import { fetchAndSetIncomeItems } from '../../../store/actions/IncomeActions';
 import Topbar from '../../../components/Topbar';
-// import AddFilterIncome from '../../../components/AddFilterIncome';
-// import ManageFilterIncome from '../../../components/ManageFilterIncome';
-import EditCategory from '../../../components/EditCategory';
 import IncomeFilterModel from '../../../model/IncomeFilterModel';
 import GridFilter from '../../../components/GridFilter';
 import EditIncome from '../../../components/EditIncome';
-// import AddFilterIncomeCommand from '../../../events/AddFilterIncomeCommand';
-// import ManageFilterIncomeCommand from '../../../events/ManageFilterIncomeCommand';
 
 interface Props {
   history: any;

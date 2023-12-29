@@ -15,13 +15,8 @@ import * as d3 from 'd3';
 import { cloneDeep } from 'lodash';
 
 import './style.scss';
-import NoteModel from '../../model/NoteModel';
-import NotelinkModel from '../../model/NotelinkModel';
 import LinkModel from '../../model/LinkModel';
 import NodeModel from '../../model/NodeModel';
-import FilterGroup from './FilterGroup';
-import { getFilterGroup, updateFilterGroup } from './service';
-import BinaryChoiceInput from './BinaryChoiceInput';
 import { useNavigate } from 'react-router-dom';
 import { AlignmentType, Button, Checkbox, Modal, ModalBody, ModalFooter, ModalHeader } from 'basicui';
 
@@ -59,7 +54,6 @@ const NetworkGraph = (props: Props) => {
   const companyList = useSelector((state: any) => state.company.items);
   const [data, setData] = useState<any>();
   const [references, setReferences] = useState<any>({});
-  const [filterGroup, setFilterGroup] = useState<any[]>([]);
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
 
   const [hideOrphanNodes, setHideOrphanNodes] = useState(false);
@@ -87,16 +81,6 @@ const NetworkGraph = (props: Props) => {
   const [linkNode, setLinkNode] = useState<any>();
   const [eventNode, setEventNode] = useState<any>();
   const [simulation, setSimulation] = useState<any>();
-
-  useEffect(() => {
-    if (authorization.isAuth) {
-      getFilterGroup(props.space, authorization).then((response: any) => {
-        if (response) {
-          setFilterGroup(response);
-        }
-      });
-    }
-  }, [authorization]);
 
   const nodeColor = d3
     .scaleOrdinal()
@@ -561,12 +545,6 @@ const NetworkGraph = (props: Props) => {
       ...state,
       [event.target.name]: 0 - parseInt(event.target.value, 10),
     });
-  };
-
-  const handleUpdateFilterGroup = (payload: any) => {
-    updateFilterGroup(props.space, payload, authorization).then(
-      (response: any) => { }
-    );
   };
 
   return (

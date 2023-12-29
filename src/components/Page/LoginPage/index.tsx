@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import './style.scss';
-import { Button, Input, ThemeType } from 'basicui';
 import Logo from './Logo';
-import { signin } from './service';
 import { setSessionValue } from '../../../utils/SessionUtils';
 import {
   AuthliteComponents,
   AuthliteTypes,
   AuthliteAuthenticationService,
 } from 'authlite';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAndSetCompanyItems } from '../../../store/actions/CompanyActions';
 
 interface Props {
 }
@@ -19,7 +19,9 @@ const environment: any = process.env.REACT_APP_ENVIRONMENT || 'local';
 
 const LoginPage = (props: Props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
+  const authorization = useSelector((state: any) => state.authorization);
 
   const [view, setView] = useState<AuthliteTypes.PageView>(AuthliteTypes.PageView.signin);
   const [successPage, setSuccessPage] = useState<'signin' | 'signup' | 'resetpassword' | 'resendverifylink' | null>(null);
@@ -36,6 +38,7 @@ const LoginPage = (props: Props) => {
         setSessionValue(`neuralweb-access_token`, response.data.access_token);
         setSessionValue(`neuralweb-refresh_token`, response.data.refresh_token);
         navigate(searchParams.get("from") || '/home');
+        dispatch(fetchAndSetCompanyItems(authorization));
       }
     })
   }
