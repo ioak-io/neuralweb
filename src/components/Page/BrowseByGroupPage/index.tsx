@@ -24,33 +24,39 @@ const BrowseByGroupPage = (props: Props) => {
   const metadataDefinitionList = useSelector((state: any) => state.metadataDefinition.items);
   const metadataValueList = useSelector((state: any) => state.metadataValue.items);
   const labelList = useSelector((state: any) => state.label.items);
+  const keywordList = useSelector((state: any) => state.keyword.items);
   const [categories, setCategories] = useState<string[]>();
 
   useEffect(() => {
-    if (params.group !== 'label') {
+    if (params.group === 'labels') {
+      setGroupName('Label');
+    } else if (params.group === 'primaryLabel') {
+      setGroupName('Starred label');
+    } else if (params.group === 'keywords') {
+      setGroupName('Keywords');
+    } else {
       const _metadataDefinition = metadataDefinitionList.find((item: MetadataDefinitionModel) => item._id === params.group);
       setMetadataDefinition(_metadataDefinition);
 
       if (_metadataDefinition) {
         setGroupName(`${_metadataDefinition.group} > ${_metadataDefinition.name}`);
       }
-    } else {
-      setGroupName('Label');
     }
   }, [params, metadataDefinitionList]);
 
   useEffect(() => {
     let _categories: string[] = [];
-    if (params.group === 'label') {
+    if (params.group === 'labels' || params.group === 'primaryLabel') {
       _categories = labelList;
-    } else if (params.group && metadataValueList) {
+    } else if (params.group === 'keywords' && keywordList) {
+      _categories = keywordList;
+    } else if (params.group && !["labels", "primaryLabel", "keywords"].includes(params.group) && metadataValueList) {
       _categories = metadataValueList[params.group];
     } else {
       _categories = [];
     }
-    console.log(_categories);
-    setCategories(_categories);
-  }, [labelList, metadataValueList, params.group]);
+    setCategories(_categories.sort((a, b) => a.localeCompare(b)));
+  }, [labelList, keywordList, metadataValueList, params.group]);
 
   return (
     <div className="page-animate">

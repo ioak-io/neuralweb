@@ -31,20 +31,22 @@ const CategoryView = (props: Props) => {
   }, [props.category, props.group, authorization]);
 
   return (
-    <div className="category-view">
-      <div className="category-view__heading">
-        <Link href={`/#/${props.space}/browse/${props.group}/${props.category}`} theme={ThemeType.default}>
-          {props.category}
-        </Link>
-      </div>
-      <div>
-        {noteList.map((note) => <div>
-          <Link href={`/#/${props.space}/note/${note.reference}`} theme={ThemeType.primary}>
-            {note.name}
+    <>
+      {noteList.length > 0 && <div className="category-view">
+        <div className="category-view__heading">
+          <Link href={`/#/${props.space}/browse/${props.group}/${props.category}`} theme={ThemeType.default}>
+            {props.category}
           </Link>
-        </div>)}
-      </div>
-    </div>
+        </div>
+        <div>
+          {noteList.map((note) => <div>
+            <Link href={`/#/${props.space}/note/${note.reference}`} theme={ThemeType.primary}>
+              {note.name}
+            </Link>
+          </div>)}
+        </div>
+      </div>}
+    </>
   );
 };
 

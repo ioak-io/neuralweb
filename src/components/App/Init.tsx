@@ -19,6 +19,7 @@ import { getSessionValue, removeSessionValue, setSessionValue } from '../../util
 import { addAuth, removeAuth } from '../../store/actions/AuthActions';
 import { useNavigate } from 'react-router-dom';
 import { rotateToken } from './service';
+import { fetchAndSetKeywordItems } from '../../store/actions/KeywordActions';
 
 const Init = () => {
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ const Init = () => {
       dispatch(fetchAndSetNotelinkItems(space, authorization));
       dispatch(fetchAndSetNotelinkAutoItems(space, authorization));
       dispatch(fetchAndSetLabelItems(space, authorization));
+      dispatch(fetchAndSetKeywordItems(space, authorization));
       dispatch(fetchAndSetMetadataDefinitionItems(space, authorization));
       dispatch(fetchAndSetMetadataValueItems(space, authorization));
       dispatch(fetchAndSetColorfilterItems(space, authorization));

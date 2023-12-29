@@ -50,13 +50,26 @@ const BrowsePage = (props: Props) => {
       <MainSection>
         {/* <h2>Browse by group</h2> */}
         <div className="browse-page">
-          <button className="browse-page__item" onClick={() => gotoPage('label')}>
+          <button className="browse-page__item" onClick={() => gotoPage('primaryLabel')}>
+            <div className="browse-page__item__left">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" /></svg>
+            </div>
+            <div className="browse-page__item__right">
+              <div className="browse-page__item__right__top">
+                Starred label
+              </div>
+              <div className="browse-page__item__right__bottom">
+                Primary starred label that uniquely categorize the content, making it easier to find relevant articles on specific topics
+              </div>
+            </div>
+          </button>
+          <button className="browse-page__item" onClick={() => gotoPage('labels')}>
             <div className="browse-page__item__left">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M345 39.1L472.8 168.4c52.4 53 52.4 138.2 0 191.2L360.8 472.9c-9.3 9.4-24.5 9.5-33.9 .2s-9.5-24.5-.2-33.9L438.6 325.9c33.9-34.3 33.9-89.4 0-123.7L310.9 72.9c-9.3-9.4-9.2-24.6 .2-33.9s24.6-9.2 33.9 .2zM0 229.5V80C0 53.5 21.5 32 48 32H197.5c17 0 33.3 6.7 45.3 18.7l168 168c25 25 25 65.5 0 90.5L277.3 442.7c-25 25-65.5 25-90.5 0l-168-168C6.7 262.7 0 246.5 0 229.5zM144 144a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z" /></svg>
             </div>
             <div className="browse-page__item__right">
               <div className="browse-page__item__right__top">
-                label
+                Label
               </div>
               <div className="browse-page__item__right__bottom">
                 Descriptive labels that help categorize and index the content, making it easier to find relevant articles on specific topics
@@ -76,6 +89,19 @@ const BrowsePage = (props: Props) => {
               </div>
             </div>
           </button>)}
+          <button className="browse-page__item" onClick={() => gotoPage('keywords')}>
+            <div className="browse-page__item__left">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M345 39.1L472.8 168.4c52.4 53 52.4 138.2 0 191.2L360.8 472.9c-9.3 9.4-24.5 9.5-33.9 .2s-9.5-24.5-.2-33.9L438.6 325.9c33.9-34.3 33.9-89.4 0-123.7L310.9 72.9c-9.3-9.4-9.2-24.6 .2-33.9s24.6-9.2 33.9 .2zM0 229.5V80C0 53.5 21.5 32 48 32H197.5c17 0 33.3 6.7 45.3 18.7l168 168c25 25 25 65.5 0 90.5L277.3 442.7c-25 25-65.5 25-90.5 0l-168-168C6.7 262.7 0 246.5 0 229.5zM144 144a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z" /></svg>
+            </div>
+            <div className="browse-page__item__right">
+              <div className="browse-page__item__right__top">
+                Keyword
+              </div>
+              <div className="browse-page__item__right__bottom">
+                Context identified by the artificial inteligence algorithm
+              </div>
+            </div>
+          </button>
         </div>
       </MainSection>
     </div>

@@ -21,6 +21,7 @@ import UserReducer from './reducers/UserReducer';
 import NotelinkReducer from './reducers/NotelinkReducer';
 import NotelinkAutoReducer from './reducers/NotelinkAutoReducer';
 import ColorfilterReducer from './reducers/ColorfilterReducer';
+import KeywordReducer from './reducers/KeywordReducer';
 
 const initialState = {};
 
@@ -40,6 +41,7 @@ const store = configureStore(
       notelink: NotelinkReducer,
       notelinkAuto: NotelinkAutoReducer,
       label: LabelReducer,
+      keyword: KeywordReducer,
       metadataDefinition: MetadataDefinitionReducer,
       metadataValue: MetadataValueReducer,
       colorfilter: ColorfilterReducer

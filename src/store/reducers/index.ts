@@ -14,6 +14,7 @@ import IncomeCategoryReducer from './IncomeCategoryReducer';
 import IncomeReducer from './IncomeReducer';
 import NoteReducer from './NoteReducer';
 import LabelReducer from './LabelReducer';
+import KeywordReducer from './KeywordReducer';
 
 export default combineReducers({
   authorization: AuthReducer,
@@ -30,5 +31,6 @@ export default combineReducers({
   filterExpense: FilterExpenseReducer,
   incomeCategory: IncomeCategoryReducer,
   note: NoteReducer,
-  label: LabelReducer
+  label: LabelReducer,
+  keyword: KeywordReducer
 });
