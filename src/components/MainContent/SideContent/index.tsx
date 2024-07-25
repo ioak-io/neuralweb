@@ -23,6 +23,7 @@ import {
   faMoneyBillWaveAlt,
   faPalette,
   faPlus,
+  faPuzzlePiece,
   faReceipt,
   faSearch,
   faShoppingBag,
@@ -140,6 +141,11 @@ const SideContent = (props: Props) => {
               link={`/${props.space}/search`}
               icon={faSearch}
               label="Search"
+            />
+            <SideNavLink
+              link={`/${props.space}/fleeting-notes`}
+              icon={faPuzzlePiece}
+              label="Fleeting notes"
             />
             <SideNavLink
               link={`/${props.space}/graph`}

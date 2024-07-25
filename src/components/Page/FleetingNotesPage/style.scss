@@ -1,0 +1,12 @@
+.fleeting-notes-page {
+  height: 100%;
+  display: grid;
+  row-gap: 12px;
+}
+
+.fleeting-notes-page__record {
+  display: grid;
+  grid-auto-flow: column;
+  column-gap: 12px;
+  justify-content: flex-start;
+}

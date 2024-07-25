@@ -24,6 +24,7 @@ import StopwordsPage from '../Page/StopwordsPage';
 import LoginPage from '../Page/LoginPage';
 import SearchPage from '../Page/SearchPage';
 import BrowseByGroupPage from '../Page/BrowseByGroupPage';
+import FleetingNotesPage from '../Page/FleetingNotesPage';
 
 interface Props {
 }
@@ -97,6 +98,12 @@ const RouterView = (props: Props) => {
           element={
             <ProtectedRouteApp
               middleware={['readAuthentication']} component={BrowsePage} />}
+        />
+        <Route
+          path="/:space/fleeting-notes"
+          element={
+            <ProtectedRouteApp
+              middleware={['readAuthentication']} component={FleetingNotesPage} />}
         />
         <Route
           path="/:space/browse/:group"
