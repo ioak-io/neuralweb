@@ -126,7 +126,7 @@ const Init = () => {
     if (colorMode || sidebarStatus) {
       dispatch(
         setProfile({
-          theme: colorMode || 'basicui-dark basicui-dark',
+          theme: colorMode || 'basicui-dark',
           sidebar: sidebarStatus === 'expanded',
         })
       );

@@ -7,11 +7,7 @@
   // align-content: center;
   align-items: center;
   padding: 0 20px;
-  border-bottom: 1px solid var(--theme-white-600);
-}
-
-.basicui-dark .topbar {
-  border-color: var(--theme-black-extended-800);
+  border-bottom: 1px solid var(--basicui-border-color);
 }
 
 .topbar__left {
@@ -39,17 +35,4 @@
   font-size: 14px;
   height: 100%;
   padding: 0 12px;
-}
-
-.topbar__left button.topbar__left__nav:hover,
-.topbar__left button.topbar__left__nav:focus,
-.topbar__left button.topbar__left__nav:active {
-  background-color: var(--theme-white-400);
-}
-.basicui-dark {
-.topbar__left button.topbar__left__nav:hover,
-.topbar__left button.topbar__left__nav:focus,
-.topbar__left button.topbar__left__nav:active {
-  background-color: var(--theme-black-50);
-}
 }

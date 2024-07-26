@@ -1,0 +1,41 @@
+.console-section {
+  margin: 0px 20px;
+  display: grid;
+  grid-auto-flow: row;
+  row-gap: 12px;
+  position: fixed;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
+
+@media (min-width: 768px) {
+  .console-section {
+    margin-left: calc(var(--app-layout-sidebar-width) + 20px);
+    transition: margin-left 250ms ease-in-out;
+  }
+}
+
+@media (min-width: 768px) {
+  .console-section__sidebar-inactive {
+    margin-left: 75px;
+    margin-left: calc(var(--app-layout-sidebar-width-shrinked) + 20px);
+  }
+}
+
+.console-section__editor {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  column-gap: 6px;
+}
+
+.console-section__controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.console-section__controls button {
+  margin: 0 6px 6px 0;
+}
