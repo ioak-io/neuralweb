@@ -50,10 +50,10 @@ const Topbar = (props: Props) => {
         </div>
         <div className="topbar__right">{props.children}</div>
       </div>
-      <MobileSidebar
+      {/* <MobileSidebar
         isOpen={isMobileSidebarOpen}
         onClose={closeMobileSidebar}
-      />
+      /> */}
     </>
   );
 };

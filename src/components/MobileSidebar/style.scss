@@ -1,27 +1,23 @@
 .mobile-sidebar-overlay,
 .mobile-sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
 }
 
 .mobile-sidebar-overlay {
-  right: 0;
-  background-color: rgba(0,0,0,0.5);
+  // right: 0;
+  // background-color: rgba(0,0,0,0.5);
 }
 
 .mobile-sidebar {
-  width: calc(100vw - 50px);
-  overflow-y: auto;
-  background-color: var(--theme-white-200);
-  color: var(--theme-white-200i);
+  // width: 100%;
+  // overflow-y: auto;
+  // background-color: var(--theme-white-200);
+  // color: var(--theme-white-200i);
 }
 
 .mobile-sidebar::-webkit-scrollbar {
-  display: none;
+  // display: none;
 }
-.basicui-dark .mobile-sidebar {
-  background-color: var(--theme-black-400);
-  color: var(--theme-black-400i);
-}
+// .basicui-dark .mobile-sidebar {
+//   background-color: var(--theme-black-400);
+//   color: var(--theme-black-400i);
+// }
