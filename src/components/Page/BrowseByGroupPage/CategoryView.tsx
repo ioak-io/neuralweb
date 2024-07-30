@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import './CategoryView.scss';
-import Topbar from '../../../components/Topbar';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Input, Link, ThemeType } from 'basicui';
-import MainSection from '../../../components/MainSection';
-import { SearchOptionType } from 'src/components/BrowseNotes/SearchInput/SearchOptionType';
-import MetadataDefinitionModel from 'src/model/MetadataDefinitionModel';
-import { getNotesByMetadataValue } from './service';
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import "./CategoryView.scss";
+import Topbar from "../../../components/Topbar";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Input, Link, ThemeType } from "basicui";
+import MainSection from "../../../components/MainSection";
+import { SearchOptionType } from "src/components/BrowseNotes/SearchInput/SearchOptionType";
+import MetadataDefinitionModel from "src/model/MetadataDefinitionModel";
+import { getNotesByMetadataValue } from "./service";
 
 interface Props {
   location: any;
@@ -24,28 +24,43 @@ const CategoryView = (props: Props) => {
 
   useEffect(() => {
     if (props.category && props.group && authorization.isAuth) {
-      getNotesByMetadataValue(props.space, props.group, props.category, authorization).then((response: any[]) => {
+      getNotesByMetadataValue(
+        props.space,
+        props.group,
+        props.category,
+        authorization
+      ).then((response: any[]) => {
         setNoteList(response);
-      })
+      });
     }
   }, [props.category, props.group, authorization]);
 
   return (
     <>
-      {noteList.length > 0 && <div className="category-view">
-        <div className="category-view__heading">
-          <Link href={`/#/${props.space}/browse/${props.group}/${props.category}`} theme={ThemeType.default}>
-            {props.category}
-          </Link>
-        </div>
-        <div>
-          {noteList.map((note) => <div>
-            <Link href={`/#/${props.space}/note/${note.reference}`} theme={ThemeType.primary}>
-              {note.name}
+      {noteList.length > 0 && (
+        <div className="category-view">
+          <div className="category-view__heading">
+            <Link
+              href={`/#/${props.space}/browse/${props.group}/${props.category}`}
+              theme={ThemeType.default}
+            >
+              {props.category}
             </Link>
-          </div>)}
+          </div>
+          <div>
+            {noteList.map((note) => (
+              <div key={note.reference}>
+                <Link
+                  href={`/#/${props.space}/note/${note.reference}`}
+                  theme={ThemeType.primary}
+                >
+                  {note.name}
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>}
+      )}
     </>
   );
 };

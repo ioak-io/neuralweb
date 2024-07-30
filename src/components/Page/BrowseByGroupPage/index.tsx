@@ -60,10 +60,10 @@ const BrowseByGroupPage = (props: Props) => {
 
   return (
     <div className="page-animate">
-      <Topbar title={`Browse by ${groupName}`} space={props.space} />
+      <Topbar title={`Browse by ${groupName}`} />
       <MainSection>
         <div className="browse-by-group-page">
-          {categories?.map(item => <CategoryView space={props.space} location={props.location} category={item} group={params.group || ''} />)}
+          {categories?.map(item => <CategoryView key={item} space={props.space} location={props.location} category={item} group={params.group || ''} />)}
         </div>
       </MainSection>
     </div>
