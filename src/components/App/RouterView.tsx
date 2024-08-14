@@ -77,6 +77,16 @@ const RouterView = (props: Props) => {
           }
         />
         <Route
+          path="/reset-password"
+          element={
+            <ProtectedRouteApp
+              middleware={[]}
+              component={LoginPage}
+              additionalProps={{ view: "resetpassword" }}
+            />
+          }
+        />
+        <Route
           path="/company/edit"
           element={
             <ProtectedRouteApp

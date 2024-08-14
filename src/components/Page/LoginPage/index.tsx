@@ -20,10 +20,13 @@ interface Props {
   view?: string;
 }
 
-const appRealm = process.env.REACT_APP_ONEAUTH_APPSPACE_ID || "";
+const realm = process.env.REACT_APP_ONEAUTH_APPSPACE_ID || "";
 const environment: any = process.env.REACT_APP_ENVIRONMENT || "local";
+const apiKey = "78b4e61d-de91-4700-9404-3a9a0924ba8a";
 const emailConfirmationPageLink: any =
   process.env.REACT_APP_REDIRECT_CONFIRM_EMAIL || undefined;
+const resetPasswordPageLink: any =
+  process.env.REACT_APP_REDIRECT_RESET_PASSWORD || undefined;
 
 const LoginPage = (props: Props) => {
   const navigate = useNavigate();
@@ -37,6 +40,7 @@ const LoginPage = (props: Props) => {
   const [successPage, setSuccessPage] = useState<
     | "signin"
     | "signup"
+    | "forgotpassword"
     | "resetpassword"
     | "resendverifylink"
     | "confirmemail"
@@ -48,6 +52,8 @@ const LoginPage = (props: Props) => {
     resendVerifyLinkFormErrorMessages,
     setResendVerifyLinkFormErrorMessages,
   ] = useState<AuthliteTypes.ResendVerifyLinkFormErrorMessages>({});
+  const [myProfileFormErrorMessages, setMyProfileFormErrorMessages] =
+    useState<AuthliteTypes.MyProfileFormErrorMessages>({});
   const [signinFormErrorMessages, setSigninFormErrorMessages] =
     useState<AuthliteTypes.SigninFormErrorMessages>({});
   const [signupFormErrorMessages, setSignupFormErrorMessages] =
@@ -56,9 +62,17 @@ const LoginPage = (props: Props) => {
     validateConfirmEmailLinkMessages,
     setValidateConfirmEmailLinkMessages,
   ] = useState<AuthliteTypes.ValidateConfirmEmailLinkMessages>({});
+  const [
+    validateResetPasswordLinkMessages,
+    setValidateResetPasswordLinkMessages,
+  ] = useState<AuthliteTypes.ValidateResetPasswordLinkMessages>({
+    outcome: "unknown",
+  });
+  const [resetPasswordFormErrorMessages, setResetPasswordFormErrorMessages] =
+    useState<AuthliteTypes.ResetPasswordFormErrorMessages>({});
 
   const onSignin = (payload: AuthliteTypes.SigninRequest) => {
-    AuthliteAuthenticationService.signin(environment, appRealm, payload).then(
+    AuthliteAuthenticationService.signin(environment, realm, payload).then(
       (response: AuthliteTypes.SigninResponse) => {
         console.log(response);
         setSigninFormErrorMessages(response.errorMessages);
@@ -78,9 +92,10 @@ const LoginPage = (props: Props) => {
   const onSignup = (data: AuthliteTypes.SignupRequest) => {
     AuthliteAuthenticationService.signup(
       environment,
-      appRealm,
+      realm,
       data,
-      "78b4e61d-de91-4700-9404-3a9a0924ba8a"
+      apiKey,
+      emailConfirmationPageLink
     ).then((response: AuthliteTypes.SignupResponse) => {
       console.log(response);
       if (response.outcome === "SUCCESS") {
@@ -91,16 +106,16 @@ const LoginPage = (props: Props) => {
     });
   };
 
-  const onForgotPassword = (data: AuthliteTypes.SignupRequest) => {
+  const onForgotPassword = (data: AuthliteTypes.ForgotPasswordRequest) => {
     AuthliteAuthenticationService.resetPasswordLink(
       environment,
-      appRealm,
-      data
+      realm,
+      data,
+      resetPasswordPageLink
     ).then((response: AuthliteTypes.ForgotPasswordResponse) => {
-      console.log(response);
       if (response.outcome === "SUCCESS") {
         setView(AuthliteTypes.PageView.placeholder);
-        setSuccessPage("resetpassword");
+        setSuccessPage("forgotpassword");
       }
       setForgotPasswordFormErrorMessages(response.errorMessages);
     });
@@ -109,7 +124,7 @@ const LoginPage = (props: Props) => {
   const onResendVerifyLink = (data: AuthliteTypes.ResendVerifyLinkRequest) => {
     AuthliteAuthenticationService.resendVerifyLink(
       environment,
-      appRealm,
+      realm,
       data,
       emailConfirmationPageLink
     ).then((response: AuthliteTypes.ResendVerifyLinkResponse) => {
@@ -126,7 +141,7 @@ const LoginPage = (props: Props) => {
   ) => {
     AuthliteAuthenticationService.confirmEmailLink(
       environment,
-      appRealm,
+      realm,
       data
     ).then((response: ValidateConfirmEmailLinkResponse) => {
       if (response.outcome === "SUCCESS") {
@@ -136,6 +151,36 @@ const LoginPage = (props: Props) => {
       setValidateConfirmEmailLinkMessages(response.errorMessages);
     });
   };
+
+  const onValidateResetPasswordLink = (
+    data: ValidateConfirmEmailLinkRequest
+  ) => {
+    AuthliteAuthenticationService.onValidateResetPasswordLink(
+      environment,
+      realm,
+      data
+    ).then((response: AuthliteTypes.ValidateResetPasswordLinkResponse) => {
+      setValidateResetPasswordLinkMessages(response.errorMessages);
+    });
+  };
+
+  const onResetPassword = (data: AuthliteTypes.ResetPasswordRequest) => {
+    AuthliteAuthenticationService.onResetPassword(
+      environment,
+      realm,
+      data
+    ).then((response: AuthliteTypes.ResetPasswordResponse) => {
+      if (response.outcome === "SUCCESS") {
+        setView(AuthliteTypes.PageView.placeholder);
+        setSuccessPage("resetpassword");
+      }
+      setResetPasswordFormErrorMessages(response.errorMessages);
+    });
+  };
+
+  const onChangePassword = (data: AuthliteTypes.ChangePasswordRequest) => {};
+
+  const onUpdateProfile = (data: AuthliteTypes.UpdateProfileRequest) => {};
 
   const clearErrorMessages = () => {
     setSigninFormErrorMessages({});
@@ -154,6 +199,8 @@ const LoginPage = (props: Props) => {
     switch (pageViewString) {
       case "confirmemail":
         return AuthliteTypes.PageView.confirmemail;
+      case "resetpassword":
+        return AuthliteTypes.PageView.resetpassword;
       default:
         return AuthliteTypes.PageView.signin;
     }
@@ -165,12 +212,19 @@ const LoginPage = (props: Props) => {
       onSignup={onSignup}
       onForgotPassword={onForgotPassword}
       onResendVerifyLink={onResendVerifyLink}
+      onValidateConfirmEmailLink={onValidateConfirmEmailLink}
+      onValidateResetPasswordLink={onValidateResetPasswordLink}
+      onResetPassword={onResetPassword}
+      onChangePassword={onChangePassword}
+      onUpdateProfile={onUpdateProfile}
+      myProfileFormErrorMessages={myProfileFormErrorMessages}
       signinFormErrorMessages={signinFormErrorMessages}
       signupFormErrorMessages={signupFormErrorMessages}
       forgotPasswordFormErrorMessages={forgotPasswordFormErrorMessages}
       resendVerifyLinkFormErrorMessages={resendVerifyLinkFormErrorMessages}
-      onValidateConfirmEmailLink={onValidateConfirmEmailLink}
       validateConfirmEmailLinkMessages={validateConfirmEmailLinkMessages}
+      resetPasswordFormErrorMessages={resetPasswordFormErrorMessages}
+      validateResetPasswordLinkMessages={validateResetPasswordLinkMessages}
       clearErrorMessages={clearErrorMessages}
       view={view}
       changeView={setView}
@@ -214,8 +268,25 @@ const LoginPage = (props: Props) => {
             </AuthliteComponents.InfoPageFootnote>
           </AuthliteComponents.InfoPage>
         )}
-        {successPage === "resetpassword" && (
+        {successPage === "forgotpassword" && (
           <AuthliteComponents.InfoPage heading="Password reset link sent!">
+            <AuthliteComponents.InfoPageDescription>
+              Gravida dolor suscipit urna sagittis per{" "}
+              <a onClick={() => setView(AuthliteTypes.PageView.signin)}>
+                login now
+              </a>{" "}
+              parturient eu. laoreet congue fermentum ipsum tincidunt elementum
+              auctor aptent aliquam feugiat interdum. porta sem metus convallis
+              donec nam sodales.
+            </AuthliteComponents.InfoPageDescription>
+            <AuthliteComponents.InfoPageFootnote>
+              Rutrum elit lacus consequat justo luctus per proin venenatis
+              varius quam dui dignissim etiam
+            </AuthliteComponents.InfoPageFootnote>
+          </AuthliteComponents.InfoPage>
+        )}
+        {successPage === "resetpassword" && (
+          <AuthliteComponents.InfoPage heading="Password has been updated!">
             <AuthliteComponents.InfoPageDescription>
               Gravida dolor suscipit urna sagittis per{" "}
               <a onClick={() => setView(AuthliteTypes.PageView.signin)}>

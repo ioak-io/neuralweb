@@ -96,7 +96,8 @@ const MainContent = (props: Props) => {
       logoTextWhite={logoTextWhite}
       hideNavbar={
         location.pathname === "/login" ||
-        location.pathname.startsWith("/confirm-email")
+        location.pathname.startsWith("/confirm-email") ||
+        location.pathname.startsWith("/reset-password")
       }
       location={location}
     >
