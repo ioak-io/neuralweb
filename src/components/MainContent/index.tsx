@@ -125,6 +125,11 @@ const MainContent = (props: Props) => {
                 label="Browse"
               />
               <SideNavLink
+                link={`/${props.space}/browse-new`}
+                icon={faFolderOpen}
+                label="Browse New"
+              />
+              <SideNavLink
                 link={`/${props.space}/search`}
                 icon={faSearch}
                 label="Search"

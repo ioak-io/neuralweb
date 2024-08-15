@@ -16,7 +16,7 @@ import BackupAndRestore from "../Page/SettingsPage/BackupAndRestore";
 import GraphPage from "../Page/GraphPage";
 import NotePage from "../Page/NotePage";
 import MetadataDefinitionPage from "../Page/MetadataDefinitionPage";
-import BrowsePage from "../Page/BrowsePage";
+import BrowsePageOld from "../Page/BrowsePageOld";
 import NewNotePage from "../Page/NewNotePage";
 import ColorfilterPage from "../Page/ColorfilterPage";
 import EditColorFilterPage from "../Page/EditColorfilterPage";
@@ -25,6 +25,7 @@ import LoginPage from "../Page/LoginPage";
 import SearchPage from "../Page/SearchPage";
 import BrowseByGroupPage from "../Page/BrowseByGroupPage";
 import FleetingNotesPage from "../Page/FleetingNotesPage";
+import BrowsePage from "../Page/BrowsePage";
 
 interface Props {}
 
@@ -133,6 +134,15 @@ const RouterView = (props: Props) => {
         />
         <Route
           path="/:space/browse"
+          element={
+            <ProtectedRouteApp
+              middleware={["readAuthentication"]}
+              component={BrowsePageOld}
+            />
+          }
+        />
+        <Route
+          path="/:space/browse-new"
           element={
             <ProtectedRouteApp
               middleware={["readAuthentication"]}

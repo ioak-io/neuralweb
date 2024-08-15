@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './style.scss';
 import NoteModel from '../../../../model/NoteModel';
-import { searchNote } from '../../../../components/Page/BrowsePage/service';
+import { searchNote } from '../../../../components/Page/BrowsePageOld/service';
 import { ButtonVariantType, IconButton, Input, ThemeType } from 'basicui';
 import { saveNotelink } from './service';
 import LinkView from '../LinkView';

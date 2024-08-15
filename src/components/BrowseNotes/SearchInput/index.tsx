@@ -99,7 +99,7 @@ const SearchInput = (props: Props) => {
     <div className="search-input">
       <SearchPref searchPref={props.searchConfig.searchPref} options={searchByOptions} handleChange={handleSearchPrefChange} />
       <div className="search-input__input">
-        <form className="main browse-page-form" onSubmit={onSearch}>
+        <form className="main browse-page-old-form" onSubmit={onSearch}>
           <Input name="text"
             value={props.searchConfig.text}
             onInput={handleTextChange}
