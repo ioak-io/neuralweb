@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { httpGet, httpPost, httpPut } from '../../Lib/RestTemplate';
+import { httpGet, httpPost, httpPut } from '../Lib/RestTemplate';
 
 export const saveNote = (space: string, payload: any, authorization: any) => {
   return httpPut(`/note/${space}/`, payload, {

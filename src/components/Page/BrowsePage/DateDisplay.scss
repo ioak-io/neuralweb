@@ -1,0 +1,20 @@
+.browse-page-datedisplay {
+  display: grid;
+  grid-auto-flow: row;
+  // row-gap: 2px;
+  border: 1px solid var(--basicui-border-color);
+  border-radius: 12px;
+  height: 64px;
+  width: 46px;
+  align-content: center;
+  justify-items: center;
+  background-color: var(--basicui-bg-surface);
+}
+
+.browse-page-datedisplay__date {
+  font-size: 24px;
+}
+
+.browse-page-datedisplay__day {
+  font-size: 10px;
+}

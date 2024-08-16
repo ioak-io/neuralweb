@@ -21,13 +21,12 @@ const LinksEditor = (props: Props) => {
 
   const addLink = (reference: string) => {
     saveNotelink(props.space, props.note.reference, reference, authorization).then((response: NoteModel) => {
-      console.log(response);
+      // console.log(response);
     })
   }
 
   const removeLink = (reference: string) => {
     deleteNotelink(props.space, props.note.reference, reference, authorization).then((response: NoteModel) => {
-      console.log(response);
       dispatch(deleteNotelinkItems({
         sourceNoteRef: props.note.reference,
         linkedNoteRef: reference,

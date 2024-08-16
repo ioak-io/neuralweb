@@ -118,7 +118,7 @@ const RouterView = (props: Props) => {
           path="/:space/new-note"
           element={
             <ProtectedRouteApp
-              middleware={["readAuthentication"]}
+              middleware={["authenticate"]}
               component={NewNotePage}
             />
           }
@@ -127,7 +127,7 @@ const RouterView = (props: Props) => {
           path="/:space/note/:id"
           element={
             <ProtectedRouteApp
-              middleware={["readAuthentication"]}
+              middleware={["authenticate"]}
               component={NotePage}
             />
           }
@@ -136,7 +136,7 @@ const RouterView = (props: Props) => {
           path="/:space/browse"
           element={
             <ProtectedRouteApp
-              middleware={["readAuthentication"]}
+              middleware={["authenticate"]}
               component={BrowsePageOld}
             />
           }

@@ -1,0 +1,30 @@
+.home-action-button {
+  font-size: inherit;
+  font-weight: inherit;
+  box-shadow: none;
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 250ms ease-in-out, color 250ms ease-in-out,
+    border-color 250ms ease-in-out;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 12px 6px;
+  border-bottom: 1px solid var(--basicui-border-color);
+}
+
+.home-action-button:hover,
+.home-action-button:active {
+  background-color: var(--basicui-bg-accent);
+}
+
+.home-action-button__label {
+    margin-left: 6px;
+}
+
+.home-action-button__icon {
+}

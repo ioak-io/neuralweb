@@ -1,0 +1,21 @@
+.browse-page-popup {
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: var(--basicui-bg-card);
+  z-index: 9;
+  margin-left: 100vw;
+  transition: margin-left 250ms ease-in-out;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.browse-page-popup--expanded {
+  margin-left: var(--basicui-appshell-navbar-width);
+}
+
+.browse-page-popup__main {
+    overflow-y: auto;
+}
