@@ -1,7 +1,7 @@
 .browse-page {
   height: 100%;
   display: grid;
-  grid-template-columns: calc(var(--basicui-appshell-navbar-width) + 36px) 1fr;
+  // grid-template-columns: calc(var(--basicui-appshell-navbar-width) + 36px) 1fr;
 }
 
 .browse-page-browser {
@@ -35,15 +35,14 @@
   border-top: 1px solid var(--basicui-border-color);
 }
 
+.browse-page-main {
+  background-color: var(--basicui-bg-surface);
+  min-height: 100vh;
+  // overflow-y: auto;
+}
+
 @media (max-width: 767px) {
-  .browse-page {
-    grid-template-columns: 1fr;
-  }
-  .browse-page-main {
-    display: none;
-  }
   .browse-page-browser {
     height: calc(100vh - var(--basicui-appshell-topbar-height));
-    border-right: none;
   }
 }

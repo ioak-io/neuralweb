@@ -37,9 +37,9 @@ const BrowsePage = (props: Props) => {
   const keywordList = useSelector((state: any) => state.keyword.items);
   const [categories, setCategories] = useState<string[]>();
   const [popupTitle, setPopupTitle] = useState<string>("");
-  const [popupView, setPopupView] = useState<
-    "none" | "preview" | "merge" | "newnote"
-  >("none");
+  const [popupView, setPopupView] = useState<"none" | "merge" | "newnote">(
+    "none"
+  );
 
   useEffect(() => {
     setBrowsehistory(StorageService.readBrowseHistory());
@@ -129,8 +129,11 @@ const BrowsePage = (props: Props) => {
       browsehistory.length > 0 &&
       browsehistory[browsehistory.length - 1].selectedNoteIds.length > 0
     ) {
-      setPopupView("preview");
-      setPopupTitle(browsehistory[browsehistory.length - 1].selectedNoteIds[0]);
+      navigate(
+        `/${props.space}/note/${
+          browsehistory[browsehistory.length - 1].selectedNoteIds[0]
+        }`
+      );
     }
   };
 
@@ -176,9 +179,9 @@ const BrowsePage = (props: Props) => {
   };
 
   return (
-    <>
-      <div className="page-animate">
-        <div className="browse-page">
+    <div className="page-animate">
+      <div className="browse-page">
+        {popupView === "none" && (
           <div className="browse-page-browser">
             <Header
               space={props.space}
@@ -232,29 +235,14 @@ const BrowsePage = (props: Props) => {
                 </div>
               )}
           </div>
-          <div className="browse-page-main">
-            <MainSection>Main</MainSection>
-          </div>
-        </div>
-      </div>
-      <Popup
-        title={popupTitle}
-        isExpanded={popupView !== "none"}
-        onClose={closePopupView}
-      >
-        {popupView === "preview" && (
-          <PreviewNote
-            space={props.space}
-            reference={
-              browsehistory[browsehistory.length - 1].selectedNoteIds[0]
-            }
-          />
         )}
         {popupView === "newnote" && (
-          <NewNote space={props.space} location={props.location} />
+          <div className="browse-page-main">
+            <NewNote space={props.space} location={props.location} />
+          </div>
         )}
-      </Popup>
-    </>
+      </div>
+    </div>
   );
 };
 
