@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cloneDeep } from "lodash";
 import "./style.scss";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import MainSection from "../../../components/MainSection";
 import { SearchOptionType } from "../../../components/BrowseNotes/SearchInput/SearchOptionType";
 import ActionSection from "./ActionSection";
@@ -23,6 +23,7 @@ interface Props {
 }
 
 const BrowsePage = (props: Props) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
   const [searchByOptions, setSearchByOptions] = useState<SearchOptionType[]>(
@@ -36,14 +37,14 @@ const BrowsePage = (props: Props) => {
   const labelList = useSelector((state: any) => state.label.items);
   const keywordList = useSelector((state: any) => state.keyword.items);
   const [categories, setCategories] = useState<string[]>();
-  const [popupTitle, setPopupTitle] = useState<string>("");
-  const [popupView, setPopupView] = useState<"none" | "merge" | "newnote">(
-    "none"
-  );
 
   useEffect(() => {
     setBrowsehistory(StorageService.readBrowseHistory());
   }, []);
+
+  useEffect(() => {
+    console.log(searchParams.get("view"));
+  }, [searchParams]);
 
   const findCategories = (metadataId: string): string[] => {
     let _categories: string[] = [];
@@ -88,12 +89,17 @@ const BrowsePage = (props: Props) => {
   };
 
   const back = () => {
-    if (browsehistory.length > 0) {
+    if (!searchParams.get("view") && browsehistory.length > 0) {
       let _browsehistory = cloneDeep(browsehistory);
       _browsehistory = _browsehistory.splice(0, browsehistory.length - 1);
       setBrowsehistory(_browsehistory);
       setCategories([]);
       setNotes([]);
+    } else if (searchParams.get("view")) {
+      // const newParams = new URLSearchParams(searchParams.toString());
+      // newParams.set("view", "");
+      // setSearchParams(newParams);
+      navigate(-1);
     }
   };
 
@@ -119,21 +125,19 @@ const BrowsePage = (props: Props) => {
     StorageService.writeBrowseHistory(browsehistory);
   }, [browsehistory, authorization, labelList, keywordList, metadataValueList]);
 
-  const closePopupView = () => {
-    setPopupView("none");
-    setPopupTitle("");
-  };
+  // const closePopupView = () => {
+  //   setPopupView("none");
+  //   setPopupTitle("");
+  // };
 
   const onPreview = () => {
     if (
       browsehistory.length > 0 &&
       browsehistory[browsehistory.length - 1].selectedNoteIds.length > 0
     ) {
-      navigate(
-        `/${props.space}/note/${
-          browsehistory[browsehistory.length - 1].selectedNoteIds[0]
-        }`
-      );
+      const newParams = new URLSearchParams(searchParams.toString());
+      newParams.set("view", "previewnote");
+      setSearchParams(newParams);
     }
   };
 
@@ -174,22 +178,24 @@ const BrowsePage = (props: Props) => {
   };
 
   const onNewNote = () => {
-    setPopupView("newnote");
-    setPopupTitle("New note");
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("view", "newnote");
+    setSearchParams(newParams);
   };
 
   return (
     <div className="page-animate">
       <div className="browse-page">
-        {popupView === "none" && (
-          <div className="browse-page-browser">
-            <Header
-              space={props.space}
-              browsehistory={browsehistory}
-              back={back}
-              onNewNote={onNewNote}
-            />
+        <div className="browse-page-browser">
+          <Header
+            space={props.space}
+            browsehistory={browsehistory}
+            back={back}
+            onNewNote={onNewNote}
+            showInfo={!searchParams.get("view")}
+          />
 
+          {!searchParams.get("view") && (
             <div className="browse-page-browser__main">
               {(browsehistory.length === 0 ||
                 browsehistory[browsehistory.length - 1].view === "home") && (
@@ -219,28 +225,43 @@ const BrowsePage = (props: Props) => {
                   />
                 )}
             </div>
+          )}
 
-            {browsehistory.length > 0 &&
-              browsehistory[browsehistory.length - 1].view === "note" &&
-              browsehistory[browsehistory.length - 1].selectedNoteIds.length >
-                0 && (
-                <div className="browse-page-browser__action">
-                  <ActionSection
-                    space={props.space}
-                    onPreview={onPreview}
-                    onFindSimilar={onFindSimilar}
-                    onDelete={onDelete}
-                    browseHistory={browsehistory[browsehistory.length - 1]}
-                  />
-                </div>
-              )}
-          </div>
-        )}
-        {popupView === "newnote" && (
-          <div className="browse-page-main">
-            <NewNote space={props.space} location={props.location} />
-          </div>
-        )}
+          {!searchParams.get("view") &&
+            browsehistory.length > 0 &&
+            browsehistory[browsehistory.length - 1].view === "note" &&
+            browsehistory[browsehistory.length - 1].selectedNoteIds.length >
+              0 && (
+              <div className="browse-page-browser__action">
+                <ActionSection
+                  space={props.space}
+                  onPreview={onPreview}
+                  onFindSimilar={onFindSimilar}
+                  onDelete={onDelete}
+                  browseHistory={browsehistory[browsehistory.length - 1]}
+                />
+              </div>
+            )}
+          {searchParams.get("view") === "newnote" && (
+            <div className="browse-page-browser__main">
+              <NewNote space={props.space} location={props.location} />
+            </div>
+          )}
+          {searchParams.get("view") === "previewnote" &&
+            browsehistory.length > 0 &&
+            browsehistory[browsehistory.length - 1].view === "note" &&
+            browsehistory[browsehistory.length - 1].selectedNoteIds.length >
+              0 && (
+              <div className="browse-page-browser__main">
+                <PreviewNote
+                  space={props.space}
+                  reference={
+                    browsehistory[browsehistory.length - 1].selectedNoteIds[0]
+                  }
+                />
+              </div>
+            )}
+        </div>
       </div>
     </div>
   );

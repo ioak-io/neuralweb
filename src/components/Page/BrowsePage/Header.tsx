@@ -20,6 +20,7 @@ interface Props {
   browsehistory: BrowseHistoryType[];
   back: any;
   onNewNote: any;
+  showInfo: boolean;
 }
 
 const Header = (props: Props) => {
@@ -53,7 +54,7 @@ const Header = (props: Props) => {
         props.browsehistory[props.browsehistory.length - 1].view ===
           "home") && <div />}
 
-      {props.browsehistory.length > 0 &&
+      {props.showInfo && props.browsehistory.length > 0 &&
         props.browsehistory[props.browsehistory.length - 1].view !== "home" && (
           <div className="browse-page-header__bottom">
             <div className="browse-page-header__bottom__left">

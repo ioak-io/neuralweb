@@ -34,6 +34,8 @@ import { deleteNotelinkItemsByNoteRef } from "../../../store/actions/NotelinkAct
 import { deleteNotelinkAutoItemsByNoteRef } from "../../../store/actions/NotelinkAutoActions";
 import { generateReport } from "../../../components/Page/NotePage/service";
 import { formatDate } from "../../../components/Lib/DateUtils";
+import LabelEditor from "../sections/LabelEditor";
+import LabelViewer from "../sections/LabelViewer";
 
 interface Props {
   note: NoteModel;
@@ -53,6 +55,7 @@ const ContentSection = (props: Props) => {
   const [deleting, setDeleting] = useState(false);
   const params = useParams();
   const [isEditHead, setIsEditHead] = useState(false);
+  const [isEditLabel, setIsEditLabel] = useState(false);
   const [isEditContent, setIsEditContent] = useState(false);
   const [isEditMetadata, setIsEditMetadata] = useState<any>({});
   const [isEdit, setIsEdit] = useState(false);
@@ -91,6 +94,11 @@ const ContentSection = (props: Props) => {
     setIsEditHead(false);
     setIsEdit(false);
   };
+  const onCancelLabel = () => {
+    reset();
+    setIsEditLabel(false);
+    setIsEdit(false);
+  };
   const onCancelContent = () => {
     reset();
     setIsEditContent(false);
@@ -109,6 +117,11 @@ const ContentSection = (props: Props) => {
 
   const onEditHead = () => {
     setIsEditHead(true);
+    setIsEdit(true);
+  };
+
+  const onEditLabel = () => {
+    setIsEditLabel(true);
     setIsEdit(true);
   };
   const onEditContent = () => {
@@ -132,6 +145,7 @@ const ContentSection = (props: Props) => {
         props.onPostNoteSave(response);
         setIsEditContent(false);
         setIsEditHead(false);
+        setIsEditLabel(false);
         setIsEditMetadata({});
         setIsEdit(false);
         setSaving(false);
@@ -199,29 +213,13 @@ const ContentSection = (props: Props) => {
             />
           )}
           {isEditHead && (
-            <HeadEditor note={state} onChange={handleEditStateChange} />
+            <HeadEditor
+              note={state}
+              onChange={handleEditStateChange}
+              editor={editor}
+            />
           )}
           {!isEditHead && <HeadViewer note={props.note} />}
-        </SectionContainer>
-        <SectionContainer>
-          {isEditContent && (
-            <EditControls
-              onCancel={onCancelContent}
-              onSave={onSaveContent}
-              saving={saving}
-            />
-          )}
-          {!isEditContent && (
-            <ViewControls onEdit={onEditContent} disable={isEdit} />
-          )}
-          {isEditContent && (
-            <ContentEditor
-              note={state}
-              editor={editor}
-              onChange={handleEditStateChange}
-            />
-          )}
-          {!isEditContent && <ContentViewer note={props.note} />}
         </SectionContainer>
         {Object.keys(metadataDefinitionMap).map((group) => (
           <SectionContainer key={group}>
@@ -255,6 +253,25 @@ const ContentSection = (props: Props) => {
             )}
           </SectionContainer>
         ))}
+        <SectionContainer>
+          {isEditLabel && (
+            <EditControls
+              onCancel={onCancelLabel}
+              onSave={onSave}
+              saving={saving}
+            />
+          )}
+          {!isEditLabel && (
+            <ViewControls
+              onEdit={onEditLabel}
+              disable={isEdit}
+            />
+          )}
+          {isEditLabel && (
+            <LabelEditor note={state} onChange={handleEditStateChange} />
+          )}
+          {!isEditLabel && <LabelViewer note={props.note} />}
+        </SectionContainer>
         <LinksSection note={props.note} space={props.space} disable={false} />
         <AutoLinksSection
           note={props.note}

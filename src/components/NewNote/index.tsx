@@ -5,18 +5,59 @@ import {
   faCheck,
   faCircleNodes,
   faListUl,
+  faMicrophoneAlt,
+  faMicrophoneAltSlash,
   faPlus,
+  faStop,
 } from "@fortawesome/free-solid-svg-icons";
 import "./style.scss";
 import Topbar from "../../components/Topbar";
 import NoteModel from "../../model/NoteModel";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Button, Checkbox, Input } from "basicui";
+import {
+  Button,
+  ButtonVariantType,
+  Checkbox,
+  IconButton,
+  Input,
+  Textarea,
+  ThemeType,
+} from "basicui";
 import MainSection from "../../components/MainSection";
 import { getRecentlyCreatedNote } from "./service";
 import RecentNote from "./RecentNote";
 import { appendNoteItem } from "../../store/actions/NoteActions";
 import { saveNote } from "../PreviewNote/service";
+import {
+  BlockQuote,
+  Bold,
+  BulletList,
+  ClearFormatting,
+  Editor,
+  HighlightColor,
+  Italic,
+  OrderedList,
+  Underline,
+} from "writeup";
+import { getEditorConfig } from "../../utils/EditorUtils";
+
+interface SpeechRecognitionResult {
+  transcript: string;
+  confidence: number;
+  isFinal: boolean;
+  // Other properties as needed
+}
+
+interface SpeechRecognitionResultList
+  extends Array<SpeechRecognitionResult[]> {}
+
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+}
 
 interface Props {
   location: any;
@@ -41,6 +82,76 @@ const NewNote = (props: Props) => {
     name: "",
     reference: "",
   });
+  const editor = getEditorConfig();
+
+  const [recognition, setRecognition] = useState<any>(null);
+  const [listeningFor, setListeningFor] = useState<"name" | "content">();
+
+  const startRecording = (fieldName: "name" | "content") => {
+    const _recognition = new (window.SpeechRecognition ||
+      window.webkitSpeechRecognition)();
+    _recognition.interimResults = true;
+    _recognition.lang = "en-US";
+    _recognition.continuous = true;
+
+    let final_transcript = state[fieldName];
+    if (fieldName === "content") {
+      final_transcript = editor?.getHTML();
+    }
+    let lastUpdateTime = Date.now();
+
+    _recognition.onresult = (event: any) => {
+      let interim_transcript = "";
+
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          final_transcript += event.results[i][0].transcript;
+
+          // Detecting the silence by checking the time difference between results
+          const _now = Date.now();
+          if (_now - lastUpdateTime > 1000) {
+            // 1000ms pause threshold
+            final_transcript = final_transcript?.trim() + ". ";
+          }
+          lastUpdateTime = _now;
+        } else {
+          interim_transcript += event.results[i][0].transcript;
+        }
+      }
+
+      if (fieldName === "name") {
+        setState({ ...state, name: final_transcript || "" });
+      }
+
+      if (fieldName === "content") {
+        editor?.commands.setContent(final_transcript || "");
+      }
+    };
+
+    _recognition.onend = () => {
+      if (listeningFor) {
+        _recognition.start();
+      }
+    };
+
+    _recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      console.error("Speech recognition error", event.error);
+      if (listeningFor) {
+        _recognition.start();
+      }
+    };
+
+    setRecognition(_recognition);
+    _recognition.start();
+    setListeningFor(fieldName);
+  };
+
+  const stopRecording = () => {
+    setListeningFor(undefined);
+    if (recognition) {
+      recognition.stop();
+    }
+  };
 
   useEffect(() => {
     if (authorization.isAuth) {
@@ -51,6 +162,10 @@ const NewNote = (props: Props) => {
       );
     }
   }, [authorization]);
+
+  // useEffect(() => {
+  //   editor?.commands.setContent(state.content || "");
+  // }, [state.content, editor]);
 
   // useEffect(() => {
   //   console.log("****", recentNote);
@@ -68,7 +183,7 @@ const NewNote = (props: Props) => {
   };
 
   const save = () => {
-    let _note = { ...state };
+    let _note = { ...state, content: editor?.getHTML() };
     if (copy) {
       const {
         name,
@@ -82,7 +197,7 @@ const NewNote = (props: Props) => {
         type,
         ...rest
       } = recentNote;
-      _note = { ...state, ...rest };
+      _note = { ...state, content: editor?.getHTML(), ...rest };
     }
     saveNote(props.space, _note, authorization).then((response) => {
       dispatch(appendNoteItem(response.note));
@@ -104,7 +219,66 @@ const NewNote = (props: Props) => {
             value={state.name}
             onInput={handleChange}
             label="Note name"
+            disabled={listeningFor === "name"}
           />
+          <div>
+            {listeningFor !== "name" && (
+              <IconButton
+                onClick={() => startRecording("name")}
+                circle
+                // loading={isRecording}
+                disabled={listeningFor === "content"}
+                variant={ButtonVariantType.transparent}
+                // theme={ThemeType.danger}
+              >
+                <FontAwesomeIcon icon={faMicrophoneAlt} />
+              </IconButton>
+            )}
+            {listeningFor === "name" && (
+              <IconButton
+                onClick={stopRecording}
+                circle
+                // loading={isRecording}
+                variant={ButtonVariantType.transparent}
+              >
+                <FontAwesomeIcon icon={faStop} />
+              </IconButton>
+            )}
+          </div>
+          <Editor editor={editor}>
+            <Bold editor={editor} />
+            <Italic editor={editor} />
+            <Underline editor={editor} />
+            <BulletList editor={editor} />
+            <OrderedList editor={editor} />
+            <BlockQuote editor={editor} />
+            <HighlightColor editor={editor} />
+            <ClearFormatting editor={editor} />
+          </Editor>
+          <div>
+            {listeningFor !== "content" && (
+              <IconButton
+                onClick={() => startRecording("content")}
+                circle
+                // loading={isRecording}
+                disabled={listeningFor === "name"}
+                variant={ButtonVariantType.transparent}
+                // theme={ThemeType.danger}
+              >
+                <FontAwesomeIcon icon={faMicrophoneAlt} />
+              </IconButton>
+            )}
+            {listeningFor === "content" && (
+              <IconButton
+                onClick={stopRecording}
+                circle
+                // loading={isRecording}
+                variant={ButtonVariantType.transparent}
+              >
+                <FontAwesomeIcon icon={faStop} />
+              </IconButton>
+            )}
+          </div>
           {recentNote && (
             <>
               <Checkbox

@@ -47,6 +47,7 @@ const LabelEditor = (props: Props) => {
       primaryLabel = _label;
     }
     props.onChange({
+      ...props.note,
       labels: [...props.note.labels, _label],
       primaryLabel
     });
@@ -61,6 +62,7 @@ const LabelEditor = (props: Props) => {
       primaryLabel = undefined;
     }
     props.onChange({
+      ...props.note,
       labels: props.note.labels.filter(item => item !== _label),
       primaryLabel
     });
@@ -69,6 +71,7 @@ const LabelEditor = (props: Props) => {
   const starLabel = (event: any, _label: string) => {
     event.preventDefault();
     props.onChange({
+      ...props.note,
       labels: props.note.labels,
       primaryLabel: _label
     })

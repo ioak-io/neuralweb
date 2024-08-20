@@ -91,7 +91,7 @@ export const getEditorConfig = () => {
                 },
             }),
         ],
-        content: `Hello`,
+        content: "",
     });
 
     return config;
