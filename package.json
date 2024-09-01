@@ -88,6 +88,6 @@
     "file-saver": "^2.0.5",
     "moment": "^2.30.1",
     "react-popper": "^2.3.0",
-    "writeup": "file:writeup-1.0.0.tgz"
+    "writeup": "file:writeup-1.0.1.tgz"
   }
 }

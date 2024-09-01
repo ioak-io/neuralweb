@@ -8,6 +8,7 @@ import { isEmptyOrSpaces } from '../../../../components/Utils';
 
 interface Props {
   note: NoteModel;
+  group: string;
   metadataDefinition: MetadataDefinitionModel;
 }
 
@@ -15,7 +16,7 @@ const LineItem = (props: Props) => {
 
   return (
     <div className='metadata-viewer-line-item'>
-      <Label>{props.metadataDefinition.name}</Label>
+      <Label>{`${props.group} > ${props.metadataDefinition.name}`}</Label>
       {!isEmptyOrSpaces(props.note[props.metadataDefinition._id || '']) && props.note[props.metadataDefinition._id || '']}
       {isEmptyOrSpaces(props.note[props.metadataDefinition._id || '']) && '-'}
     </div>

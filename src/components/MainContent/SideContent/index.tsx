@@ -1,5 +1,6 @@
 import {
   faBalanceScaleRight,
+  faBook,
   faCalendarAlt,
   faChartArea,
   faChartBar,
@@ -143,14 +144,19 @@ const SideContent = (props: Props) => {
               label="Search"
             />
             <SideNavLink
-              link={`/${props.space}/fleeting-notes`}
-              icon={faPuzzlePiece}
-              label="Fleeting notes"
+              link={`/${props.space}/library`}
+              icon={faBook}
+              label="Library"
             />
             <SideNavLink
               link={`/${props.space}/graph`}
               icon={faCircleNodes}
               label="Graph"
+            />
+            <SideNavLink
+              link={`/${props.space}/index`}
+              icon={faListUl}
+              label="Index"
             />
             <SideNavSubHeading short="System" long="System" />
             <SideNavLink

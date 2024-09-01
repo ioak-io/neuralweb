@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './style.scss';
 import NoteModel from '../../../../model/NoteModel';
-import { searchNote } from '../../../../components/Page/BrowsePageOld/service';
+import { searchNote } from '../../../../components/Page/IndexPage/service';
 import LinkView from '../LinkView';
 import { saveNotelink } from '../LinksCreator/service';
 import { deleteNotelink } from './service';

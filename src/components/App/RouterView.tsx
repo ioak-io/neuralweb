@@ -16,7 +16,7 @@ import BackupAndRestore from "../Page/SettingsPage/BackupAndRestore";
 import GraphPage from "../Page/GraphPage";
 import NotePage from "../Page/NotePage";
 import MetadataDefinitionPage from "../Page/MetadataDefinitionPage";
-import BrowsePageOld from "../Page/BrowsePageOld";
+import IndexPage from "../Page/IndexPage";
 import NewNotePage from "../Page/NewNotePage";
 import ColorfilterPage from "../Page/ColorfilterPage";
 import EditColorFilterPage from "../Page/EditColorfilterPage";
@@ -24,7 +24,7 @@ import StopwordsPage from "../Page/StopwordsPage";
 import LoginPage from "../Page/LoginPage";
 import SearchPage from "../Page/SearchPage";
 import BrowseByGroupPage from "../Page/BrowseByGroupPage";
-import FleetingNotesPage from "../Page/FleetingNotesPage";
+import LibraryPage from "../Page/LibraryPage";
 import BrowsePage from "../Page/BrowsePage";
 
 interface Props {}
@@ -133,16 +133,16 @@ const RouterView = (props: Props) => {
           }
         />
         <Route
-          path="/:space/browse"
+          path="/:space/index"
           element={
             <ProtectedRouteApp
               middleware={["authenticate"]}
-              component={BrowsePageOld}
+              component={IndexPage}
             />
           }
         />
         <Route
-          path="/:space/browse-new"
+          path="/:space/browse"
           element={
             <ProtectedRouteApp
               middleware={["readAuthentication"]}
@@ -151,11 +151,11 @@ const RouterView = (props: Props) => {
           }
         />
         <Route
-          path="/:space/fleeting-notes"
+          path="/:space/library"
           element={
             <ProtectedRouteApp
               middleware={["readAuthentication"]}
-              component={FleetingNotesPage}
+              component={LibraryPage}
             />
           }
         />

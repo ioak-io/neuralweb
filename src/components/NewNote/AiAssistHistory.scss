@@ -1,0 +1,25 @@
+.ai-assist-history {
+  display: grid;
+  grid-auto-flow: row;
+  row-gap: 12px;
+}
+
+.ai-assist-history__item {
+  display: grid;
+  padding: 12px;
+}
+
+.ai-assist-history__item--user {
+  margin-left: 24px;
+  justify-content: flex-end;
+  border-radius: 12px 12px 0 12px;
+  border: 1px solid var(--basicui-border-color);
+  background-color: var(--basicui-bg-accent);
+}
+
+.ai-assist-history__item--bot {
+  margin-right: 24px;
+  border-radius: 12px 12px 12px 0;
+  border: 1px solid var(--basicui-border-color);
+  background-color: var(--theme-primary-transparent-100);
+}

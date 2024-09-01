@@ -12,6 +12,7 @@ import Portal from "./Portal";
 import DarkModeIcon from "../Navigation/DarkModeIcon";
 import {
   faBalanceScaleRight,
+  faBook,
   faCalendarAlt,
   faChartBar,
   faCircleNodes,
@@ -90,14 +91,35 @@ const MobileSidebar = (props: MobileSidebarProps) => {
             label="Search"
           />
           <SideNavLink
-            link={`/${props.space}/fleeting-notes`}
-            icon={faPuzzlePiece}
-            label="Fleeting notes"
-          />
-          <SideNavLink
             link={`/${props.space}/graph`}
             icon={faCircleNodes}
             label="Graph"
+          />
+          <SideNavLink
+            link={`/${props.space}/index`}
+            icon={faListUl}
+            label="Index"
+          />
+          <SideNavSubHeading short="Library" long="Library" />
+          <SideNavLink
+            link={`/${props.space}/library`}
+            icon={faPlus}
+            label="New chapter"
+          />
+          <SideNavLink
+            link={`/${props.space}/library`}
+            icon={faBook}
+            label="Books"
+          />
+          <SideNavLink
+            link={`/${props.space}/library`}
+            icon={faSearch}
+            label="Search"
+          />
+          <SideNavLink
+            link={`/${props.space}/library`}
+            icon={faListUl}
+            label="Index"
           />
           <SideNavSubHeading short="System" long="System" />
           <SideNavLink

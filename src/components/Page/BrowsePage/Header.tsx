@@ -6,6 +6,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faFile,
+  faFileAlt,
+  faFileEdit,
+  faFolderTree,
   faHashtag,
   faLayerGroup,
   faSearch,
@@ -14,6 +17,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { BrowseHistoryType } from "./BrowseHistoryType";
 import { Button, ButtonVariantType, ThemeType } from "basicui";
+import ModeSwitch from "./ModeSwitch";
 
 interface Props {
   space: string;
@@ -21,6 +25,8 @@ interface Props {
   back: any;
   onNewNote: any;
   showInfo: boolean;
+  isBrowserMode: boolean;
+  toggleIsBrowserMode: any;
 }
 
 const Header = (props: Props) => {
@@ -38,6 +44,10 @@ const Header = (props: Props) => {
                 <FontAwesomeIcon icon={faChevronLeft} /> Back
               </Button>
             )}
+          <ModeSwitch
+            isBrowserMode={props.isBrowserMode}
+            onChange={(mode: boolean) => props.toggleIsBrowserMode(mode)}
+          />
         </div>
         <div className="browse-page-header__top__right">
           <Button
@@ -54,7 +64,8 @@ const Header = (props: Props) => {
         props.browsehistory[props.browsehistory.length - 1].view ===
           "home") && <div />}
 
-      {props.showInfo && props.browsehistory.length > 0 &&
+      {props.showInfo &&
+        props.browsehistory.length > 0 &&
         props.browsehistory[props.browsehistory.length - 1].view !== "home" && (
           <div className="browse-page-header__bottom">
             <div className="browse-page-header__bottom__left">

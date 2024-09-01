@@ -43,6 +43,7 @@ const PreviewNote = (props: Props) => {
         }
       );
     }
+    console.log("*3", props.reference);
   }, [props.reference, authorization]);
 
   // const saveChanges = () => {

@@ -37,6 +37,21 @@ const BrowsePage = (props: Props) => {
   const labelList = useSelector((state: any) => state.label.items);
   const keywordList = useSelector((state: any) => state.keyword.items);
   const [categories, setCategories] = useState<string[]>();
+  const [isBrowserMode, setIsBrowserMode] = useState(false);
+
+  const toggleIsBrowserMode = () => {
+    if (!isBrowserMode) {
+      if (browsehistory.length > 0) {
+        let _browsehistory = cloneDeep(browsehistory);
+        const item = _browsehistory[_browsehistory.length - 1];
+        item.selectedNoteIds = [];
+        _browsehistory[_browsehistory.length - 1] = item;
+        setBrowsehistory(_browsehistory);
+      }
+    }
+
+    setIsBrowserMode(!isBrowserMode);
+  };
 
   useEffect(() => {
     setBrowsehistory(StorageService.readBrowseHistory());
@@ -73,7 +88,9 @@ const BrowsePage = (props: Props) => {
   };
 
   const onSelectNote = (selectedNoteId: string) => {
-    if (browsehistory.length > 0) {
+    if (isBrowserMode) {
+      onPreview(selectedNoteId);
+    } else if (browsehistory.length > 0) {
       let _browsehistory = cloneDeep(browsehistory);
       const item = _browsehistory[_browsehistory.length - 1];
       if (item.selectedNoteIds?.includes(selectedNoteId)) {
@@ -130,11 +147,18 @@ const BrowsePage = (props: Props) => {
   //   setPopupTitle("");
   // };
 
-  const onPreview = () => {
-    if (
+  const onPreview = (noteId?: string) => {
+    if (noteId) {
+      console.log("*1", noteId);
+      const newParams = new URLSearchParams(searchParams.toString());
+      newParams.set("view", "previewnote");
+      newParams.set("reference", noteId);
+      setSearchParams(newParams);
+    } else if (
       browsehistory.length > 0 &&
       browsehistory[browsehistory.length - 1].selectedNoteIds.length > 0
     ) {
+      console.log("*2", noteId);
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.set("view", "previewnote");
       setSearchParams(newParams);
@@ -193,6 +217,8 @@ const BrowsePage = (props: Props) => {
             back={back}
             onNewNote={onNewNote}
             showInfo={!searchParams.get("view")}
+            isBrowserMode={isBrowserMode}
+            toggleIsBrowserMode={toggleIsBrowserMode}
           />
 
           {!searchParams.get("view") && (
@@ -235,7 +261,7 @@ const BrowsePage = (props: Props) => {
               <div className="browse-page-browser__action">
                 <ActionSection
                   space={props.space}
-                  onPreview={onPreview}
+                  onPreview={() => onPreview()}
                   onFindSimilar={onFindSimilar}
                   onDelete={onDelete}
                   browseHistory={browsehistory[browsehistory.length - 1]}
@@ -258,6 +284,15 @@ const BrowsePage = (props: Props) => {
                   reference={
                     browsehistory[browsehistory.length - 1].selectedNoteIds[0]
                   }
+                />
+              </div>
+            )}
+          {searchParams.get("view") === "previewnote" &&
+            searchParams.get("reference") && (
+              <div className="browse-page-browser__main">
+                <PreviewNote
+                  space={props.space}
+                  reference={searchParams.get("reference") || ""}
                 />
               </div>
             )}

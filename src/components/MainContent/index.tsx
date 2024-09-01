@@ -13,6 +13,7 @@ import logoIconBlack from "../../images/neuralweb_black_small.svg";
 import logoTextBlack from "../../images/neuralweb_black_text.svg";
 import SideNavLink from "./SideNavLink";
 import {
+  faBook,
   faCircleNodes,
   faCogs,
   faDatabase,
@@ -125,24 +126,40 @@ const MainContent = (props: Props) => {
                 label="Browse"
               />
               <SideNavLink
-                link={`/${props.space}/browse-new`}
-                icon={faFolderOpen}
-                label="Browse New"
-              />
-              <SideNavLink
                 link={`/${props.space}/search`}
                 icon={faSearch}
                 label="Search"
               />
               <SideNavLink
-                link={`/${props.space}/fleeting-notes`}
-                icon={faPuzzlePiece}
-                label="Fleeting notes"
-              />
-              <SideNavLink
                 link={`/${props.space}/graph`}
                 icon={faCircleNodes}
                 label="Graph"
+              />
+              <SideNavLink
+                link={`/${props.space}/index`}
+                icon={faListUl}
+                label="Index"
+              />
+              <SideNavSubHeading short="Library" long="Library" />
+              <SideNavLink
+                link={`/${props.space}/library`}
+                icon={faPlus}
+                label="New chapter"
+              />
+              <SideNavLink
+                link={`/${props.space}/library`}
+                icon={faBook}
+                label="Books"
+              />
+              <SideNavLink
+                link={`/${props.space}/library`}
+                icon={faSearch}
+                label="Search"
+              />
+              <SideNavLink
+                link={`/${props.space}/library`}
+                icon={faListUl}
+                label="Index"
               />
               <SideNavSubHeading short="System" long="System" />
               <SideNavLink

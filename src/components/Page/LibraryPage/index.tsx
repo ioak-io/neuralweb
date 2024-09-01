@@ -24,7 +24,7 @@ interface Props {
   space: string;
 }
 
-const FleetingNotesPage = (props: Props) => {
+const LibraryPage = (props: Props) => {
   const editor = getEditorConfig();
   const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
@@ -42,10 +42,10 @@ const FleetingNotesPage = (props: Props) => {
 
   return (
     <div className="page-animate">
-      <Topbar title="Fleeting notes (coming soon)" space={props.space} />
+      <Topbar title="Library (coming soon)" space={props.space} />
       <MainSection>
-        <div className="fleeting-notes-page">
-          <div className="fleeting-notes-page__list">
+        <div className="library-page">
+          <div className="library-page__list">
             {fleetingnotes.map((item: any, index: number) => (
               <div key={index}>{item.content}</div>
             ))}
@@ -57,4 +57,4 @@ const FleetingNotesPage = (props: Props) => {
   );
 };
 
-export default FleetingNotesPage;
+export default LibraryPage;

@@ -13,10 +13,10 @@ interface Props {
 const MetadataViewer = (props: Props) => {
   return (
     <div className="metadata-viewer">
-    <h5>{props.group}</h5>
+    {/* <h5>{props.group}</h5> */}
     <div className='metadata-viewer__main'>
       {props.metadataDefinitionList.map(item =>
-        <LineItem note={props.note} metadataDefinition={item} key={item._id} />
+        <LineItem group={props.group} note={props.note} metadataDefinition={item} key={item._id} />
       )}
     </div>
     </div>

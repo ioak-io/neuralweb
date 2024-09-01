@@ -17,10 +17,10 @@
 }
 
 .writeup-light {
-    --writeup-background-color: var(--theme-white-200);
+    /* --writeup-background-color: transparent; */
 }
 .writeup-dark {
-    --writeup-background-color: var(--theme-black-300);
+    /* --writeup-background-color: transparent; */
 }
 
 .writeup-light table, .writeup-light table th, .writeup-light table td,
@@ -31,5 +31,5 @@
 * {
     --basicui-formelement-font-weight: 300;
     --basicui-formelement-font-size: 1rem;
-    --writeup-background-color: var(--basicui-formelement-background-color);
+    --writeup-background-color: transparent;
 }

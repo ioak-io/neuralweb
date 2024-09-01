@@ -11,6 +11,7 @@ interface Props {
   note: NoteModel;
   onChange: any;
   metadataDefinition: MetadataDefinitionModel;
+  group: string;
 }
 
 const LineItem = (props: Props) => {
@@ -26,10 +27,10 @@ const LineItem = (props: Props) => {
   return (
     <div className='metadata-editor-line-item'>
       {props.metadataDefinition.type === 'long-text' &&
-        <Textarea label={props.metadataDefinition.name} name={props.metadataDefinition._id} value={props.note[props.metadataDefinition._id || '']} onInput={handleChange} />
+        <Textarea label={`${props.group} > ${props.metadataDefinition.name}`} name={props.metadataDefinition._id} value={props.note[props.metadataDefinition._id || '']} onInput={handleChange} />
       }
       {props.metadataDefinition.type === 'short-text' && !props.metadataDefinition.linkable &&
-        <Input label={props.metadataDefinition.name} name={props.metadataDefinition._id} value={props.note[props.metadataDefinition._id || '']} onInput={handleChange} />
+        <Input label={`${props.group} > ${props.metadataDefinition.name}`} name={props.metadataDefinition._id} value={props.note[props.metadataDefinition._id || '']} onInput={handleChange} />
       }
       {/* {props.metadataDefinition.type === 'short-text' && props.metadataDefinition.linkable &&
         <DataPicker note={props.note} metadataDefinition={props.metadataDefinition} onChange={handleDataPickerChange} />
@@ -38,7 +39,7 @@ const LineItem = (props: Props) => {
         <Select
           autocomplete
           allowNewValues
-          label={props.metadataDefinition.name} 
+          label={`${props.group} > ${props.metadataDefinition.name}`} 
           name={props.metadataDefinition._id || ''}
           value={[props.note[props.metadataDefinition._id || '']]}
           options={SelectPropsConverter.optionsFromSimpleList(metadataValueMap[props.metadataDefinition._id || ''] || [])}

@@ -10,6 +10,10 @@
   padding: 0 12px;
 }
 
+.browse-page-header__top {
+  column-gap: 12px;
+}
+
 .browse-page-header__bottom {
   font-size: 12px;
 }
@@ -22,7 +26,6 @@
   justify-content: flex-start;
 }
 
-
 .browse-page-header__top .basicui-button {
   height: 26px;
   font-size: 10px;
@@ -32,3 +35,12 @@
 .browse-page-header__top .basicui-button svg {
   height: 10px;
 }
+
+.browse-page-header__top__left {
+  display: grid;
+  grid-auto-flow: column;
+  column-gap: 12px;
+  overflow: auto;
+  justify-content: flex-start;
+}
+

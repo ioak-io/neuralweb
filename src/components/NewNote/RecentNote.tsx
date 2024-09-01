@@ -9,7 +9,6 @@ import LabelViewer from "../../components/Note/sections/LabelViewer";
 import LabelEditor from "../../components/Note/sections/LabelEditor";
 
 interface Props {
-  editable: boolean;
   note: NoteModel;
   onChange: any;
 }
@@ -37,36 +36,17 @@ const RecentNote = (props: Props) => {
   };
 
   return (
-    <div
-      className={`recent-note  ${
-        props.editable ? "recent-note--editable" : ""
-      }`}
-    >
-      {!props.editable && <LabelViewer note={props.note} />}
-      {props.editable && (
-        <LabelEditor note={props.note} onChange={handleLabelChange} />
-      )}
+    <div className={`recent-note`}>
       {Object.keys(metadataDefinitionMap).map((group) => (
-        <>
-          {!props.editable && (
-            <MetadataViewer
-              key={group}
-              note={props.note}
-              group={group}
-              metadataDefinitionList={metadataDefinitionMap[group]}
-            />
-          )}
-          {props.editable && (
-            <MetadataEditor
-              key={group}
-              onChange={props.onChange}
-              note={props.note}
-              group={group}
-              metadataDefinitionList={metadataDefinitionMap[group]}
-            />
-          )}
-        </>
+        <MetadataEditor
+          key={group}
+          onChange={props.onChange}
+          note={props.note}
+          group={group}
+          metadataDefinitionList={metadataDefinitionMap[group]}
+        />
       ))}
+      <LabelEditor note={props.note} onChange={handleLabelChange} />
     </div>
   );
 };

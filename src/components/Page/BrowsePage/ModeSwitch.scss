@@ -1,0 +1,19 @@
+.mode-switch {
+ display: flex; 
+ border: 1px solid var(--basicui-border-color);
+ border-radius: 24px;
+ align-items: center;
+ padding: 0 2px;
+}
+
+.mode-switch__button {
+  height: 22px !important;
+  border-color: transparent !important;
+}
+
+.mode-switch__button--inactive {
+  border-color: transparent !important;
+}
+.mode-switch__button--active {
+
+}

@@ -214,6 +214,7 @@ const ContentSection = (props: Props) => {
           )}
           {isEditHead && (
             <HeadEditor
+              space={props.space}
               note={state}
               onChange={handleEditStateChange}
               editor={editor}
@@ -262,10 +263,7 @@ const ContentSection = (props: Props) => {
             />
           )}
           {!isEditLabel && (
-            <ViewControls
-              onEdit={onEditLabel}
-              disable={isEdit}
-            />
+            <ViewControls onEdit={onEditLabel} disable={isEdit} />
           )}
           {isEditLabel && (
             <LabelEditor note={state} onChange={handleEditStateChange} />

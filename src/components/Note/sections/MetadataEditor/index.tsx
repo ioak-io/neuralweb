@@ -1,10 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
-import './style.scss';
-import NoteModel from '../../../../model/NoteModel';
-import { Input, Label, Textarea } from 'basicui';
-import { Editor, Bold, Italic, Underline, HighlightColor, ClearFormatting, BulletList, OrderedList, BlockQuote } from 'writeup';
-import MetadataDefinitionModel from 'src/model/MetadataDefinitionModel';
-import LineItem from './LineItem';
+import React, { useEffect, useRef, useState } from "react";
+import "./style.scss";
+import NoteModel from "../../../../model/NoteModel";
+import { Input, Label, Textarea } from "basicui";
+import {
+  Editor,
+  Bold,
+  Italic,
+  Underline,
+  HighlightColor,
+  ClearFormatting,
+  BulletList,
+  OrderedList,
+  BlockQuote,
+} from "writeup";
+import MetadataDefinitionModel from "src/model/MetadataDefinitionModel";
+import LineItem from "./LineItem";
 
 interface Props {
   note: NoteModel;
@@ -16,12 +26,18 @@ interface Props {
 const MetadataEditor = (props: Props) => {
   return (
     <div className="metadata-editor">
-    <h5>{props.group}</h5>
-    <div className='metadata-editor__main'>
-      {props.metadataDefinitionList.map(item =>
-        <LineItem onChange={props.onChange} note={props.note} metadataDefinition={item} />
-      )}
-    </div>
+      {/* <h5>{props.group}</h5> */}
+      <div className="metadata-editor__main">
+        {props.metadataDefinitionList.map((item) => (
+          <LineItem
+            key={item._id}
+            group={props.group}
+            onChange={props.onChange}
+            note={props.note}
+            metadataDefinition={item}
+          />
+        ))}
+      </div>
     </div>
   );
 };

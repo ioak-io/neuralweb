@@ -13,7 +13,7 @@ import { saveColorfilter } from '../ColorfilterPage/service';
 import SearchInput from '../../../components/BrowseNotes/SearchInput';
 import { getSessionValueAsJson } from '../../../utils/SessionUtils';
 import { SearchConfigType } from 'src/components/BrowseNotes/SearchInput/SearchConfig';
-import { searchNote } from '../BrowsePageOld/service';
+import { searchNote } from '../IndexPage/service';
 import MockSearchResults from './MockSearchResults';
 import { updateColorfilterItems } from '../../../store/actions/ColorfilterActions';
 
