@@ -1,0 +1,8 @@
+.chapter-list-item-view {
+  display: grid;
+  padding: 12px;
+  background-color: var(--basicui-bg-accent);
+  border-radius: 6px;
+  grid-auto-flow: row;
+  row-gap: 4px;
+}

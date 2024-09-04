@@ -1,21 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "./NoteListView.scss";
+import "./style.scss";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { SearchOptionType } from "src/components/BrowseNotes/SearchInput/SearchOptionType";
-import MetadataDefinitionModel from "src/model/MetadataDefinitionModel";
-import {
-  faBookmark,
-  faChevronLeft,
-  faFolderOpen,
-  faStar,
-  faTags,
-  faTimes,
-} from "@fortawesome/free-solid-svg-icons";
-import HomeActionButton from "./HomeActionButton";
-import NoteModel from "../../../model/NoteModel";
+import NoteModel from "../../../../model/NoteModel";
 import NoteListItem from "./NoteListItem";
-import { BrowseHistoryType } from "./BrowseHistoryType";
+import { BrowseHistoryType } from "../types/BrowseHistoryType";
 
 interface Props {
   space: string;

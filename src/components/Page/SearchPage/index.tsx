@@ -75,7 +75,7 @@ const SearchPage = (props: Props) => {
 
   return (
     <div className="page-animate">
-      <Topbar title="Search" space={props.space}>
+      <Topbar title="Search">
         <div className="topbar-actions">
           <button
             className={`button ${view === 'graph' ? 'active' : ''}`}

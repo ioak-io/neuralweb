@@ -26,6 +26,10 @@ import SearchPage from "../Page/SearchPage";
 import BrowseByGroupPage from "../Page/BrowseByGroupPage";
 import LibraryPage from "../Page/LibraryPage";
 import BrowsePage from "../Page/BrowsePage";
+import BookChapterPage from "../Page/BookChapterPage";
+import ChapterPage from "../Page/ChapterPage";
+import BookConceptPage from "../Page/BookConceptPage";
+import ConceptPage from "../Page/ConceptPage";
 
 interface Props {}
 
@@ -156,6 +160,42 @@ const RouterView = (props: Props) => {
             <ProtectedRouteApp
               middleware={["readAuthentication"]}
               component={LibraryPage}
+            />
+          }
+        />
+        <Route
+          path="/:space/book/:bookref/chapter"
+          element={
+            <ProtectedRouteApp
+              middleware={["readAuthentication"]}
+              component={BookChapterPage}
+            />
+          }
+        />
+        <Route
+          path="/:space/book/:bookref/chapter/:chapterref"
+          element={
+            <ProtectedRouteApp
+              middleware={["readAuthentication"]}
+              component={ChapterPage}
+            />
+          }
+        />
+        <Route
+          path="/:space/book/:bookref/concept"
+          element={
+            <ProtectedRouteApp
+              middleware={["readAuthentication"]}
+              component={BookConceptPage}
+            />
+          }
+        />
+        <Route
+          path="/:space/book/:bookref/concept/:conceptref"
+          element={
+            <ProtectedRouteApp
+              middleware={["readAuthentication"]}
+              component={ConceptPage}
             />
           }
         />

@@ -4,7 +4,7 @@ import "./NoteListItem.scss";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NoteModel from "src/model/NoteModel";
-import DateDisplay from "./DateDisplay";
+import DateDisplay from "../ui/DateDisplay";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {

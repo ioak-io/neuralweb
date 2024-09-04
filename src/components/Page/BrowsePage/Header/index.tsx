@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "./Header.scss";
+import "./style.scss";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,9 +15,9 @@ import {
   faStar,
   faTags,
 } from "@fortawesome/free-solid-svg-icons";
-import { BrowseHistoryType } from "./BrowseHistoryType";
+import { BrowseHistoryType } from "../types/BrowseHistoryType";
 import { Button, ButtonVariantType, ThemeType } from "basicui";
-import ModeSwitch from "./ModeSwitch";
+import ModeSwitch from "../ui/ModeSwitch";
 
 interface Props {
   space: string;

@@ -15,7 +15,6 @@ import {
   faStar,
   faTags,
 } from "@fortawesome/free-solid-svg-icons";
-import { BrowseHistoryType } from "./BrowseHistoryType";
 import { Button, ButtonVariantType, ThemeType } from "basicui";
 
 interface Props {

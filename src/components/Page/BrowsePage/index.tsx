@@ -3,17 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { cloneDeep } from "lodash";
 import "./style.scss";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import MainSection from "../../../components/MainSection";
 import { SearchOptionType } from "../../../components/BrowseNotes/SearchInput/SearchOptionType";
 import ActionSection from "./ActionSection";
-import { BrowseHistoryType } from "./BrowseHistoryType";
+import { BrowseHistoryType } from "./types/BrowseHistoryType";
 import { browseNotes, deleteNoteByReferenceList } from "./service";
 import HomeView from "./HomeView";
 import CategoryView from "./CategoryView";
 import NoteListView from "./NoteListView";
 import * as StorageService from "./StorageService";
 import Header from "./Header";
-import Popup from "./Popup";
 import PreviewNote from "../../../components/PreviewNote";
 import NewNote from "../../../components/NewNote";
 
@@ -26,9 +24,6 @@ const BrowsePage = (props: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
-  const [searchByOptions, setSearchByOptions] = useState<SearchOptionType[]>(
-    []
-  );
   const [browsehistory, setBrowsehistory] = useState<BrowseHistoryType[]>([]);
   const [notes, setNotes] = useState<any[]>([]);
   const metadataValueList = useSelector(

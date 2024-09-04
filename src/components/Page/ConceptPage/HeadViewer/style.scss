@@ -1,0 +1,17 @@
+.head-viewer {
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 12px;
+}
+
+.head-viewer__name {
+    font-weight: 500;
+}
+
+.head-viewer__title {
+    display: inline;
+}
+.head-viewer__title h4 {
+    margin-top: 6px;
+    margin-bottom: 6px;
+}

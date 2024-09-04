@@ -1,4 +1,4 @@
-import { BrowseHistoryType } from "./BrowseHistoryType";
+import { BrowseHistoryType } from "./types/BrowseHistoryType";
 
 const LOCAL_STORAGE_KEY = "NEURALWEB_BROWSEHISTORY";
 

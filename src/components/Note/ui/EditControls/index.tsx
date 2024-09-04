@@ -1,4 +1,4 @@
-import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faWandMagicSparkles, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonVariantType, IconButton, ThemeType } from 'basicui';
 import React, { useEffect, useRef, useState } from 'react';
@@ -7,6 +7,7 @@ import './style.scss';
 interface Props {
   onSave?: any;
   onCancel?: any;
+  onGenerate?: any;
   saving?: boolean;
 }
 
@@ -19,6 +20,9 @@ const EditControls = (props: Props) => {
       </IconButton>}
       {props.onCancel && <IconButton onClick={props.onCancel} circle variant={ButtonVariantType.default} theme={ThemeType.default}>
         <FontAwesomeIcon icon={faXmark} />
+      </IconButton>}
+      {props.onGenerate && <IconButton onClick={props.onGenerate} circle variant={ButtonVariantType.default} theme={ThemeType.default}>
+        <FontAwesomeIcon icon={faWandMagicSparkles} />
       </IconButton>}
     </div>
   );

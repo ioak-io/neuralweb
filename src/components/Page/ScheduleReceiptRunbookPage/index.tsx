@@ -65,12 +65,12 @@ const ScheduleReceiptRunbookPage = (props: Props) => {
   };
 
   return (
-    <div className="schedule-receipt-runbook-page">
+    <div className="schedule-receipt-runbook-chapter-page">
       <Topbar title={data ? `${data.name} - Runbook` : ''}>
         <Button onClick={goToEditSchedule}>Edit schedule</Button>
       </Topbar>
-      <div className="main-section schedule-receipt-runbook-page__main">
-        <div className="schedule-receipt-runbook-page__main__section page-width content-section">
+      <div className="main-section schedule-receipt-runbook-chapter-page__main">
+        <div className="schedule-receipt-runbook-chapter-page__main__section page-width content-section">
           {data && (
             <Details
               receipt={data}
@@ -79,7 +79,7 @@ const ScheduleReceiptRunbookPage = (props: Props) => {
             />
           )}
         </div>
-        <div className="schedule-receipt-runbook-page__main__section page-width content-section">
+        <div className="schedule-receipt-runbook-chapter-page__main__section page-width content-section">
           {data && <RunLog space={props.space} data={logData} />}
         </div>
       </div>

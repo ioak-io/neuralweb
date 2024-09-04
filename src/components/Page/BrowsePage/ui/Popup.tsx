@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./Popup.scss";
-import Topbar from "../../../components/Topbar";
+import Topbar from "../../../../components/Topbar";
 import { Button, ButtonVariantType, IconButton, ThemeType } from "basicui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";

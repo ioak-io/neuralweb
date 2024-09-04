@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "./ActionSection.scss";
+import "./style.scss";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import ActionButton from "./ActionButton";
+import ActionButton from "../ui/ActionButton";
 import {
   faCheck,
   faCodeMerge,
@@ -14,7 +14,7 @@ import {
   faTrashAlt,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { BrowseHistoryType } from "./BrowseHistoryType";
+import { BrowseHistoryType } from "../types/BrowseHistoryType";
 import {
   AlignmentType,
   Button,

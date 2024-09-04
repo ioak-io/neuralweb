@@ -1,9 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import "./DateDisplay.scss";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import NoteModel from "src/model/NoteModel";
 
 interface Props {
   date: any;
