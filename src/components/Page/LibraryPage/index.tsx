@@ -25,6 +25,10 @@ import MainSection from "../../../components/MainSection";
 import BookList from "./BookList";
 import BookModel from "../../../model/BookModel";
 import NewBook from "./NewBook";
+import {
+  BookListState,
+  refreshBookListState,
+} from "../../../simplestates/BookListState";
 
 interface Props {
   location: any;
@@ -39,33 +43,16 @@ const LibraryPage = (props: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (authorization.isAuth) {
-      _refreshBooks();
-    }
-  }, [authorization]);
-
-  // useEffect(() => {
-  //   if (authorization.isAuth && searchParams.has("id")) {
-  //     getChapters(
-  //       props.space,
-  //       searchParams.get("id") || "",
-  //       authorization
-  //     ).then((response) => {
-  //       setChapters(response);
-  //     });
-  //   }
-  // }, [authorization, searchParams]);
-
-  const _refreshBooks = () => {
-    getBooks(props.space, authorization).then((response) => {
-      setBooks(response);
-    });
-  };
+    const bookListStateSubscription = BookListState.subscribe(
+      (_data: BookModel[]) => setBooks(_data)
+    );
+    return () => bookListStateSubscription.unsubscribe();
+  }, []);
 
   const closePopup = (isBookAdded: boolean) => {
     setIsOpen(false);
     if (isBookAdded) {
-      _refreshBooks();
+      refreshBookListState(props.space, authorization);
     }
   };
 

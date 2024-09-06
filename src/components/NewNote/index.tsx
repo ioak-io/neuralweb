@@ -47,6 +47,7 @@ import AiAssist from "./AiAssist";
 import MetadataDefinitionModel from "../../model/MetadataDefinitionModel";
 import MetadataEditor from "../Note/sections/MetadataEditor";
 import LabelEditor from "../Note/sections/LabelEditor";
+import BookLinkEditor from "../Note/sections/BookLinkEditor";
 
 interface SpeechRecognitionResult {
   transcript: string;
@@ -176,24 +177,6 @@ const NewNote = (props: Props) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (authorization.isAuth) {
-  //     getRecentlyCreatedNote(props.space, authorization).then(
-  //       (response: NoteModel) => {
-  //         setRecentNote(response);
-  //       }
-  //     );
-  //   }
-  // }, [authorization]);
-
-  // useEffect(() => {
-  //   editor?.commands.setContent(state.content || "");
-  // }, [state.content, editor]);
-
-  // useEffect(() => {
-  //   console.log("****", recentNote);
-  // }, [recentNote]);
-
   const handleChange = (event: any) => {
     setState({
       ...state,
@@ -206,6 +189,7 @@ const NewNote = (props: Props) => {
   };
 
   const handleStateChange = (_note: NoteModel) => {
+    console.log(_note);
     setState({ ...state, ..._note });
   };
 
@@ -286,6 +270,11 @@ const NewNote = (props: Props) => {
                 </Button>
               )}
             </div>
+            <BookLinkEditor
+              space={props.space}
+              note={state}
+              onChange={handleStateChange}
+            />
             {!autoGenerateOtherDetails && (
               <>
                 <Input

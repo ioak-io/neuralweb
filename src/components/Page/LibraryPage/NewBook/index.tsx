@@ -28,17 +28,19 @@ import {
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import BookModel from "../../../../model/BookModel";
+import { isEmptyOrSpaces } from "../../../../components/Utils";
 
 interface Props {
   space: string;
   isOpen: boolean;
   onClose: any;
+  initialTitle?: string;
 }
 
 const _EMPTY_BOOK: BookModel = {
-  title: "cell biology",
+  title: "",
   authors: [],
-  primaryAuthor: "bruce alberts",
+  primaryAuthor: "",
   categories: [],
   description: "",
   isbn: "",
@@ -56,6 +58,12 @@ const NewBook = (props: Props) => {
   >();
   const [state, setState] = useState<BookModel>({ ..._EMPTY_BOOK });
   const [isManaged, setIsManaged] = useState(true);
+
+  useEffect(() => {
+    if (props.initialTitle && !isEmptyOrSpaces(props.initialTitle)) {
+      setState({ ...state, title: props.initialTitle });
+    }
+  }, [props.initialTitle]);
 
   const handleSkipValidation = (event: any) => {
     setIsManaged(!event.currentTarget.checked);
@@ -99,22 +107,22 @@ const NewBook = (props: Props) => {
       authorization
     ).then((response: any) => {
       setIsLoading(false);
-      onClose(true);
+      onClose(true, response.reference);
     });
   };
 
-  const onClose = (isBookAdded?: boolean) => {
+  const onClose = (isBookAdded: boolean, bookref?: string) => {
     setState({ ..._EMPTY_BOOK });
     setValidationStatus(undefined);
     setErrorMessage("");
     setIsLoading(false);
     setIsManaged(true);
-    props.onClose(isBookAdded);
+    props.onClose(isBookAdded, bookref);
   };
 
   return (
-    <Modal isOpen={props.isOpen} onClose={onClose}>
-      <ModalHeader heading="New book" onClose={onClose} />
+    <Modal isOpen={props.isOpen} onClose={() => onClose(false)}>
+      <ModalHeader heading="New book" onClose={() => onClose(false)} />
       <ModalBody>
         {/* <form onSubmit={onSubmit}> */}
         <div className="form">
@@ -193,7 +201,7 @@ const NewBook = (props: Props) => {
             Create
           </Button>
         )}
-        <Button onClick={onClose}>
+        <Button onClick={() => onClose(false)}>
           <FontAwesomeIcon icon={faTimes} />
         </Button>
       </ModalFooter>

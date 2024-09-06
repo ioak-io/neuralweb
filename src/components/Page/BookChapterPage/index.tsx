@@ -2,13 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./style.scss";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { generateChapters, getChapters } from "./service";
+import { generateChapters, getChapters, uploadBookPdf } from "./service";
 import Topbar from "../../../components/Topbar";
 import { Button, Input } from "basicui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons";
 import MainSection from "../../../components/MainSection";
-import NewBook from "./NewBook";
 import ChapterList from "./ChapterList";
 import ChapterModel from "../../../model/ChapterModel";
 
@@ -25,6 +24,7 @@ const BookChapterPage = (props: Props) => {
   const [chapters, setChapters] = useState<ChapterModel[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [fileData, setFileData] = useState();
 
   useEffect(() => {
     if (authorization.isAuth && params.bookref) {
@@ -60,6 +60,17 @@ const BookChapterPage = (props: Props) => {
     );
   };
 
+  const onBookUpload = (event: any) => {
+    uploadBookPdf(
+      props.space,
+      params.bookref || "",
+      event.currentTarget.files[0],
+      authorization
+    ).then((response) => {
+      console.log(response);
+    });
+  };
+
   return (
     <div className="page-animate">
       <Topbar title="Library">
@@ -72,6 +83,7 @@ const BookChapterPage = (props: Props) => {
       </Topbar>
       <MainSection>
         <Input placeholder="Search text" onInput={() => {}} />
+        <Input onInput={onBookUpload} name="file" type="file" />
         <ChapterList space={props.space} chapters={chapters} />
       </MainSection>
     </div>

@@ -17,8 +17,8 @@ const ConceptList = (props: Props) => {
 
   return (
     <div className="concept-list">
-      {props.concepts.map((concept) => (
-        <ItemView key={concept._id} space={props.space} concept={concept}/>
+      {props.concepts.map((concept, index) => (
+        <ItemView key={concept._id} index={index} space={props.space} concept={concept}/>
       ))}
     </div>
   );

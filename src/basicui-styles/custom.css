@@ -1,35 +1,77 @@
 .basicui-light {
-    --basicui-formelement-background-color: var(--theme-white-300);
-    --basicui-formelement-border-color: var(--theme-white-300);
-    --basicui-formelement-background-color-hover: var(--theme-white-300);
-    --basicui-formelement-border-color-hover: var(--theme-primary-transparent-200);
-    --basicui-formelement-background-color-active: var(--theme-white-300);
-    --basicui-formelement-border-color-active: var(--theme-primary-transparent-400);
+  --basicui-formelement-background-color: var(--theme-white-300);
+  --basicui-formelement-border-color: var(--theme-white-300);
+  --basicui-formelement-background-color-hover: var(--theme-white-300);
+  --basicui-formelement-border-color-hover: var(
+    --theme-primary-transparent-200
+  );
+  --basicui-formelement-background-color-active: var(--theme-white-300);
+  --basicui-formelement-border-color-active: var(
+    --theme-primary-transparent-400
+  );
 }
 
 .basicui-dark {
-    --basicui-formelement-background-color: var(--theme-black-50);
-    --basicui-formelement-border-color: var(--theme-black-50);
-    --basicui-formelement-background-color-hover: var(--theme-black-50);
-    --basicui-formelement-border-color-hover: var(--theme-primary-transparent-200);
-    --basicui-formelement-background-color-active: var(--theme-black-50);
-    --basicui-formelement-border-color-active: var(--theme-primary-transparent-400);
+  --basicui-formelement-background-color: var(--theme-black-50);
+  --basicui-formelement-border-color: var(--theme-black-50);
+  --basicui-formelement-background-color-hover: var(--theme-black-50);
+  --basicui-formelement-border-color-hover: var(
+    --theme-primary-transparent-200
+  );
+  --basicui-formelement-background-color-active: var(--theme-black-50);
+  --basicui-formelement-border-color-active: var(
+    --theme-primary-transparent-400
+  );
+  color: #e0e0e0;
 }
 
 .writeup-light {
-    /* --writeup-background-color: transparent; */
+  /* --writeup-background-color: transparent; */
 }
 .writeup-dark {
-    /* --writeup-background-color: transparent; */
+  /* --writeup-background-color: transparent; */
 }
 
-.writeup-light table, .writeup-light table th, .writeup-light table td,
-.writeup-dark table, .writeup-dark table th, .writeup-dark table td {
-    border: none;
+.writeup-light table,
+.writeup-light table th,
+.writeup-light table td,
+.writeup-dark table,
+.writeup-dark table th,
+.writeup-dark table td {
+  border: none;
 }
 
 * {
-    --basicui-formelement-font-weight: 300;
-    --basicui-formelement-font-size: 1rem;
-    --writeup-background-color: transparent;
+  --basicui-formelement-font-weight: 300;
+  --basicui-formelement-font-size: 1rem;
+  --writeup-background-color: transparent;
+}
+
+/* General styles for unordered lists */
+ul {
+  list-style-type: disc; /* Change this to circle, square, or none if needed */
+  margin: 0;
+  padding: 0;
+  padding-left: 20px; /* Adjust this value to align the bullets with the text */
+  margin-bottom: 1rem;;
+}
+
+/* Styles for list items */
+li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Indentation for nested lists */
+ul ul {
+  margin-left: 20px; /* Adjust this value to control the indentation level */
+  padding-left: 0; /* Ensure no extra padding for nested lists */
+  margin-bottom: 0;
+}
+
+/* You can also style different levels differently if needed */
+ul ul ul {
+  margin-left: 20px; /* Adjust for deeper levels */
+  padding-left: 0; /* Ensure no extra padding for deeper nested lists */
+  margin-bottom: 0;
 }

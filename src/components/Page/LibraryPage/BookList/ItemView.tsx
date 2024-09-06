@@ -34,12 +34,12 @@ const ItemView = (props: Props) => {
       <div>by {props.book.primaryAuthor}</div>
       <div>{props.book.description}</div>
       <div className="footer-actions position-right">
-        <Button circle onClick={onOpen}>
+        {/* <Button circle onClick={onOpen}>
           <FontAwesomeIcon icon={faFolderOpen} /> Chapters
-        </Button>
-        <Button circle onClick={onOpenConcept}>
-          <FontAwesomeIcon icon={faBookOpen} /> Key concepts
-        </Button>
+        </Button> */}
+        <IconButton circle onClick={onOpenConcept}>
+          <FontAwesomeIcon icon={faFolderOpen} />
+        </IconButton>
       </div>
     </div>
   );

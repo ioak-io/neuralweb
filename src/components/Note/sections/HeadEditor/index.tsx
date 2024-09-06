@@ -30,6 +30,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import AiAssist from "../../../../components/NewNote/AiAssist";
 import { getEditorConfig } from "../../../../utils/EditorUtils";
+import BookLinkEditor from "../BookLinkEditor";
 
 interface SpeechRecognitionResult {
   transcript: string;
@@ -218,6 +219,11 @@ const HeadEditor = (props: Props) => {
             </Button>
           )}
         </div>
+        <BookLinkEditor
+          space={props.space}
+          note={props.note}
+          onChange={props.onChange}
+        />
         {/* <LabelEditor note={props.note} onChange={handleLabelChange} /> */}
       </div>
       <AiAssist

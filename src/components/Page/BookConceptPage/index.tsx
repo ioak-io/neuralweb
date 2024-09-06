@@ -54,6 +54,7 @@ const BookConceptPage = (props: Props) => {
     setIsLoading(true);
     generateConcepts(props.space, params.bookref || "", authorization).then(
       (response: any) => {
+        _refreshConcepts();
         setIsLoading(false);
       }
     );

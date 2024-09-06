@@ -1,25 +1,32 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { receiveMessage, sendMessage } from '../../events/MessageService';
-import ExpenseStateActions from '../../simplestates/ExpenseStateActions';
-import { fetchAndSetCompanyItems } from '../../store/actions/CompanyActions';
-import { fetchAndSetUserItems } from '../../store/actions/UserActions';
-import { setProfile } from '../../store/actions/ProfileActions';
-import ReceiptStateActions from '../../simplestates/ReceiptStateActions';
-import IncomeStateActions from '../../simplestates/IncomeStateActions';
-import { fetchAndSetNoteItems } from '../../store/actions/NoteActions';
-import { fetchAndSetLabelItems } from '../../store/actions/LabelActions';
-import { fetchAndSetMetadataDefinitionItems } from '../../store/actions/MetadataDefinitionActions';
-import { fetchAndSetMetadataValueItems } from '../../store/actions/MetadataValueActions';
-import { fetchAndSetNotelinkItems } from '../../store/actions/NotelinkActions';
-import { fetchAndSetNotelinkAutoItems } from '../../store/actions/NotelinkAutoActions';
-import { fetchAndSetColorfilterItems } from '../../store/actions/ColorfilterActions';
-import { axiosInstance, httpPost } from '../Lib/RestTemplate';
-import { getSessionValue, removeSessionValue, setSessionValue } from '../../utils/SessionUtils';
-import { addAuth, removeAuth } from '../../store/actions/AuthActions';
-import { useNavigate } from 'react-router-dom';
-import { rotateToken } from './service';
-import { fetchAndSetKeywordItems } from '../../store/actions/KeywordActions';
+import React, { useEffect, useRef, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { receiveMessage, sendMessage } from "../../events/MessageService";
+import ExpenseStateActions from "../../simplestates/ExpenseStateActions";
+import { fetchAndSetCompanyItems } from "../../store/actions/CompanyActions";
+import { fetchAndSetUserItems } from "../../store/actions/UserActions";
+import { setProfile } from "../../store/actions/ProfileActions";
+import ReceiptStateActions from "../../simplestates/ReceiptStateActions";
+import IncomeStateActions from "../../simplestates/IncomeStateActions";
+import { fetchAndSetNoteItems } from "../../store/actions/NoteActions";
+import { fetchAndSetLabelItems } from "../../store/actions/LabelActions";
+import { fetchAndSetMetadataDefinitionItems } from "../../store/actions/MetadataDefinitionActions";
+import { fetchAndSetMetadataValueItems } from "../../store/actions/MetadataValueActions";
+import { fetchAndSetNotelinkItems } from "../../store/actions/NotelinkActions";
+import { fetchAndSetNotelinkAutoItems } from "../../store/actions/NotelinkAutoActions";
+import { fetchAndSetColorfilterItems } from "../../store/actions/ColorfilterActions";
+import { axiosInstance, httpPost } from "../Lib/RestTemplate";
+import {
+  getSessionValue,
+  removeSessionValue,
+  setSessionValue,
+} from "../../utils/SessionUtils";
+import { addAuth, removeAuth } from "../../store/actions/AuthActions";
+import { useNavigate } from "react-router-dom";
+import { rotateToken } from "./service";
+import { fetchAndSetKeywordItems } from "../../store/actions/KeywordActions";
+import { getBooks } from "./book_service";
+import BookModel from "../../model/BookModel";
+import { refreshBookListState } from "../../simplestates/BookListState";
 
 const Init = () => {
   const navigate = useNavigate();
@@ -70,11 +77,11 @@ const Init = () => {
   useEffect(() => {
     initializeProfileFromSession();
     receiveMessage().subscribe((event: any) => {
-      if (event.name === 'spaceChange') {
+      if (event.name === "spaceChange") {
         // TODO
         setSpace(event.data);
       }
-      if (event.name === 'spaceChange' && authorization.isAuth) {
+      if (event.name === "spaceChange" && authorization.isAuth) {
         setSpace(event.data);
         initialize();
         initializeHttpRequestInterceptor();
@@ -97,7 +104,7 @@ const Init = () => {
   // }, [profile]);
 
   useEffect(() => {
-    if (profile.theme === 'basicui-light') {
+    if (profile.theme === "basicui-light") {
       document.body.classList.add("basicui-light");
       document.body.classList.add("writeup-light");
       document.body.classList.remove("basicui-dark");
@@ -113,39 +120,41 @@ const Init = () => {
   }, [profile.theme]);
 
   const initialize = () => {
-    console.log('Initialization logic here');
+    console.log("Initialization logic here");
     if (space) {
-      // dispatch(fetchAllCategories(space, authorization));
+      refreshBookListState(space, authorization);
     }
   };
 
   const initializeProfileFromSession = () => {
-    const colorMode = sessionStorage.getItem('neuralweb_pref_profile_colormode');
-    const sidebarStatus = sessionStorage.getItem('neuralweb_pref_sidebar_status');
+    const colorMode = sessionStorage.getItem(
+      "neuralweb_pref_profile_colormode"
+    );
+    const sidebarStatus = sessionStorage.getItem(
+      "neuralweb_pref_sidebar_status"
+    );
 
     if (colorMode || sidebarStatus) {
       dispatch(
         setProfile({
-          theme: colorMode || 'basicui-dark',
-          sidebar: sidebarStatus === 'expanded',
+          theme: colorMode || "basicui-dark",
+          sidebar: sidebarStatus === "expanded",
         })
       );
     }
   };
 
-
-
   const initializeHttpRequestInterceptor = () => {
     axiosInstance.interceptors.request.use(
-      config => {
+      (config) => {
         // (config.headers as RawAxiosRequestHeaders)['Authorization'] = authorization.access_token;
         return config;
       },
-      error => {
+      (error) => {
         return Promise.reject(error);
       }
     );
-  }
+  };
 
   const initializeHttpResponseInterceptor = () => {
     axiosInstance.interceptors.response.use(
@@ -155,8 +164,8 @@ const Init = () => {
         if (error?.response?.status === 401 && !config?._retry) {
           config._retry = true;
           console.log(authorizationRef.current);
-          return rotateToken(space || '', authorizationRef.current)
-            .then((response: any) => {
+          return rotateToken(space || "", authorizationRef.current).then(
+            (response: any) => {
               if (response) {
                 config.headers = {
                   ...config.headers,
@@ -169,30 +178,23 @@ const Init = () => {
                   })
                 );
                 return axiosInstance(error.config);
-              }
-              else {
-                console.log('********redirect to login');
+              } else {
+                console.log("********redirect to login");
                 dispatch(removeAuth());
-                removeSessionValue(
-                  `fortuna-access_token`
-                );
-                removeSessionValue(
-                  `fortuna-refresh_token`
-                );
-                navigate('/login');
+                removeSessionValue(`fortuna-access_token`);
+                removeSessionValue(`fortuna-refresh_token`);
+                navigate("/login");
                 Promise.reject(error);
               }
-            })
+            }
+          );
         }
         Promise.reject(error);
       }
-    )
-  }
+    );
+  };
 
-  return (
-    <>
-    </>
-  );
+  return <></>;
 };
 
 export default Init;

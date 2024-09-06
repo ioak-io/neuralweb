@@ -44,3 +44,26 @@ export const generateChapters = (
       return Promise.resolve({});
     });
 };
+
+export const uploadBookPdf = (
+  space: string,
+  bookRef: string,
+  fileData: any,
+  authorization: any
+) => {
+  const formData = new FormData();
+  formData.append("file", fileData);
+  return httpPost(`/book/${space}/reference/${bookRef}/upload-book`, formData, {
+    headers: {
+      Authorization: authorization.access_token,
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return Promise.resolve(response.data);
+      }
+    })
+    .catch((error) => {
+      return Promise.resolve({});
+    });
+};

@@ -11,5 +11,6 @@ export default interface NoteModel {
   keywords?: string[];
   type?: 'Fleeting' | 'Reference' | 'Literature' | 'Permanent';
   createdAt?: any;
+  bookrefList?: string[];
   [key: string]: any;
 }

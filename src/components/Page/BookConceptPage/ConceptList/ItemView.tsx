@@ -4,32 +4,31 @@ import "./ItemView.scss";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { IconButton } from "basicui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBook,
-  faBookOpen,
-  faBookReader,
-  faFolderOpen,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFileAlt } from "@fortawesome/free-solid-svg-icons";
 import ConceptModel from "../../../../model/ConceptModel";
 
 interface Props {
   space: string;
   concept: ConceptModel;
+  index: number;
 }
 
 const ItemView = (props: Props) => {
   const navigate = useNavigate();
 
   const onOpen = () => {
-    navigate(`/${props.space}/book/${props.concept.bookref}/concept/${props.concept.reference}`);
+    navigate(
+      `/${props.space}/book/${props.concept.bookref}/concept/${props.concept.reference}`
+    );
   };
 
   return (
     <div className="concept-list-item-view">
-      <div>{props.concept.name}</div>
+      <div>{`${props.index + 1}. ${props.concept.name}`}</div>
+      <div>{props.concept.description}</div>
       <div>
         <IconButton circle onClick={onOpen}>
-          <FontAwesomeIcon icon={faBookOpen} />
+          <FontAwesomeIcon icon={faFileAlt} />
         </IconButton>
       </div>
     </div>

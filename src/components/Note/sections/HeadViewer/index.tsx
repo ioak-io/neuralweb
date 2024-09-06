@@ -8,6 +8,7 @@ import TypeViewer from "../TypeViewer";
 import KeywordViewer from "../KeywordViewer";
 import ColorViewer from "../ColorViewer";
 import { isEmptyOrSpaces } from "../../../../components/Utils";
+import BookLinkViewer from "../BookLinkViewer";
 
 interface Props {
   note: NoteModel;
@@ -38,6 +39,9 @@ const HeadViewer = (props: Props) => {
           )}
           {isEmptyOrSpaces(props.note.contentText) && "-"}
         </div>
+      </div>
+      <div>
+        <BookLinkViewer note={props.note} />
       </div>
     </div>
   );
