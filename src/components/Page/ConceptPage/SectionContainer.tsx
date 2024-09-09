@@ -96,6 +96,7 @@ const SectionContainer = (props: Props) => {
           // disable={isEdit}
           disable={false}
           // onPrint={onPrint}
+          textToSpeak={props.conceptDetail.content?.replace(/<[^>]+>/g, "")}
         />
       )}
       {isEdit && (

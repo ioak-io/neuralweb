@@ -1,5 +1,19 @@
 .concept-section-container {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    column-gap: 10px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+}
+
+.concept-add-new-section {
+  display: grid;
+  //   justify-content: flex-end;
+  // justify-items: center;
+}
+.concept-add-new-section--closed {
+  justify-content: flex-end;
+}
+.concept-add-new-section--open {
+  background-color: var(--basicui-bg-card);
+  padding: 12px 12px;
+  border-radius: 6px;
 }

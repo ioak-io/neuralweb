@@ -29,6 +29,7 @@ import {
   BookListState,
   refreshBookListState,
 } from "../../../simplestates/BookListState";
+import { isEmptyOrSpaces } from "../../../components/Utils";
 
 interface Props {
   location: any;
@@ -41,6 +42,24 @@ const LibraryPage = (props: Props) => {
   const authorization = useSelector((state: any) => state.authorization);
   const [books, setBooks] = useState<BookModel[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [booksFiltered, setBooksFiltered] = useState<BookModel[]>([]);
+
+  useEffect(() => {
+    if (isEmptyOrSpaces(searchText)) {
+      setBooksFiltered(books);
+    } else {
+      const _searchText = searchText.toLowerCase();
+      setBooksFiltered(
+        books.filter(
+          (item) =>
+            item.title.toLowerCase().includes(_searchText) ||
+            item.primaryAuthor.toLowerCase().includes(_searchText) ||
+            item.description.toLowerCase().includes(_searchText)
+        )
+      );
+    }
+  }, [books, searchText]);
 
   useEffect(() => {
     const bookListStateSubscription = BookListState.subscribe(
@@ -60,6 +79,10 @@ const LibraryPage = (props: Props) => {
     setIsOpen(true);
   };
 
+  const onSearchTextChange = (event: any) => {
+    setSearchText(event.currentTarget.value);
+  };
+
   return (
     <>
       <div className="page-animate">
@@ -72,8 +95,13 @@ const LibraryPage = (props: Props) => {
           </div>
         </Topbar>
         <MainSection>
-          <Input placeholder="Search text" onInput={() => {}} />
-          <BookList space={props.space} books={books} />
+          <Input
+            placeholder="Search text"
+            value={searchText}
+            onInput={onSearchTextChange}
+            autoFocus
+          />
+          <BookList space={props.space} books={booksFiltered} />
         </MainSection>
       </div>
       <NewBook space={props.space} isOpen={isOpen} onClose={closePopup} />

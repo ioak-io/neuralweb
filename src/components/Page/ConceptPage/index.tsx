@@ -15,6 +15,7 @@ import { getEditorConfig } from "../../../utils/EditorUtils";
 import SectionContainer from "./SectionContainer";
 import AddNewSection from "./AddNewSection";
 import ConceptDetailModel from "../../../model/ConceptDetailModel";
+import TextToSpeech from "../../../components/TextToSpeech";
 
 interface Props {
   space: string;
@@ -36,6 +37,7 @@ const ConceptPage = (props: Props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [state, setState] = useState<ConceptModel>({
     name: "",
+    description: "",
   });
 
   useEffect(() => {

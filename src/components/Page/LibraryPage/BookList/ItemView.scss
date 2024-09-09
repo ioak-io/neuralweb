@@ -1,8 +1,62 @@
+// .book-list-item-view{
+//   display: grid;
+//   grid-template-columns: 1fr auto;
+//   column-gap: 12px;
+//   align-items: center;
+// }
+// .book-list-item-view__left {
+//   display: grid;
+//   padding: 12px;
+//   background-color: var(--basicui-bg-accent);
+//   border-radius: 4px;
+//   grid-auto-flow: row;
+//   row-gap: 4px;
+// }
+
+
 .book-list-item-view {
-  display: grid;
-  padding: 12px;
-  background-color: var(--basicui-bg-accent);
-  border-radius: 6px;
-  grid-auto-flow: row;
-  row-gap: 4px;
+  display: inline;
+}
+
+a {
+  font-size: 18px;
+  display: inline;
+  transition: 150ms color ease-in-out, 150ms border-color ease-in-out;
+  // cursor: pointer;
+}
+
+.book-list-item-view {
+  a,
+  a:hover,
+  a:focus,
+  a:active {
+    // text-decoration: underline
+  }
+
+  a,
+  a:visited {
+    color: var(--theme-primary-600);
+    border-bottom: inherit;
+    text-decoration: none; /* Underline by default */
+  }
+
+  a:hover,
+  a:focus {
+    color: var(--theme-warning-600);
+    border-color: inherit;
+    text-decoration: none; /* Remove underline on hover */
+  }
+}
+
+
+.basicui-dark .book-list-item-view {
+  a,
+  a:visited {
+    color: var(--theme-primary-400);
+  }
+
+  a:hover,
+  a:focus {
+    color: var(--theme-warning-500);
+  }
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./ItemView.scss";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { IconButton } from "basicui";
+import { IconButton, Link } from "basicui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileAlt } from "@fortawesome/free-solid-svg-icons";
 import ConceptModel from "../../../../model/ConceptModel";
@@ -23,14 +23,23 @@ const ItemView = (props: Props) => {
   };
 
   return (
+    // <div className="concept-list-item-view">
+    //   <div>{`${props.index + 1}. ${props.concept.name}`}</div>
+    //   <div>{props.concept.description}</div>
+    //   <div>
+    //     <IconButton circle onClick={onOpen}>
+    //       <FontAwesomeIcon icon={faFileAlt} />
+    //     </IconButton>
+    //   </div>
+    // </div>
     <div className="concept-list-item-view">
-      <div>{`${props.index + 1}. ${props.concept.name}`}</div>
-      <div>{props.concept.description}</div>
-      <div>
-        <IconButton circle onClick={onOpen}>
-          <FontAwesomeIcon icon={faFileAlt} />
-        </IconButton>
-      </div>
+      <a
+        rel="noopener noreferrer"
+        title={props.concept.name}
+        href={`/#/${props.space}/book/${props.concept.bookref}/concept/${props.concept.reference}`}
+      >
+        {`${props.index + 1}. ${props.concept.name}`}
+      </a>
     </div>
   );
 };

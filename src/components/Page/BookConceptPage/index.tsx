@@ -10,6 +10,7 @@ import { faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons";
 import MainSection from "../../../components/MainSection";
 import ConceptModel from "../../../model/ConceptModel";
 import ConceptList from "../BookConceptPage/ConceptList";
+import { isEmptyOrSpaces } from "../../../components/Utils";
 
 interface Props {
   location: any;
@@ -24,6 +25,23 @@ const BookConceptPage = (props: Props) => {
   const [concepts, setConcepts] = useState<ConceptModel[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [conceptsFiltered, setConceptsFiltered] = useState<ConceptModel[]>([]);
+
+  useEffect(() => {
+    if (isEmptyOrSpaces(searchText)) {
+      setConceptsFiltered(concepts);
+    } else {
+      const _searchText = searchText.toLowerCase();
+      setConceptsFiltered(
+        concepts.filter(
+          (item) =>
+            item.name.toLowerCase().includes(_searchText) ||
+            item.description.toLowerCase().includes(_searchText)
+        )
+      );
+    }
+  }, [concepts, searchText]);
 
   useEffect(() => {
     if (authorization.isAuth && params.bookref) {
@@ -60,6 +78,10 @@ const BookConceptPage = (props: Props) => {
     );
   };
 
+  const onSearchTextChange = (event: any) => {
+    setSearchText(event.currentTarget.value);
+  };
+
   return (
     <div className="page-animate">
       <Topbar title="Library">
@@ -71,8 +93,12 @@ const BookConceptPage = (props: Props) => {
         </div>
       </Topbar>
       <MainSection>
-        <Input placeholder="Search text" onInput={() => {}} />
-        <ConceptList space={props.space} concepts={concepts} />
+        <Input
+          placeholder="Search text"
+          onInput={onSearchTextChange}
+          autoFocus
+        />
+        <ConceptList space={props.space} concepts={conceptsFiltered} />
       </MainSection>
     </div>
   );

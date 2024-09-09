@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
   faChevronRight,
+  faPlus,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { SECTION_TYPES } from "./SectionTypes";
@@ -71,7 +72,13 @@ const AddNewSection = (props: Props) => {
   };
 
   return (
-    <div className="concept-add-new-section">
+    <div
+      className={`concept-add-new-section ${
+        isOpen
+          ? "concept-add-new-section--open"
+          : "concept-add-new-section--closed"
+      }`}
+    >
       <div className="form">
         {isOpen && (
           <>
@@ -101,16 +108,17 @@ const AddNewSection = (props: Props) => {
                 />
               </>
             )}
-            <div className="action-footer position-left">
+            <div className="action-footer position-right">
               <Button
                 onClick={onSave}
                 theme={ThemeType.primary}
                 loading={saving}
+                disabled={!chosenType}
               >
                 <FontAwesomeIcon icon={faCheck} />
                 Create
               </Button>
-              <Button onClick={onCancel}>
+              <Button onClick={onCancel} disabled={saving}>
                 <FontAwesomeIcon icon={faTimes} />
               </Button>
             </div>
@@ -118,7 +126,10 @@ const AddNewSection = (props: Props) => {
         )}
 
         {!isOpen && (
-          <Button onClick={() => setIsOpen(true)}>Add section</Button>
+          <Button onClick={() => setIsOpen(true)}>
+            <FontAwesomeIcon icon={faPlus} />
+            Add section
+          </Button>
         )}
       </div>
     </div>
