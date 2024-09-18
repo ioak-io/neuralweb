@@ -1,0 +1,19 @@
+.theme-section-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+}
+
+.theme-add-new-section {
+  display: grid;
+  //   justify-content: flex-end;
+  // justify-items: center;
+}
+.theme-add-new-section--closed {
+  justify-content: flex-end;
+}
+.theme-add-new-section--open {
+  background-color: var(--basicui-bg-card);
+  padding: 12px 12px;
+  border-radius: 6px;
+}

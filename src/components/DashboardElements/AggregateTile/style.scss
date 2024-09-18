@@ -30,8 +30,8 @@
 .basicui-dark .aggregate-tile--active,
 .basicui-dark .aggregate-tile--active:hover,
 .basicui-dark .aggregate-tile--active:focus {
-  background-color: var(--theme-primary-500);
-  color: var(--theme-primary-500i);
+  background-color: var(--basicui-bg-primary);
+  color: var(--basicui-fg-primary);
 }
 
 .aggregate-tile__metric {

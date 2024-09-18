@@ -8,23 +8,25 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNodes, faFileAlt } from "@fortawesome/free-solid-svg-icons";
 import { isEmptyAttributes, isEmptyOrSpaces } from "../../../components/Utils";
 import {
-  generateChapterSectionHead,
-  getChapterDetailList,
-  saveChapter,
+  generateThemeSectionHead,
+  getThemeDetailList,
+  saveTheme,
+  updateThemeDetail,
 } from "./service";
-import ChapterModel from "../../../model/ChapterModel";
+import ThemeModel from "../../../model/ThemeModel";
 import EditControls from "../../../components/Note/ui/EditControls";
 import ViewControls from "../../../components/Note/ui/ViewControls";
 import { cloneDeep } from "lodash";
 import HeadEditor from "./HeadEditor";
 import { getEditorConfig } from "../../../utils/EditorUtils";
 import HeadViewer from "./HeadViewer";
-import ChapterDetailModel from "../../../model/ChapterDetailModel";
+import ThemeDetailModel from "../../../model/ThemeDetailModel";
 import { getSectionType } from "./SectionTypes";
 
 interface Props {
   space: string;
-  chapterDetail: ChapterDetailModel;
+  theme: ThemeModel;
+  themeDetail: ThemeDetailModel;
   onRefresh: any;
 }
 
@@ -34,13 +36,16 @@ const SectionContainer = (props: Props) => {
   const params = useParams();
   const dispatch = useDispatch();
   const authorization = useSelector((state: any) => state.authorization);
-  const [chapterDetail, setChapterDetail] = useState<ChapterDetailModel>();
   const [saving, setSaving] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [state, setState] = useState<ChapterDetailModel>({
+  const [state, setState] = useState<ThemeDetailModel>({
     content: "",
     type: "",
   });
+
+  useEffect(() => {
+    setState({ ...props.themeDetail });
+  }, [props.themeDetail]);
 
   const onEdit = () => {
     setIsEdit(true);
@@ -52,17 +57,22 @@ const SectionContainer = (props: Props) => {
   };
 
   const reset = () => {
-    setState(cloneDeep(props.chapterDetail));
+    setState(cloneDeep(props.themeDetail));
   };
 
   useEffect(() => {
-    editor?.commands.setContent(props.chapterDetail.content);
-    console.log(props.chapterDetail.content);
-  }, [props.chapterDetail]);
+    editor?.commands.setContent(props.themeDetail.content);
+    console.log(props.themeDetail.content);
+  }, [props.themeDetail]);
 
   const onSave = (event: any, reload?: boolean) => {
     setSaving(true);
-    saveChapter(props.space, { ...state }, authorization)
+    updateThemeDetail(
+      props.space,
+      props.themeDetail._id || "",
+      { ...state, content: editor?.getHTML() },
+      authorization
+    )
       .then((response) => {
         props.onRefresh();
         setIsEdit(false);
@@ -81,11 +91,11 @@ const SectionContainer = (props: Props) => {
   // };
 
   const onChange = (event: any) => {
-    console.log(event);
+    setState({ ...state, ...event });
   };
 
   return (
-    <div className="chapter-section-container">
+    <div className="theme-section-container">
       {isEdit && (
         <EditControls onCancel={onCancelHead} onSave={onSave} saving={saving} />
       )}
@@ -96,29 +106,27 @@ const SectionContainer = (props: Props) => {
           // disable={isEdit}
           disable={false}
           // onPrint={onPrint}
+          // textToSpeak={props.themeDetail.content?.replace(/<[^>]+>/g, "")}
         />
       )}
       {isEdit && (
         <HeadEditor
           space={props.space}
-          chapter={state}
+          theme={state}
           onChange={onChange}
           editor={editor}
         />
       )}
       {!isEdit && (
         <div>
-          {props.chapterDetail.type !== "CUSTOM_MANAGED" &&
-            props.chapterDetail.type !== "CUSTOM" && (
-              <h4>{getSectionType(props.chapterDetail.type)?.description}</h4>
-            )}
-          {(props.chapterDetail.type === "CUSTOM_MANAGED" ||
-            props.chapterDetail.type === "CUSTOM") && (
-            <h4>{props.chapterDetail.customTitle}</h4>
+          {props.themeDetail.type !== "summary" && (
+            <h4>{getSectionType(props.themeDetail.type)?.description}</h4>
           )}
+
+          {props.themeDetail.type === "summary" && <h3>{props.theme.title}</h3>}
           <div
             dangerouslySetInnerHTML={{
-              __html: props.chapterDetail.content || "",
+              __html: props.themeDetail.content || "",
             }}
           />
         </div>

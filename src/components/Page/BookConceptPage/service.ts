@@ -20,6 +20,26 @@ export const getConcepts = (
       return Promise.resolve([]);
     });
 };
+export const getConceptByReference = (
+  space: string,
+  bookref: string,
+  conceptref: string,
+  authorization: any
+) => {
+  return httpGet(`/book/concept/${space}/${bookref}/${conceptref}`, {
+    headers: {
+      Authorization: authorization.access_token,
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return Promise.resolve(response.data);
+      }
+    })
+    .catch((error) => {
+      return Promise.resolve([]);
+    });
+};
 
 export const generateConcepts = (
   space: string,

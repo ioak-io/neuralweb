@@ -35,14 +35,14 @@ a {
 
   a,
   a:visited {
-    color: var(--theme-primary-600);
+    color: var(--basicui-bg-primary-text);
     border-bottom: inherit;
     text-decoration: none; /* Underline by default */
   }
 
   a:hover,
   a:focus {
-    color: var(--theme-warning-600);
+    color: var(--basicui-bg-secondary-text);
     border-color: inherit;
     text-decoration: none; /* Remove underline on hover */
   }
@@ -52,11 +52,11 @@ a {
 .basicui-dark .book-list-item-view {
   a,
   a:visited {
-    color: var(--theme-primary-400);
+    color: var(--basicui-bg-primary-text);
   }
 
   a:hover,
   a:focus {
-    color: var(--theme-warning-500);
+    color: var(--basicui-bg-secondary-text);
   }
 }

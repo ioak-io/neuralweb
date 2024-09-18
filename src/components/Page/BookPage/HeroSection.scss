@@ -1,6 +1,15 @@
 .book-page-hero-section {
-    display: grid;
-    justify-content: center;
-    justify-items: center;
-    row-gap: 12px;
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  row-gap: 12px;
+}
+
+.book-page-hero-section__actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  button:not(:last-child) {
+    margin-right: 12px;
+  }
 }

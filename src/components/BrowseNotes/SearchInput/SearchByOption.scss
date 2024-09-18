@@ -34,8 +34,8 @@
 .search-by-option--active:hover,
 .search-by-option--active:focus,
 .search-by-option--active:active {
-    background-color: var(--theme-primary-transparent-600);
-    color: var(--theme-primary-transparent-600i);
+    background-color: var(--basicui-bg-primary-transparent);
+    color: var(--basicui-bg-primary-transparenti);
 }
 
 .basicui-dark {
@@ -45,7 +45,7 @@
     .search-by-option--active:focus,
     .search-by-option--active:active {
 
-        background-color: var(--theme-primary-transparent-600);
-        color: var(--theme-primary-transparent-600i);
+        background-color: var(--basicui-bg-primary-transparent);
+        color: var(--basicui-bg-primary-transparenti);
     }
 }

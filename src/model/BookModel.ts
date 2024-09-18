@@ -13,4 +13,5 @@ export default interface BookModel {
   pageCount?: number;
   publishedDate: string;
   thumbnail?: string;
+  overview?: string;
 }

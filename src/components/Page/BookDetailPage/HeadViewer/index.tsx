@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./style.scss";
 import { isEmptyOrSpaces } from "../../../../components/Utils";
-import ChapterModel from "../../../../model/ChapterModel";
+import BookDetailModel from "../../../../model/BookDetailModel";
 
 interface Props {
-  chapter: ChapterModel;
+  bookdetail: BookDetailModel;
 }
 
 const HeadViewer = (props: Props) => {
@@ -15,13 +15,13 @@ const HeadViewer = (props: Props) => {
       <div>
         {/* <Label>Name</Label> */}
         <div className="head-viewer__title">
-          <h4>{props.chapter.name}</h4>
-          {/* {!isEmptyOrSpaces(props.chapter.contentText) && (
+          <h4>{props.bookdetail.name}</h4>
+          {/* {!isEmptyOrSpaces(props.bookdetail.contentText) && (
             <div
-              dangerouslySetInnerHTML={{ __html: props.chapter.content || "" }}
+              dangerouslySetInnerHTML={{ __html: props.bookdetail.content || "" }}
             />
           )}
-          {isEmptyOrSpaces(props.chapter.contentText) && "-"} */}
+          {isEmptyOrSpaces(props.bookdetail.contentText) && "-"} */}
         </div>
       </div>
     </div>

@@ -20,13 +20,13 @@
 }
 
 .index-page-form input:hover {
-    border-color: var(--theme-primary-transparent-300);
+    border-color: var(--basicui-bg-primary-transparent);
     background-color: var(--theme-white-300);
 }
 
 .index-page-form input:focus,
 .index-page-form input:active {
-    border-color: var(--theme-primary-transparent-600);
+    border-color: var(--basicui-bg-primary-transparent);
     background-color: var(--theme-white-300);
 }
 
@@ -37,13 +37,13 @@
 }
 
 .basicui-dark .index-page-form input:hover {
-    border-color: var(--theme-primary-transparent-300);
+    border-color: var(--basicui-bg-primary-transparent);
     background-color: var(--theme-black-extended-800);
 }
 
 .basicui-dark .index-page-form input:focus,
 .basicui-dark .index-page-form input:active {
-    border-color: var(--theme-primary-transparent-600);
+    border-color: var(--basicui-bg-primary-transparent);
     background-color: var(--theme-black-extended-800);
 }
 

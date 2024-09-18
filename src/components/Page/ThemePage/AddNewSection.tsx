@@ -2,12 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./AddNewSection.scss";
 import { useParams } from "react-router-dom";
-import { createChapterDetail, saveChapter } from "./service";
+import { createThemeDetail, saveTheme } from "./service";
 import { Button, Checkbox, Input, Radio, ThemeType } from "basicui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
   faChevronRight,
+  faPlus,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { SECTION_TYPES } from "./SectionTypes";
@@ -31,10 +32,11 @@ const AddNewSection = (props: Props) => {
 
   const onSave = (event: any, reload?: boolean) => {
     setSaving(true);
-    createChapterDetail(
+    createThemeDetail(
       props.space,
       params.bookref || "",
-      params.chapterref || "",
+      params.conceptref || "",
+      params.themeref || "",
       {
         type: chosenType,
         sectionTitle: customSectionTitle,
@@ -71,7 +73,11 @@ const AddNewSection = (props: Props) => {
   };
 
   return (
-    <div className="chapter-add-new-section">
+    <div
+      className={`theme-add-new-section ${
+        isOpen ? "theme-add-new-section--open" : "theme-add-new-section--closed"
+      }`}
+    >
       <div className="form">
         {isOpen && (
           <>
@@ -101,16 +107,17 @@ const AddNewSection = (props: Props) => {
                 />
               </>
             )}
-            <div className="action-footer position-left">
+            <div className="action-footer position-right">
               <Button
                 onClick={onSave}
                 theme={ThemeType.primary}
                 loading={saving}
+                disabled={!chosenType}
               >
                 <FontAwesomeIcon icon={faCheck} />
                 Create
               </Button>
-              <Button onClick={onCancel}>
+              <Button onClick={onCancel} disabled={saving}>
                 <FontAwesomeIcon icon={faTimes} />
               </Button>
             </div>
@@ -118,7 +125,10 @@ const AddNewSection = (props: Props) => {
         )}
 
         {!isOpen && (
-          <Button onClick={() => setIsOpen(true)}>Add section</Button>
+          <Button onClick={() => setIsOpen(true)}>
+            <FontAwesomeIcon icon={faPlus} />
+            Add section
+          </Button>
         )}
       </div>
     </div>

@@ -1,10 +1,10 @@
 .book-editor input {
-  border-color: var(--theme-primary-transparent-300);
+  border-color: var(--basicui-bg-primary-transparent);
   // background-color: var(--theme-white-500);
 }
 
 .basicui-dark .book-editor input {
-  border-color: var(--theme-primary-transparent-300);
+  border-color: var(--basicui-bg-primary-transparent);
   // background-color: var(--theme-black-200);
 }
 
@@ -32,7 +32,7 @@
 }
 
 .book-editor__view__star-active svg {
-  color: var(--theme-primary-500);
+  color: var(--basicui-bg-primary);
 }
 
 .book-editor__view__item {
@@ -59,8 +59,8 @@
 button.book-editor__view__item :hover,
 button.book-editor__view__item :focus,
 button.book-editor__view__item :active {
-  background-color: var(--theme-primary-transparent-400);
-  color: var(--theme-primary-transparent-400i);
+  background-color: var(--basicui-bg-primary-transparent);
+  color: var(--basicui-bg-primary-transparenti);
 }
 
 .book-editor__view__item button {

@@ -43,6 +43,27 @@ export const createConceptDetail = (
     });
 };
 
+export const updateConceptDetail = (
+  space: string,
+  id: string,
+  payload: any,
+  authorization: any
+) => {
+  return httpPut(`/book/concept-detail/${space}/${id}`, payload, {
+    headers: {
+      Authorization: authorization.access_token,
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return Promise.resolve(response.data);
+      }
+    })
+    .catch((error) => {
+      return Promise.resolve({});
+    });
+};
+
 export const generateConceptSectionHead = (
   space: string,
   bookref: string,

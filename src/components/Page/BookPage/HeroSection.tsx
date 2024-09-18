@@ -6,7 +6,11 @@ import { generateConcepts, getBook } from "./service";
 import Topbar from "../../../components/Topbar";
 import { Button, ButtonVariantType, Input, ThemeType } from "basicui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBookReader,
+  faChevronRight,
+  faWandMagicSparkles,
+} from "@fortawesome/free-solid-svg-icons";
 import MainSection from "../../../components/MainSection";
 import ConceptModel from "../../../model/BookModel";
 import BookModel from "../../../model/BookModel";
@@ -24,7 +28,11 @@ const HeroSection = (props: Props) => {
   const authorization = useSelector((state: any) => state.authorization);
 
   const onOpen = () => {
-    navigate(`/${props.space}/book/${props.book.reference}/summary`);
+    navigate(`/${props.space}/book/${props.book.reference}/read`);
+  };
+
+  const onOpenExtract = () => {
+    navigate(`/${props.space}/book/${props.book.reference}/extract`);
   };
   const onOpenConcept = () => {
     navigate(`/${props.space}/book/${props.book.reference}/concept`);
@@ -33,20 +41,16 @@ const HeroSection = (props: Props) => {
   return (
     <div className="book-page-hero-section">
       <ImageComponent imageUrl={props.book.thumbnail} />
-      <Button
-        theme={ThemeType.primary}
-        variant={ButtonVariantType.outline}
-        onClick={onOpen}
-      >
-        Summary
-      </Button>
-      <Button
-        theme={ThemeType.primary}
-        variant={ButtonVariantType.outline}
-        onClick={onOpenConcept}
-      >
-        Key Concepts
-      </Button>
+      <div className="book-page-hero-section__actions">
+        <Button
+          theme={ThemeType.primary}
+          variant={ButtonVariantType.chroma}
+          onClick={onOpen}
+        >
+          <FontAwesomeIcon icon={faBookReader} />
+          Read
+        </Button>
+      </div>
     </div>
   );
 };

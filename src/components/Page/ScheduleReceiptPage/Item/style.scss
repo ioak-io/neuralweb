@@ -6,14 +6,14 @@
   align-items: flex-start;
   &:hover,
   &:focus {
-    background-color: var(--theme-primary-transparent-200);
+    background-color: var(--basicui-bg-primary-transparent);
   }
 }
 .basicui-dark .sch-rec-pg-item {
   background-color: var(--theme-black-300);
   &:hover,
   &:focus {
-    background-color: var(--theme-primary-transparent-200);
+    background-color: var(--basicui-bg-primary-transparent);
   }
 }
 .sch-rec-pg-item__element {

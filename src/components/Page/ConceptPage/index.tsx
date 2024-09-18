@@ -16,6 +16,7 @@ import SectionContainer from "./SectionContainer";
 import AddNewSection from "./AddNewSection";
 import ConceptDetailModel from "../../../model/ConceptDetailModel";
 import TextToSpeech from "../../../components/TextToSpeech";
+import { getConceptByReference, getConcepts } from "../BookConceptPage/service";
 
 interface Props {
   space: string;
@@ -27,7 +28,7 @@ const ConceptPage = (props: Props) => {
   const params = useParams();
   const dispatch = useDispatch();
   const authorization = useSelector((state: any) => state.authorization);
-  const [concept, setConcept] = useState<ConceptModel | null>(null);
+  const [concept, setConcept] = useState<ConceptModel>();
   const [conceptDetailList, setConceptDetailList] = useState<
     ConceptDetailModel[]
   >([]);
@@ -41,13 +42,8 @@ const ConceptPage = (props: Props) => {
   });
 
   useEffect(() => {
-    if (concept) {
-      setState(cloneDeep(concept));
-    }
-  }, [concept]);
-
-  useEffect(() => {
     _refreshConceptDetailList();
+    _refreshConcept();
   }, [params, authorization]);
 
   const _refreshConceptDetailList = () => {
@@ -59,6 +55,19 @@ const ConceptPage = (props: Props) => {
         authorization
       ).then((response) => {
         setConceptDetailList(response);
+      });
+    }
+  };
+
+  const _refreshConcept = () => {
+    if (params.bookref && params.conceptref && authorization.isAuth) {
+      getConceptByReference(
+        props.space,
+        params.bookref,
+        params.conceptref,
+        authorization
+      ).then((response) => {
+        setConcept(response);
       });
     }
   };
@@ -130,17 +139,19 @@ const ConceptPage = (props: Props) => {
   return (
     <>
       <div className="note-page page-animate">
-        <Topbar title={concept?.name || ""} />
+        <Topbar title={`Concept | ${concept?.name}` || ""} />
 
         <MainSection>
-          {conceptDetailList.map((item) => (
-            <SectionContainer
-              key={item._id}
-              space={props.space}
-              conceptDetail={item}
-              onRefresh={_refreshConceptDetailList}
-            />
-          ))}
+          {concept &&
+            conceptDetailList.map((item) => (
+              <SectionContainer
+                key={item._id}
+                space={props.space}
+                conceptDetail={item}
+                concept={concept}
+                onRefresh={_refreshConceptDetailList}
+              />
+            ))}
           <AddNewSection
             space={props.space}
             onRefresh={_refreshConceptDetailList}

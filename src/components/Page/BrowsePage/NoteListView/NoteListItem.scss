@@ -23,12 +23,12 @@
 .browse-page-notelistitem--selected,
 .browse-page-notelistitem--selected:hover,
 .browse-page-notelistitem--selected:active {
-  background-color: var(--theme-primary-transparent-100);
+  background-color: var(--basicui-bg-primary-transparent);
 }
 .basicui-dark .browse-page-notelistitem--selected,
 .basicui-dark .browse-page-notelistitem--selected:hover,
 .basicui-dark .browse-page-notelistitem--selected:active {
-  background-color: var(--theme-primary-transparent-300);
+  background-color: var(--basicui-bg-primary-transparent);
 }
 
 .browse-page-notelistitem-container {

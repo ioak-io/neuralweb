@@ -31,6 +31,22 @@ const Details = (props: Props) => {
           <i>by {props.book.primaryAuthor}</i>
         </h5>
       </div>
+      <div className="book-page-details__sources">
+        <a
+          rel="noopener noreferrer"
+          title="Sources"
+          href={`/#/${props.space}/book/${props.book.reference}/extract`}
+        >
+          0 sources
+        </a>
+        <a
+          rel="noopener noreferrer"
+          title="Sources"
+          href={`/#/${props.space}/book/${props.book.reference}/concept`}
+        >
+          Key concepts
+        </a>
+      </div>
       <div>
         <p>Categories: {props.book.categories}</p>
         <p>{props.book.pageCount} pages</p>

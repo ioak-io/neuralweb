@@ -27,11 +27,13 @@ import BrowseByGroupPage from "../Page/BrowseByGroupPage";
 import LibraryPage from "../Page/LibraryPage";
 import BrowsePage from "../Page/BrowsePage";
 import BookChapterPage from "../Page/BookChapterPage";
-import ChapterPage from "../Page/ChapterPage";
 import BookConceptPage from "../Page/BookConceptPage";
 import ConceptPage from "../Page/ConceptPage";
 import FlashcardPage from "../Page/FlashcardPage";
 import BookPage from "../Page/BookPage";
+import BookExtractPage from "../Page/BookExtractPage";
+import ThemePage from "../Page/ThemePage";
+import BookDetailPage from "../Page/BookDetailPage";
 
 interface Props {}
 
@@ -184,11 +186,11 @@ const RouterView = (props: Props) => {
           }
         />
         <Route
-          path="/:space/book/:bookref/chapter/:chapterref"
+          path="/:space/book/:bookref/read"
           element={
             <ProtectedRouteApp
               middleware={["readAuthentication"]}
-              component={ChapterPage}
+              component={BookDetailPage}
             />
           }
         />
@@ -207,6 +209,24 @@ const RouterView = (props: Props) => {
             <ProtectedRouteApp
               middleware={["readAuthentication"]}
               component={ConceptPage}
+            />
+          }
+        />
+        <Route
+          path="/:space/book/:bookref/concept/:conceptref/theme/:themeref"
+          element={
+            <ProtectedRouteApp
+              middleware={["readAuthentication"]}
+              component={ThemePage}
+            />
+          }
+        />
+        <Route
+          path="/:space/book/:bookref/extract"
+          element={
+            <ProtectedRouteApp
+              middleware={["readAuthentication"]}
+              component={BookExtractPage}
             />
           }
         />

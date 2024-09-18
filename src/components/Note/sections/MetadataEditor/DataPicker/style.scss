@@ -1,10 +1,10 @@
 .metadata-picker input {
-    border-color: var(--theme-primary-transparent-300);
+    border-color: var(--basicui-bg-primary-transparent);
     // background-color: var(--theme-white-500);
 }
 
 .basicui-dark .metadata-picker input {
-    border-color: var(--theme-primary-transparent-300);
+    border-color: var(--basicui-bg-primary-transparent);
     // background-color: var(--theme-black-200);
 }
 
@@ -35,8 +35,8 @@
 .metadata-picker__item:hover,
 .metadata-picker__item:focus,
 .metadata-picker__item:active {
-    // border: 1px solid var(--theme-primary-transparent-600);
-    background-color:  var(--theme-primary-transparent-100);
+    // border: 1px solid var(--basicui-bg-primary-transparent);
+    background-color:  var(--basicui-bg-primary-transparent);
 }
 
 .metadata-picker__value{

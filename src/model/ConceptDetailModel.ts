@@ -3,7 +3,7 @@ export default interface ConceptDetailModel {
   type: string;
   customTitle?: string;
   customDescription?: string;
-  chapterref?: string;
+  conceptref?: string;
   bookref?: string;
-  content: string;
+  content: any;
 }

@@ -24,6 +24,9 @@
 }
 
 .topbar-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   button {
     position: relative;
     padding: 0 10px;

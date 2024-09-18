@@ -1,10 +1,10 @@
 .label-editor input {
-  border-color: var(--theme-primary-transparent-300);
+  border-color: var(--basicui-bg-primary-transparent);
   // background-color: var(--theme-white-500);
 }
 
 .basicui-dark .label-editor input {
-  border-color: var(--theme-primary-transparent-300);
+  border-color: var(--basicui-bg-primary-transparent);
   // background-color: var(--theme-black-200);
 }
 
@@ -32,5 +32,5 @@
 }
 
 .label-editor__view__star-active svg {
-  color: var(--theme-primary-500);
+  color: var(--basicui-bg-primary);
 }

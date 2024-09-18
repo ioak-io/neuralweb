@@ -11,6 +11,7 @@ import {
   generateConceptSectionHead,
   getConceptDetailList,
   saveConcept,
+  updateConceptDetail,
 } from "./service";
 import ConceptModel from "../../../model/ConceptModel";
 import EditControls from "../../../components/Note/ui/EditControls";
@@ -24,6 +25,7 @@ import { getSectionType } from "./SectionTypes";
 
 interface Props {
   space: string;
+  concept: ConceptModel;
   conceptDetail: ConceptDetailModel;
   onRefresh: any;
 }
@@ -34,13 +36,16 @@ const SectionContainer = (props: Props) => {
   const params = useParams();
   const dispatch = useDispatch();
   const authorization = useSelector((state: any) => state.authorization);
-  const [conceptDetail, setConceptDetail] = useState<ConceptDetailModel>();
   const [saving, setSaving] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [state, setState] = useState<ConceptDetailModel>({
     content: "",
     type: "",
   });
+
+  useEffect(() => {
+    setState({ ...props.conceptDetail });
+  }, [props.conceptDetail]);
 
   const onEdit = () => {
     setIsEdit(true);
@@ -62,7 +67,12 @@ const SectionContainer = (props: Props) => {
 
   const onSave = (event: any, reload?: boolean) => {
     setSaving(true);
-    saveConcept(props.space, { ...state }, authorization)
+    updateConceptDetail(
+      props.space,
+      props.conceptDetail._id || "",
+      { ...state, content: editor?.getHTML() },
+      authorization
+    )
       .then((response) => {
         props.onRefresh();
         setIsEdit(false);
@@ -81,7 +91,7 @@ const SectionContainer = (props: Props) => {
   // };
 
   const onChange = (event: any) => {
-    console.log(event);
+    setState({ ...state, ...event });
   };
 
   return (
@@ -96,7 +106,7 @@ const SectionContainer = (props: Props) => {
           // disable={isEdit}
           disable={false}
           // onPrint={onPrint}
-          textToSpeak={props.conceptDetail.content?.replace(/<[^>]+>/g, "")}
+          // textToSpeak={props.conceptDetail.content?.replace(/<[^>]+>/g, "")}
         />
       )}
       {isEdit && (
@@ -109,19 +119,31 @@ const SectionContainer = (props: Props) => {
       )}
       {!isEdit && (
         <div>
-          {props.conceptDetail.type !== "CUSTOM_MANAGED" &&
-            props.conceptDetail.type !== "CUSTOM" && (
-              <h4>{getSectionType(props.conceptDetail.type)?.description}</h4>
-            )}
-          {(props.conceptDetail.type === "CUSTOM_MANAGED" ||
-            props.conceptDetail.type === "CUSTOM") && (
-            <h4>{props.conceptDetail.customTitle}</h4>
+          {props.conceptDetail.type !== "_shortform" && (
+            <h4>{getSectionType(props.conceptDetail.type)?.description}</h4>
           )}
-          <div
-            dangerouslySetInnerHTML={{
-              __html: props.conceptDetail.content || "",
-            }}
-          />
+          {props.conceptDetail.type === "_shortform" && (
+            <h3>{props.concept.name}</h3>
+          )}
+          {props.conceptDetail.type !== "further_references" && (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: props.conceptDetail.content || "",
+              }}
+            />
+          )}
+          {props.conceptDetail.type === "further_references" &&
+            props.conceptDetail.content?.map((item: any) => (
+              <>
+                <li>
+                  <strong>
+                    <em>{item.book}</em>
+                  </strong>
+                  {` by ${item.author} explores key themes such as
+                  ${item.centralIdeas?.join(", ")}. ${item.summary}`}
+                </li>
+              </>
+            ))}
         </div>
       )}
     </div>

@@ -1,4 +1,9 @@
 .main-section {
-  margin: 24px 48px;
   margin: 24px 20px;
+}
+
+.main-section--short {
+  max-width: 1024px;
+  margin: 24px auto;
+  padding: 0 12px;
 }

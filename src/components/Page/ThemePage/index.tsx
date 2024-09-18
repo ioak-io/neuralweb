@@ -5,58 +5,81 @@ import Topbar from "../../../components/Topbar";
 import { useParams } from "react-router-dom";
 import MainSection from "../../../components/MainSection";
 import {
-  generateChapterSectionHead,
-  getChapterDetailList,
-  saveChapter,
+  generateThemeSectionHead,
+  getThemeByReference,
+  getThemeDetailList,
+  saveTheme,
 } from "./service";
-import ChapterModel from "../../../model/ChapterModel";
+import ThemeModel from "../../../model/ThemeModel";
 import { cloneDeep } from "lodash";
 import { getEditorConfig } from "../../../utils/EditorUtils";
 import SectionContainer from "./SectionContainer";
 import AddNewSection from "./AddNewSection";
-import ChapterDetailModel from "../../../model/ChapterDetailModel";
+import ThemeDetailModel from "../../../model/ThemeDetailModel";
+import TextToSpeech from "../../../components/TextToSpeech";
 
 interface Props {
   space: string;
 }
 
-const ChapterPage = (props: Props) => {
+const ThemePage = (props: Props) => {
   const headEditor = getEditorConfig();
 
   const params = useParams();
   const dispatch = useDispatch();
   const authorization = useSelector((state: any) => state.authorization);
-  const [chapter, setChapter] = useState<ChapterModel | null>(null);
-  const [chapterDetailList, setChapterDetailList] = useState<
-    ChapterDetailModel[]
-  >([]);
+  const [theme, setTheme] = useState<ThemeModel>();
+  const [themeDetailList, setThemeDetailList] = useState<ThemeDetailModel[]>(
+    []
+  );
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [isEditHead, setIsEditHead] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [state, setState] = useState<ChapterModel>({
-    name: "",
+  const [state, setState] = useState<ThemeModel>({
+    title: "",
+    description: "",
   });
 
   useEffect(() => {
-    if (chapter) {
-      setState(cloneDeep(chapter));
-    }
-  }, [chapter]);
-
-  useEffect(() => {
-    _refreshChapterDetailList();
+    _refreshTheme();
+    _refreshThemeDetailList();
   }, [params, authorization]);
 
-  const _refreshChapterDetailList = () => {
-    if (params.bookref && params.chapterref && authorization.isAuth) {
-      getChapterDetailList(
+  const _refreshThemeDetailList = () => {
+    if (
+      params.bookref &&
+      params.themeref &&
+      params.conceptref &&
+      authorization.isAuth
+    ) {
+      getThemeDetailList(
         props.space,
         params.bookref,
-        params.chapterref,
+        params.conceptref,
+        params.themeref,
         authorization
       ).then((response) => {
-        setChapterDetailList(response);
+        setThemeDetailList(response);
+      });
+    }
+  };
+
+  const _refreshTheme = () => {
+    if (
+      params.bookref &&
+      params.conceptref &&
+      params.themeref &&
+      authorization.isAuth
+    ) {
+      getThemeByReference(
+        props.space,
+        params.bookref,
+        params.conceptref,
+        params.themeref,
+        authorization
+      ).then((response) => {
+        setTheme(response);
       });
     }
   };
@@ -73,16 +96,16 @@ const ChapterPage = (props: Props) => {
   };
 
   const reset = () => {
-    if (chapter) {
-      setState(cloneDeep(chapter));
+    if (theme) {
+      setState(cloneDeep(theme));
     }
   };
 
   const onSave = (event: any, reload?: boolean) => {
     setSaving(true);
-    saveChapter(props.space, { ...state }, authorization)
+    saveTheme(props.space, { ...state }, authorization)
       .then((response) => {
-        setChapter(response);
+        setTheme(response);
         setIsEditHead(false);
         setIsEdit(false);
         setSaving(false);
@@ -105,19 +128,19 @@ const ChapterPage = (props: Props) => {
 
   const onGenerateHead = () => {
     setSaving(true);
-    generateChapterSectionHead(
+    generateThemeSectionHead(
       props.space,
       params.bookref || "",
-      params.chapterref || "",
+      params.themeref || "",
       {
         title: "Beyond good and evil",
         primaryAuthor: "Friedrich Nietzsche",
-        chapterTitle: "The Religious Mood",
+        themeTitle: "The Religious Mood",
       },
       authorization
     )
       .then((response) => {
-        // setChapter(response);
+        // setTheme(response);
         setIsEditHead(false);
         setIsEdit(false);
         setSaving(false);
@@ -128,20 +151,22 @@ const ChapterPage = (props: Props) => {
   return (
     <>
       <div className="note-page page-animate">
-        <Topbar title={chapter?.name || ""} />
+        <Topbar title={`Theme | ${theme?.title}` || ""} />
 
         <MainSection>
-          {chapterDetailList.map((item) => (
-            <SectionContainer
-              key={item._id}
-              space={props.space}
-              chapterDetail={item}
-              onRefresh={_refreshChapterDetailList}
-            />
-          ))}
+          {theme &&
+            themeDetailList?.map((item) => (
+              <SectionContainer
+                key={item._id}
+                space={props.space}
+                themeDetail={item}
+                theme={theme}
+                onRefresh={_refreshThemeDetailList}
+              />
+            ))}
           <AddNewSection
             space={props.space}
-            onRefresh={_refreshChapterDetailList}
+            onRefresh={_refreshThemeDetailList}
           />
         </MainSection>
       </div>
@@ -149,4 +174,4 @@ const ChapterPage = (props: Props) => {
   );
 };
 
-export default ChapterPage;
+export default ThemePage;

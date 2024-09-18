@@ -28,8 +28,8 @@
 button.note-label:hover,
 button.note-label:focus,
 button.note-label:active {
-    background-color: var(--theme-primary-transparent-400);
-    color: var(--theme-primary-transparent-400i);
+    background-color: var(--basicui-bg-primary-transparent);
+    color: var(--basicui-bg-primary-transparenti);
 }
 
 .note-label button {
