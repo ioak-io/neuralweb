@@ -4,13 +4,21 @@ export const SECTION_TYPES: { name: string; description: string }[] = [
     description: "Summary",
   },
   {
+    name: "themes",
+    description: "Key themes and ideas",
+  },
+  {
     name: "alternate_takes",
     description: "Alternate perspectives",
   },
   {
-    name: "explain_to_child",
-    description: "Explain to a child",
+    name: "purpose",
+    description: "Thematic Significance",
   },
+  // {
+  //   name: "explain_to_child",
+  //   description: "Explain to a child",
+  // },
   // {
   //   name: "critical_analysis",
   //   description: "Critical Analysis",

@@ -7,6 +7,7 @@ import {
   faPlus,
   faPrint,
   faTrashAlt,
+  faWandMagicSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ButtonVariantType, IconButton, ThemeType } from "basicui";
@@ -21,6 +22,7 @@ interface Props {
   onAdd?: any;
   onPrint?: any;
   textToSpeak?: string;
+  onGenerate?: any;
 }
 
 const ViewControls = (props: Props) => {
@@ -46,6 +48,17 @@ const ViewControls = (props: Props) => {
           theme={ThemeType.default}
         >
           <FontAwesomeIcon icon={faPlus} />
+        </IconButton>
+      )}
+      {props.onGenerate && (
+        <IconButton
+          disabled={props.disable}
+          onClick={props.onGenerate}
+          circle
+          variant={ButtonVariantType.fill}
+          theme={ThemeType.default}
+        >
+          <FontAwesomeIcon icon={faWandMagicSparkles} />
         </IconButton>
       )}
       {props.onRemove && (

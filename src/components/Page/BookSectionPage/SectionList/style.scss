@@ -1,0 +1,23 @@
+.section-list {
+    display: flex;
+    flex-direction: column;
+    // justify-items: flex-start;
+    // margin-top: 12px;
+}
+
+.section-list *:not(:last-child) {
+    // margin-bottom: 12px;
+}
+
+
+// .section-list a {
+//     display: inline-block; /* Ensures each link takes up the full width and appears on a new line */
+//     padding: 0;     /* Optional: Adjust padding if needed */
+//     margin: 0;      /* Optional: Adjust margin if needed */
+//     text-decoration: none; /* Optional: Removes underline from links */
+//     color: inherit; /* Optional: Inherits color from parent, change if needed */
+//   }
+
+//   .section-list a:hover {
+//     text-decoration: underline; /* Optional: Adds underline on hover for better UX */
+//   }

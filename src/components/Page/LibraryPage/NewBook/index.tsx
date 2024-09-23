@@ -46,6 +46,8 @@ const _EMPTY_BOOK: BookModel = {
   isbn: "",
   publishedDate: "",
   isManaged: true,
+  authorInfo: "",
+  shortDescription: "",
 };
 
 const NewBook = (props: Props) => {
@@ -126,37 +128,31 @@ const NewBook = (props: Props) => {
       <ModalBody>
         {/* <form onSubmit={onSubmit}> */}
         <div className="form">
-          <Input
-            name="title"
-            label="Book name"
-            value={state.title}
-            onInput={onChange}
-            errorMessage={errorMessage}
-            disabled={validationStatus === "success"}
-          />
-          <Input
-            name="primaryAuthor"
-            label="Author name"
-            value={state.primaryAuthor}
-            onInput={onChange}
-            disabled={validationStatus === "success"}
-          />
+          {validationStatus === "success" && (
+            <div>{`${state.title} by ${state.primaryAuthor}`}</div>
+          )}
+          {validationStatus !== "success" && (
+            <>
+              <Input
+                autoFocus
+                name="title"
+                label="Book name"
+                value={state.title}
+                onInput={onChange}
+                errorMessage={errorMessage}
+              />
+              <Input
+                name="primaryAuthor"
+                label="Author name"
+                value={state.primaryAuthor}
+                onInput={onChange}
+              />
+            </>
+          )}
           {(validationStatus === "success" ||
             (validationStatus === "failure" && !isManaged)) && (
             <>
-              <Input
-                name="isbn"
-                label="ISBN"
-                value={state.isbn}
-                onInput={onChange}
-                disabled={validationStatus === "success"}
-              />
-              <Textarea
-                name="description"
-                label="About the book"
-                value={state.description}
-                onInput={onChange}
-              />
+              <div>{state.shortDescription}</div>
               <Input
                 name="pageCount"
                 label="Number of pages"
@@ -164,6 +160,13 @@ const NewBook = (props: Props) => {
                 onInput={onChange}
                 type="number"
                 disabled={validationStatus === "success"}
+              />
+              <Input
+                name="chapterCount"
+                label="Number of chapters"
+                value={state.chapterCount}
+                onInput={onChange}
+                type="number"
               />
               <Input
                 name="categories"
@@ -190,18 +193,26 @@ const NewBook = (props: Props) => {
       </ModalBody>
       <ModalFooter>
         {validationStatus !== "success" && isManaged && (
-          <Button theme={ThemeType.primary} onClick={onSubmit}>
+          <Button
+            theme={ThemeType.primary}
+            onClick={onSubmit}
+            loading={isLoading}
+          >
             <FontAwesomeIcon icon={faSpellCheck} />
             Validate
           </Button>
         )}
         {(validationStatus === "success" || !isManaged) && (
-          <Button theme={ThemeType.primary} onClick={onSubmit}>
+          <Button
+            theme={ThemeType.primary}
+            onClick={onSubmit}
+            loading={isLoading}
+          >
             <FontAwesomeIcon icon={faChevronRight} />
             Create
           </Button>
         )}
-        <Button onClick={() => onClose(false)}>
+        <Button onClick={() => onClose(false)} disabled={isLoading}>
           <FontAwesomeIcon icon={faTimes} />
         </Button>
       </ModalFooter>

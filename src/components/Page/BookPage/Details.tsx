@@ -37,15 +37,15 @@ const Details = (props: Props) => {
           title="Sources"
           href={`/#/${props.space}/book/${props.book.reference}/extract`}
         >
-          0 sources
+          Sources
         </a>
-        <a
+        {/* <a
           rel="noopener noreferrer"
           title="Sources"
           href={`/#/${props.space}/book/${props.book.reference}/concept`}
         >
           Key concepts
-        </a>
+        </a> */}
       </div>
       <div>
         <p>Categories: {props.book.categories}</p>

@@ -33,7 +33,8 @@ import FlashcardPage from "../Page/FlashcardPage";
 import BookPage from "../Page/BookPage";
 import BookExtractPage from "../Page/BookExtractPage";
 import ThemePage from "../Page/ThemePage";
-import BookDetailPage from "../Page/BookDetailPage";
+import BookSectionDetailPage from "../Page/BookSectionDetailPage";
+import BookSectionPage from "../Page/BookSectionPage";
 
 interface Props {}
 
@@ -190,7 +191,25 @@ const RouterView = (props: Props) => {
           element={
             <ProtectedRouteApp
               middleware={["readAuthentication"]}
-              component={BookDetailPage}
+              component={BookSectionPage}
+            />
+          }
+        />
+        <Route
+          path="/:space/book/:bookref/section"
+          element={
+            <ProtectedRouteApp
+              middleware={["readAuthentication"]}
+              component={BookSectionPage}
+            />
+          }
+        />
+        <Route
+          path="/:space/book/:bookref/section/:sectionref"
+          element={
+            <ProtectedRouteApp
+              middleware={["readAuthentication"]}
+              component={BookSectionDetailPage}
             />
           }
         />

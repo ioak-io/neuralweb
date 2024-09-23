@@ -11,6 +11,7 @@ export default interface BookModel {
   isManaged: boolean;
   isbn: string;
   pageCount?: number;
+  chapterCount?: number;
   publishedDate: string;
   thumbnail?: string;
   overview?: string;

@@ -1,18 +1,18 @@
-.bookdetail-section-container {
+.book-section-detail-section-container {
   display: grid;
   grid-template-columns: auto 1fr;
   column-gap: 10px;
 }
 
-.bookdetail-add-new-section {
+.bookSectionDetail-add-new-section {
   display: grid;
   //   justify-content: flex-end;
   // justify-items: center;
 }
-.bookdetail-add-new-section--closed {
+.bookSectionDetail-add-new-section--closed {
   justify-content: flex-end;
 }
-.bookdetail-add-new-section--open {
+.bookSectionDetail-add-new-section--open {
   background-color: var(--basicui-bg-card);
   padding: 12px 12px;
   border-radius: 6px;

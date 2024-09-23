@@ -6,7 +6,7 @@ export const saveBookdetail = (
   payload: any,
   authorization: any
 ) => {
-  return httpPut(`/book/detail/${space}/`, payload, {
+  return httpPut(`/book/section-detail/${space}/`, payload, {
     headers: {
       Authorization: authorization.access_token,
     },
@@ -24,14 +24,19 @@ export const saveBookdetail = (
 export const createBookdetail = (
   space: string,
   bookref: string,
+  sectionref: string,
   payload: any,
   authorization: any
 ) => {
-  return httpPost(`/book/detail/${space}/${bookref}`, payload, {
-    headers: {
-      Authorization: authorization.access_token,
-    },
-  })
+  return httpPost(
+    `/book/section-detail/${space}/${bookref}/${sectionref}`,
+    payload,
+    {
+      headers: {
+        Authorization: authorization.access_token,
+      },
+    }
+  )
     .then((response) => {
       if (response.status === 200) {
         return Promise.resolve(response.data);
@@ -48,7 +53,7 @@ export const updateBookdetail = (
   payload: any,
   authorization: any
 ) => {
-  return httpPut(`/book/detail/${space}/${id}`, payload, {
+  return httpPut(`/book/section-detail/${space}/${id}`, payload, {
     headers: {
       Authorization: authorization.access_token,
     },
@@ -66,9 +71,10 @@ export const updateBookdetail = (
 export const getBookdetailList = (
   space: string,
   bookref: string,
+  sectionref: string,
   authorization: any
 ) => {
-  return httpGet(`/book/detail/${space}/${bookref}`, {
+  return httpGet(`/book/section-detail/${space}/${bookref}/${sectionref}`, {
     headers: {
       Authorization: authorization.access_token,
     },
@@ -87,11 +93,11 @@ export const getBookdetailByReference = (
   space: string,
   bookref: string,
   conceptref: string,
-  bookdetailref: string,
+  bookSectionDetailref: string,
   authorization: any
 ) => {
   return httpGet(
-    `/book/detail/${space}/${bookref}/${conceptref}/${bookdetailref}`,
+    `/book/section-detail/${space}/${bookref}/${conceptref}/${bookSectionDetailref}`,
     {
       headers: {
         Authorization: authorization.access_token,
@@ -113,7 +119,7 @@ export const getBookdetailsByBookref = (
   bookref: string,
   authorization: any
 ) => {
-  return httpGet(`/book/detail/${space}/${bookref}`, {
+  return httpGet(`/book/section-detail/${space}/${bookref}`, {
     headers: {
       Authorization: authorization.access_token,
     },

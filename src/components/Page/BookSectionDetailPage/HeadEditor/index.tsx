@@ -27,7 +27,7 @@ import {
   faWandMagicSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import AiAssist from "../../../../components/NewNote/AiAssist";
-import BookDetailModel from "../../../../model/BookDetailModel";
+import BookSectionDetailModel from "../../../../model/BookSectionDetailModel";
 
 interface SpeechRecognitionResult {
   transcript: string;
@@ -49,7 +49,7 @@ interface SpeechRecognitionErrorEvent extends Event {
 
 interface Props {
   space: string;
-  bookdetail: BookDetailModel;
+  bookSectionDetail: BookSectionDetailModel;
   onChange: any;
   editor: any;
 }
@@ -63,7 +63,7 @@ const HeadEditor = (props: Props) => {
 
   const handleChange = (event: any) => {
     props.onChange({
-      ...props.bookdetail,
+      ...props.bookSectionDetail,
       [event.currentTarget.name]: event.currentTarget.value,
     });
   };

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./AddNewSection.scss";
 import { useParams } from "react-router-dom";
-import { createBookdetail, saveBookdetail } from "./service";
 import { Button, Checkbox, Input, Radio, ThemeType } from "basicui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -32,25 +31,26 @@ const AddNewSection = (props: Props) => {
 
   const onSave = (event: any, reload?: boolean) => {
     setSaving(true);
-    createBookdetail(
-      props.space,
-      params.bookref || "",
-      {
-        type: chosenType,
-        sectionTitle: customSectionTitle,
-        sectionDescription: customSectionDescription,
-      },
-      authorization
-    )
-      .then((response) => {
-        setSaving(false);
-        setIsOpen(false);
-        setChosenType("");
-        setCustomSectionDescription("");
-        setCustomSectionTitle("");
-        props.onRefresh();
-      })
-      .catch(() => setSaving(false));
+    // createBookdetail(
+    //   props.space,
+    //   params.bookref || "",
+    //   params.sectionref || "",
+    //   {
+    //     type: chosenType,
+    //     sectionTitle: customSectionTitle,
+    //     sectionDescription: customSectionDescription,
+    //   },
+    //   authorization
+    // )
+    //   .then((response) => {
+    //     setSaving(false);
+    //     setIsOpen(false);
+    //     setChosenType("");
+    //     setCustomSectionDescription("");
+    //     setCustomSectionTitle("");
+    //     props.onRefresh();
+    //   })
+    //   .catch(() => setSaving(false));
   };
 
   const onCancel = () => {
@@ -72,10 +72,10 @@ const AddNewSection = (props: Props) => {
 
   return (
     <div
-      className={`bookdetail-add-new-section ${
+      className={`bookSectionDetail-add-new-section ${
         isOpen
-          ? "bookdetail-add-new-section--open"
-          : "bookdetail-add-new-section--closed"
+          ? "bookSectionDetail-add-new-section--open"
+          : "bookSectionDetail-add-new-section--closed"
       }`}
     >
       <div className="form">
@@ -110,7 +110,7 @@ const AddNewSection = (props: Props) => {
             <div className="action-footer position-right">
               <Button
                 onClick={onSave}
-                bookdetail={ThemeType.primary}
+                bookSectionDetail={ThemeType.primary}
                 loading={saving}
                 disabled={!chosenType}
               >
