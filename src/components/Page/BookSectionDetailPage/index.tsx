@@ -5,7 +5,6 @@ import Topbar from "../../../components/Topbar";
 import { useParams } from "react-router-dom";
 import MainSection from "../../../components/MainSection";
 import { getBookdetailList, saveBookdetail } from "./service";
-import { cloneDeep } from "lodash";
 import { getEditorConfig } from "../../../utils/EditorUtils";
 import SectionContainer from "./SectionContainer";
 import AddNewSection from "./AddNewSection";
@@ -30,7 +29,6 @@ const BookSectionDetailPage = (props: Props) => {
   >([]);
   const [bookSection, setBookSection] = useState<SectionModel>();
   const [saving, setSaving] = useState(false);
-  const [deleting, setDeleting] = useState(false);
   const [isEditHead, setIsEditHead] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [state, setState] = useState<BookSectionDetailModel>({
@@ -39,11 +37,22 @@ const BookSectionDetailPage = (props: Props) => {
   });
   const [log, setLog] = useState<BookLogModel[]>([]);
 
+  const pollingRef = useRef<NodeJS.Timeout | null>(null);
+  const isPolling = useRef<boolean>(false);
+
   useEffect(() => {
-    _refreshBookdetailList();
-    _refreshSection();
-    _refreshLog();
+    if (params.bookref && params.sectionref && authorization.isAuth) {
+      _refreshSection();
+      _refreshBookdetailList();
+      _startPolling();
+    }
   }, [params, authorization]);
+
+  useEffect(() => {
+    return () => {
+      _stopPolling();
+    };
+  }, []);
 
   const _refreshBookdetailList = () => {
     if (params.bookref && params.sectionref && authorization.isAuth) {
@@ -71,7 +80,14 @@ const BookSectionDetailPage = (props: Props) => {
     }
   };
 
-  const _refreshLog = () => {
+  const _startPolling = () => {
+    if (!isPolling.current) {
+      isPolling.current = true;
+      _poll();
+    }
+  };
+
+  const _poll = () => {
     getBookGenerationLog(
       props.space,
       authorization,
@@ -79,8 +95,23 @@ const BookSectionDetailPage = (props: Props) => {
       params.sectionref || ""
     ).then((response) => {
       setLog(response);
-      console.log("*", response)
+      if (response.length > 0) {
+        pollingRef.current = setTimeout(_poll, 3000);
+      } else {
+        _refreshBookdetailList();
+        _stopPolling();
+      }
     });
+  };
+
+  const _stopPolling = () => {
+    if (isPolling.current) {
+      if (pollingRef.current) {
+        clearTimeout(pollingRef.current);
+      }
+      pollingRef.current = null;
+      isPolling.current = false;
+    }
   };
 
   const onEditHead = () => {
@@ -104,22 +135,9 @@ const BookSectionDetailPage = (props: Props) => {
       .catch(() => setSaving(false));
   };
 
-  // const saveChanges = () => {
-  //   saveNote(props.space, state, authorization).then((response: any) => {
-  //     if (response) {
-  //       setState(response);
-  //       setView('view');
-  //     }
-  //   });
-  // };
-
-  const onChange = (event: any) => {
-    console.log(event);
-  };
-
   const onRefresh = () => {
     _refreshBookdetailList();
-    _refreshLog();
+    _startPolling();
   };
 
   return (
@@ -139,7 +157,13 @@ const BookSectionDetailPage = (props: Props) => {
                 log={log}
               />
             ))}
-          <AddNewSection space={props.space} onRefresh={onRefresh} />
+          {log.length === 0 && (
+            <AddNewSection
+              space={props.space}
+              onRefresh={onRefresh}
+              bookSectionDetailList={bookSectionDetailList}
+            />
+          )}
         </MainSection>
       </div>
     </>

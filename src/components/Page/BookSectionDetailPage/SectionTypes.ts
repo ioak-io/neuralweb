@@ -1,19 +1,32 @@
-export const SECTION_TYPES: { name: string; description: string }[] = [
+export const SECTION_TYPES: {
+  name: string;
+  description: string;
+  isSummaryDependent: boolean;
+  isThemesDependent: boolean;
+}[] = [
   {
     name: "summary",
     description: "Summary",
+    isSummaryDependent: false,
+    isThemesDependent: false,
   },
   {
     name: "themes",
     description: "Key themes and ideas",
+    isSummaryDependent: true,
+    isThemesDependent: false,
   },
   {
     name: "alternate_takes",
     description: "Alternate perspectives",
+    isSummaryDependent: false,
+    isThemesDependent: true,
   },
   {
     name: "purpose",
     description: "Thematic Significance",
+    isSummaryDependent: false,
+    isThemesDependent: true,
   },
   // {
   //   name: "explain_to_child",

@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { saveAs } from "file-saver";
 import "./style.scss";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { generateConcepts, getBook } from "./service";
+import { generateConcepts, generateReport, getBook } from "./service";
 import Topbar from "../../../components/Topbar";
 import { Button, Input } from "basicui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +13,7 @@ import ConceptModel from "../../../model/BookModel";
 import BookModel from "../../../model/BookModel";
 import HeroSection from "./HeroSection";
 import Details from "./Details";
+import { formatDate } from "../../../components/Lib/DateUtils";
 
 interface Props {
   location: any;
@@ -40,13 +42,27 @@ const BookPage = (props: Props) => {
     );
   };
 
+  const onPrint = () => {
+    setIsLoading(true);
+    generateReport(props.space, params.bookref || "", authorization).then(
+      (response) => {
+        // const blob = new Blob([response], { type: "application/zip" });
+        saveAs(
+          `data:application/zip;base64,${response}`,
+          `${book?.primaryAuthor} - ${book?.title}.zip`
+        );
+        setIsLoading(false);
+      }
+    );
+  };
+
   return (
     <div className="page-animate">
       <MainSection>
         {book && (
           <div className="book-page">
             <div className="book-page__left">
-              <HeroSection space={props.space} book={book} />
+              <HeroSection space={props.space} book={book} onPrint={onPrint} isPrinting={isLoading} />
             </div>
             <div className="book-page__right">
               <Details space={props.space} book={book} />

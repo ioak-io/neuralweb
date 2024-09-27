@@ -3,4 +3,8 @@
     grid-auto-flow: row;
     row-gap: 10px;
     align-content: flex-start;
+
+    button {
+        opacity: 0.75;
+    }
 }

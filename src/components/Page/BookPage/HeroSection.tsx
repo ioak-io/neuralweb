@@ -4,11 +4,19 @@ import "./HeroSection.scss";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { generateConcepts, getBook } from "./service";
 import Topbar from "../../../components/Topbar";
-import { Button, ButtonVariantType, Input, ThemeType } from "basicui";
+import {
+  Button,
+  ButtonVariantType,
+  IconButton,
+  Input,
+  ThemeType,
+} from "basicui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookReader,
   faChevronRight,
+  faDownload,
+  faFileDownload,
   faWandMagicSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import MainSection from "../../../components/MainSection";
@@ -19,6 +27,8 @@ import ImageComponent from "./ImageComponent";
 interface Props {
   space: string;
   book: BookModel;
+  onPrint: any;
+  isPrinting: boolean;
 }
 
 const HeroSection = (props: Props) => {
@@ -50,6 +60,14 @@ const HeroSection = (props: Props) => {
           <FontAwesomeIcon icon={faBookReader} />
           Read
         </Button>
+        <IconButton
+          theme={ThemeType.default}
+          variant={ButtonVariantType.chroma}
+          onClick={props.onPrint}
+          loading={props.isPrinting}
+        >
+          <FontAwesomeIcon icon={faDownload} />
+        </IconButton>
       </div>
     </div>
   );

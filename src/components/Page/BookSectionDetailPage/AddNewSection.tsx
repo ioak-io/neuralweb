@@ -12,10 +12,14 @@ import {
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { SECTION_TYPES } from "./SectionTypes";
+import EditControls from "../../../components/Note/ui/EditControls";
+import ViewControls from "../../../components/Note/ui/ViewControls";
+import BookSectionDetailModel from "../../../model/BookSectionDetailModel";
 
 interface Props {
   space: string;
   onRefresh: any;
+  bookSectionDetailList: BookSectionDetailModel[];
 }
 
 const AddNewSection = (props: Props) => {
@@ -23,12 +27,41 @@ const AddNewSection = (props: Props) => {
   const dispatch = useDispatch();
   const authorization = useSelector((state: any) => state.authorization);
 
-  const [isOpen, setIsOpen] = useState(false);
   const [chosenType, setChosenType] = useState("");
   const [customSectionTitle, setCustomSectionTitle] = useState("");
   const [customSectionDescription, setCustomSectionDescription] = useState("");
+  const [sectionTypes, setSectionTypes] = useState<
+    { name: string; description: string }[]
+  >([]);
 
   const [saving, setSaving] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+
+  const onEdit = () => {
+    setIsEdit(true);
+  };
+
+  useEffect(() => {
+    const _existingSectionTypes: string[] = [];
+    let isSummaryAvailable = false;
+    let isThemesAvailable = false;
+    props.bookSectionDetailList?.forEach((item) => {
+      _existingSectionTypes.push(item.type);
+      if (item.type === "summary") {
+        isSummaryAvailable = true;
+      } else if (item.type === "themes") {
+        isThemesAvailable = true;
+      }
+    });
+    setSectionTypes(
+      SECTION_TYPES.filter(
+        (item) =>
+          !_existingSectionTypes.includes(item.name) &&
+          (!item.isSummaryDependent || isSummaryAvailable) &&
+          (!item.isThemesDependent || isThemesAvailable)
+      )
+    );
+  }, [props.bookSectionDetailList]);
 
   const onSave = (event: any, reload?: boolean) => {
     setSaving(true);
@@ -45,7 +78,7 @@ const AddNewSection = (props: Props) => {
     )
       .then((response) => {
         setSaving(false);
-        setIsOpen(false);
+        setIsEdit(false);
         setChosenType("");
         setCustomSectionDescription("");
         setCustomSectionTitle("");
@@ -54,9 +87,9 @@ const AddNewSection = (props: Props) => {
       .catch(() => setSaving(false));
   };
 
-  const onCancel = () => {
+  const onCancelHead = () => {
     setChosenType("");
-    setIsOpen(false);
+    setIsEdit(false);
   };
 
   const onChange = (event: any) => {
@@ -72,66 +105,25 @@ const AddNewSection = (props: Props) => {
   };
 
   return (
-    <div
-      className={`bookSectionDetail-add-new-section ${
-        isOpen
-          ? "bookSectionDetail-add-new-section--open"
-          : "bookSectionDetail-add-new-section--closed"
-      }`}
-    >
-      <div className="form">
-        {isOpen && (
-          <>
-            {SECTION_TYPES.map((item) => (
-              <Radio
-                name={item.name}
-                key={item.name}
-                label={item.description}
-                value={item.name}
-                checked={item.name === chosenType}
-                onChange={onChange}
-              />
-            ))}
-            {chosenType === "CUSTOM_MANAGED" && (
-              <>
-                <Input
-                  name="customSectionDescription"
-                  value={customSectionDescription}
-                  onInput={onCustomSectionDescriptionChange}
-                  label="Instruction about what kind of content should be generated for this section"
-                />
-                <Input
-                  name="customSectionTitle"
-                  value={customSectionTitle}
-                  onInput={onCustomSectionTitleChange}
-                  label="Section title"
-                />
-              </>
-            )}
-            <div className="action-footer position-right">
-              <Button
-                onClick={onSave}
-                bookSectionDetail={ThemeType.primary}
-                loading={saving}
-                disabled={!chosenType}
-              >
-                <FontAwesomeIcon icon={faCheck} />
-                Create
-              </Button>
-              <Button onClick={onCancel} disabled={saving}>
-                <FontAwesomeIcon icon={faTimes} />
-              </Button>
-            </div>
-          </>
-        )}
-
-        {!isOpen && (
-          <Button onClick={() => setIsOpen(true)}>
-            <FontAwesomeIcon icon={faPlus} />
-            Add section
-          </Button>
-        )}
-      </div>
+    <div className="book-section-detail-add-new-section">
+      {isEdit && (
+        <EditControls onCancel={onCancelHead} onSave={onSave} saving={saving} />
+      )}
+      {!isEdit && <ViewControls onAdd={onEdit} disable={false} />}
+      {isEdit && (
+        <div className="book-section-detail-add-new-section__form">
+          {sectionTypes.map((item) => (
+            <Radio
+              name={item.name}
+              key={item.name}
+              label={item.description}
+              value={item.name}
+              checked={item.name === chosenType}
+              onChange={onChange}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

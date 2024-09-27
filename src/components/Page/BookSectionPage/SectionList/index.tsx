@@ -8,6 +8,7 @@ import ThemeModel from "../../../../model/ThemeModel";
 
 interface Props {
   space: string;
+  onRefresh: any;
   sections: SectionModel[];
   themeMap: { [key: string]: ThemeModel[] };
 }
@@ -25,6 +26,7 @@ const SectionList = (props: Props) => {
           index={index}
           space={props.space}
           section={section}
+          onRefresh={props.onRefresh}
         />
       ))}
     </div>

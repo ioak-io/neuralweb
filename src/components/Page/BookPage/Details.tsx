@@ -50,6 +50,7 @@ const Details = (props: Props) => {
       <div>
         <p>Categories: {props.book.categories}</p>
         <p>{props.book.pageCount} pages</p>
+        <p>{props.book.chapterCount} chapters</p>
       </div>
       <p>{props.book.description}</p>
       <div>

@@ -28,6 +28,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import AiAssist from "../../../../components/NewNote/AiAssist";
 import BookSectionDetailModel from "../../../../model/BookSectionDetailModel";
+import SectionModel from "../../../../model/SectionModel";
 
 interface SpeechRecognitionResult {
   transcript: string;
@@ -49,7 +50,7 @@ interface SpeechRecognitionErrorEvent extends Event {
 
 interface Props {
   space: string;
-  bookSectionDetail: BookSectionDetailModel;
+  section: SectionModel;
   onChange: any;
   editor: any;
 }
@@ -63,7 +64,7 @@ const HeadEditor = (props: Props) => {
 
   const handleChange = (event: any) => {
     props.onChange({
-      ...props.bookSectionDetail,
+      ...props.section,
       [event.currentTarget.name]: event.currentTarget.value,
     });
   };
@@ -71,6 +72,13 @@ const HeadEditor = (props: Props) => {
   return (
     <>
       <div className="head-editor">
+        <Input
+          value={props.section.title}
+          name="title"
+          label="Chapter title"
+          onInput={handleChange}
+          autoFocus
+        />
         <Editor editor={props.editor}>
           <Bold editor={props.editor} />
           <Italic editor={props.editor} />

@@ -36,6 +36,9 @@ const BookSectionPage = (props: Props) => {
   const [themeMap, setThemeMap] = useState<{ [key: string]: ThemeModel[] }>({});
   const [log, setLog] = useState<BookLogModel[]>([]);
 
+  const pollingRef = useRef<NodeJS.Timeout | null>(null);
+  const isPolling = useRef<boolean>(false);
+
   useEffect(() => {
     if (isEmptyOrSpaces(searchText)) {
       setSectionsFiltered(sections);
@@ -52,16 +55,42 @@ const BookSectionPage = (props: Props) => {
   }, [sections, searchText]);
 
   useEffect(() => {
-    if (authorization.isAuth && params.bookref) {
+    if (params.bookref && authorization.isAuth) {
       _refreshSections();
-      _refreshLog();
+      _startPolling();
     }
-  }, [authorization, params]);
+  }, [params, authorization]);
+
+  useEffect(() => {
+    return () => {
+      _stopPolling();
+    };
+  }, []);
 
   const _refreshSections = () => {
     getSections(props.space, params.bookref || "", authorization).then(
       (response) => {
         setSections(response);
+      }
+    );
+  };
+  const _startPolling = () => {
+    if (!isPolling.current) {
+      isPolling.current = true;
+      _poll();
+    }
+  };
+
+  const _poll = () => {
+    getBookGenerationLog(props.space, authorization, params.bookref || "").then(
+      (response) => {
+        setLog(response);
+        if (response.length > 0) {
+          pollingRef.current = setTimeout(_poll, 3000);
+        } else {
+          _refreshSections();
+          _stopPolling();
+        }
       }
     );
   };
@@ -72,6 +101,16 @@ const BookSectionPage = (props: Props) => {
         setLog(response);
       }
     );
+  };
+
+  const _stopPolling = () => {
+    if (isPolling.current) {
+      if (pollingRef.current) {
+        clearTimeout(pollingRef.current);
+      }
+      pollingRef.current = null;
+      isPolling.current = false;
+    }
   };
 
   const closePopup = (isBookAdded: boolean) => {
@@ -101,13 +140,13 @@ const BookSectionPage = (props: Props) => {
   };
 
   const onRefresh = () => {
-    _refreshLog();
     _refreshSections();
+    _startPolling();
   };
 
   return (
     <div className="page-animate">
-      <Topbar title="Key sections">
+      <Topbar title="Chapters">
         <div className="topbar-actions">
           <Button onClick={onGenerateSections} disabled={isLoading}>
             <FontAwesomeIcon icon={faWandMagicSparkles} />
@@ -116,22 +155,20 @@ const BookSectionPage = (props: Props) => {
         </div>
       </Topbar>
       <MainSection>
-        <SectionSummaryContainer
-          onGenerateSections={onGenerateSections}
-          isGenerating={log.length > 0}
-        >
-          {log.length === 0 && (
-            <SectionList
-              space={props.space}
-              sections={sectionsFiltered}
-              themeMap={themeMap}
-            />
-          )}
-          {log.length > 0 && (
-            <LoadingBlocks numberOfBlocks={12} minWidth={30} maxWidth={60} />
-          )}
-        </SectionSummaryContainer>
-        <AddNewSection space={props.space} onRefresh={onRefresh} />
+        {log.length === 0 && (
+          <SectionList
+            space={props.space}
+            sections={sectionsFiltered}
+            themeMap={themeMap}
+            onRefresh={onRefresh}
+          />
+        )}
+        {log.length > 0 && (
+          <LoadingBlocks numberOfBlocks={12} minWidth={30} maxWidth={60} />
+        )}
+        {log.length === 0 && (
+          <AddNewSection space={props.space} onRefresh={onRefresh} />
+        )}
       </MainSection>
     </div>
   );
