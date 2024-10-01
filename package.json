@@ -9,7 +9,7 @@
     "start": "webpack serve --config webpack.config.js --mode development",
     "build": "webpack --env target=production --config webpack.config.js --mode production",
     "deploy-gh": "npm run build&&gh-pages -d build",
-    "deploy": "pm2 start npm --name 'neuralweb-app' -- start -- --port=7004"
+    "deploy": "pm2 delete neuralweb-app && pm2 start npm --name 'neuralweb-app' -- start -- --port=7004"
   },
   "repository": {
     "type": "git",
