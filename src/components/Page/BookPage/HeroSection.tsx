@@ -13,6 +13,7 @@ import {
 } from "basicui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faBook,
   faBookReader,
   faChevronRight,
   faDownload,
@@ -41,6 +42,10 @@ const HeroSection = (props: Props) => {
     navigate(`/${props.space}/book/${props.book.reference}/read`);
   };
 
+  const onOpenChapters = () => {
+    navigate(`/${props.space}/book/${props.book.reference}/section`);
+  };
+
   const onOpenExtract = () => {
     navigate(`/${props.space}/book/${props.book.reference}/extract`);
   };
@@ -57,8 +62,16 @@ const HeroSection = (props: Props) => {
           variant={ButtonVariantType.chroma}
           onClick={onOpen}
         >
-          <FontAwesomeIcon icon={faBookReader} />
+          <FontAwesomeIcon icon={faBook} />
           Read
+        </Button>
+        <Button
+          theme={ThemeType.default}
+          variant={ButtonVariantType.chroma}
+          onClick={onOpenChapters}
+        >
+          <FontAwesomeIcon icon={faBookReader} />
+          Chapters
         </Button>
         <IconButton
           theme={ThemeType.default}

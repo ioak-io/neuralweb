@@ -62,10 +62,19 @@ const BookPage = (props: Props) => {
         {book && (
           <div className="book-page">
             <div className="book-page__left">
-              <HeroSection space={props.space} book={book} onPrint={onPrint} isPrinting={isLoading} />
+              <HeroSection
+                space={props.space}
+                book={book}
+                onPrint={onPrint}
+                isPrinting={isLoading}
+              />
             </div>
             <div className="book-page__right">
-              <Details space={props.space} book={book} />
+              <Details
+                space={props.space}
+                book={book}
+                onRefresh={_refreshBook}
+              />
             </div>
           </div>
         )}

@@ -1,62 +1,7 @@
-// .book-list-item-view{
-//   display: grid;
-//   grid-template-columns: 1fr auto;
-//   column-gap: 12px;
-//   align-items: center;
-// }
-// .book-list-item-view__left {
-//   display: grid;
-//   padding: 12px;
-//   background-color: var(--basicui-bg-accent);
-//   border-radius: 4px;
-//   grid-auto-flow: row;
-//   row-gap: 4px;
-// }
-
-
 .book-list-item-view {
   display: inline;
 }
 
 a {
-  font-size: 18px;
-  display: inline;
-  transition: 150ms color ease-in-out, 150ms border-color ease-in-out;
-  // cursor: pointer;
-}
-
-.book-list-item-view {
-  a,
-  a:hover,
-  a:focus,
-  a:active {
-    // text-decoration: underline
-  }
-
-  a,
-  a:visited {
-    color: var(--basicui-bg-primary-text);
-    border-bottom: inherit;
-    text-decoration: none; /* Underline by default */
-  }
-
-  a:hover,
-  a:focus {
-    color: var(--basicui-bg-secondary-text);
-    border-color: inherit;
-    text-decoration: none; /* Remove underline on hover */
-  }
-}
-
-
-.basicui-dark .book-list-item-view {
-  a,
-  a:visited {
-    color: var(--basicui-bg-primary-text);
-  }
-
-  a:hover,
-  a:focus {
-    color: var(--basicui-bg-secondary-text);
-  }
+  // font-size: 18px;
 }

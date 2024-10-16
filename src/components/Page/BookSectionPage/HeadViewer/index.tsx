@@ -4,6 +4,7 @@ import "./style.scss";
 import { isEmptyOrSpaces } from "../../../../components/Utils";
 import BookSectionDetailModel from "../../../../model/BookSectionDetailModel";
 import SectionModel from "../../../../model/SectionModel";
+import { Link, ThemeType } from "basicui";
 
 interface Props {
   index: number;
@@ -14,13 +15,12 @@ interface Props {
 const HeadViewer = (props: Props) => {
   return (
     <div className="book-section-page-head-viewer">
-      <a
-        rel="noopener noreferrer"
-        title={props.section.title}
+      <Link
         href={`/#/${props.space}/book/${props.section.bookref}/section/${props.section.reference}`}
+        theme={ThemeType.primary}
       >
         {`${props.index + 1}. ${props.section.title}`}
-      </a>
+      </Link>
       <div
         dangerouslySetInnerHTML={{ __html: props.section.description || "" }}
       />
